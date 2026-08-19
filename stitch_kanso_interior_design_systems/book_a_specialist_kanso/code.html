@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Begin Your Physical Transformation | Kanso</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary-container": "#e6e2dc",
+                        "primary-container": "#1c1b1b",
+                        "outline-variant": "#c4c7c7",
+                        "tertiary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "on-secondary-fixed": "#1c1c18",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#484743",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-surface-variant": "#444748",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e5e2e1",
+                        "tertiary-fixed": "#ece1d2",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-tertiary-container": "#8b8376",
+                        "tertiary-container": "#201b12",
+                        "surface-container-highest": "#e4e2dd",
+                        "surface-container-low": "#f5f3ee",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "secondary": "#605e5a",
+                        "surface-variant": "#e4e2dd",
+                        "secondary-fixed-dim": "#cac6c1",
+                        "on-surface": "#1b1c19",
+                        "on-primary-container": "#858383",
+                        "background": "#fbf9f4",
+                        "surface-bright": "#fbf9f4",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#f0eee9",
+                        "outline": "#747878",
+                        "on-background": "#1b1c19",
+                        "surface": "#fbf9f4",
+                        "on-tertiary-fixed": "#201b12",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "inverse-surface": "#30312e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#666460",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-dim": "#dcdad5",
+                        "surface-container-high": "#eae8e3",
+                        "secondary-fixed": "#e6e2dc",
+                        "surface-tint": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container-max-app": "1280px",
+                        "container-max-marketing": "1440px",
+                        "xxl": "96px",
+                        "margin-mobile": "16px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["plusJakartaSans"],
+                        "body-lg": ["plusJakartaSans"],
+                        "display-xl": ["notoSerif"],
+                        "label-sm": ["plusJakartaSans"],
+                        "headline-lg": ["plusJakartaSans"],
+                        "headline-lg-mobile": ["plusJakartaSans"],
+                        "headline-md": ["plusJakartaSans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    },
+                    "boxShadow": {
+                        'ambient': '0 4px 24px -4px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Input Styles */
+        input[type="text"],
+        input[type="email"],
+        select {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid theme('colors.outline-variant');
+            padding-left: 0;
+            padding-right: 0;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            box-shadow: none;
+            border-bottom: 1px solid theme('colors.primary');
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-body-md text-body-md">
+<!-- TopAppBar -->
+<header class="bg-background text-primary docked full-width top-0 border-b border-outline-variant flat no shadows fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-md max-w-container-max-marketing mx-auto">
+<a class="text-headline-md font-headline-md tracking-tighter text-primary" href="#">Kanso</a>
+<nav class="hidden md:flex gap-lg">
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-label-sm text-label-sm" href="#">Projects</a>
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-label-sm text-label-sm" href="#">Portfolio</a>
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-label-sm text-label-sm" href="#">Materials</a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="p-sm text-secondary hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas (Navigation Suppressed logic handles hiding sidenav/bottomnav for transactional page) -->
+<main class="flex-grow pt-[80px] pb-xl md:pb-xxl">
+<!-- Split Layout for Lead Gen -->
+<section class="max-w-container-max-app mx-auto px-margin-mobile md:px-gutter grid grid-cols-1 md:grid-cols-12 gap-xl md:gap-gutter min-h-[calc(100vh-80px-200px)] items-center">
+<!-- Left Side: Editorial Context & Form -->
+<div class="md:col-span-5 md:col-start-2 lg:col-span-4 lg:col-start-2 flex flex-col justify-center space-y-xl z-10 py-xl">
+<div class="space-y-sm md:space-y-md">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Book a Specialist</p>
+<h1 class="font-display-xl text-[48px] md:text-display-xl leading-tight">Begin Your Physical Transformation</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md pt-sm">Connect with a local Kanso-certified specialist to bring your vision to life.</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient border border-surface-highest p-lg md:p-xl mt-lg relative overflow-hidden">
+<form class="space-y-lg relative z-10">
+<div class="space-y-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-xs" for="fullName">Full Name</label>
+<input class="w-full text-body-md font-body-md placeholder-secondary-fixed-dim focus:ring-0" id="fullName" name="fullName" placeholder="Jane Doe" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-xs" for="email">Email Address</label>
+<input class="w-full text-body-md font-body-md placeholder-secondary-fixed-dim focus:ring-0" id="email" name="email" placeholder="jane@example.com" required="" type="email"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-xs" for="location">Project Location</label>
+<input class="w-full text-body-md font-body-md placeholder-secondary-fixed-dim focus:ring-0" id="location" name="location" placeholder="City, State, or Zip" required="" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-xs" for="budget">Budget Range</label>
+<select class="w-full text-body-md font-body-md text-on-surface bg-transparent focus:ring-0" id="budget" name="budget">
+<option disabled="" selected="" value="">Select Budget</option>
+<option value="10k-50k">$10k - $50k</option>
+<option value="50k-150k">$50k - $150k</option>
+<option value="150k+">$150k+</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface mb-xs" for="timeline">Timeline</label>
+<select class="w-full text-body-md font-body-md text-on-surface bg-transparent focus:ring-0" id="timeline" name="timeline">
+<option disabled="" selected="" value="">Select Timeline</option>
+<option value="asap">Immediate</option>
+<option value="3months">1-3 Months</option>
+<option value="6months+">6+ Months</option>
+</select>
+</div>
+</div>
+</div>
+<div class="pt-md">
+<button class="w-full bg-primary text-on-primary py-3 px-6 rounded hover:bg-tertiary-container transition-colors duration-300 font-label-sm text-label-sm flex justify-between items-center group" type="submit">
+<span>Request Consultation</span>
+<span class="material-symbols-outlined transform group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Right Side: High-End Photography Background -->
+<div class="md:col-span-6 lg:col-span-6 h-[400px] md:h-full min-h-[600px] relative rounded-xl overflow-hidden shadow-ambient">
+<div class="bg-cover bg-center w-full h-full absolute inset-0" data-alt="A striking interior architectural photograph featuring a minimalist living space bathed in natural light from floor-to-ceiling windows. The room showcases high-end, tactile materials like raw travertine stone floors, limewashed bone-white walls, and deeply grained charcoal oak furniture. The composition is highly structured and editorial, evoking a sense of calm and sophisticated spatial intelligence, perfectly aligned with a premium light-mode aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBFosFzQCxPQsKE1fLsL_Bf2aMjLo9JMTtnG-2jMPh2DGNP7P2pTJqKXNbxQPNuRNcU23q2eXfQxf_mwALsXOiS_1YNyN8pgtmaYoKAzEm_A9PMSM7nzZUtX4wnP18EdIPStnkEoGMVpknNkKG0bOtFwxOnERIRBFxbKaG4INppls_Vidg_kGJChOOXMts-Z_hVk5IP5Ww7PT-50snq_9vh3HzXStevyR-dsqpUORUsxftLtAr03aCE')"></div>
+<!-- Subtle overlay to ensure it feels integrated, not just slapped on -->
+<div class="absolute inset-0 bg-gradient-to-t from-primary-container/20 to-transparent mix-blend-multiply"></div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest text-secondary full-width bottom-0 border-t border-outline-variant flat no shadows w-full py-xl px-gutter flex flex-col md:flex-row justify-between items-center max-w-container-max-marketing mx-auto mt-auto">
+<div class="mb-lg md:mb-0">
+<span class="text-headline-md font-headline-md text-primary">Kanso</span>
+<p class="font-label-sm text-label-sm mt-xs">© 2024 Kanso Interior Design. All rights reserved.</p>
+</div>
+<nav class="flex flex-wrap justify-center gap-lg">
+<a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors ease-in-out" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors ease-in-out" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors ease-in-out" href="#">Sustainability</a>
+<a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors ease-in-out" href="#">Contact</a>
+</nav>
+</footer>
+</body></html>

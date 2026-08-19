@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso - Choose Your Style</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Noto+Serif:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "error-container": "#ffdad6",
+                            "on-secondary-fixed-variant": "#484743",
+                            "outline": "#747878",
+                            "on-surface": "#1b1c19",
+                            "on-primary": "#ffffff",
+                            "surface-container-high": "#eae8e3",
+                            "tertiary-fixed-dim": "#cfc5b7",
+                            "primary": "#000000",
+                            "inverse-on-surface": "#f2f1ec",
+                            "on-primary-fixed-variant": "#474746",
+                            "surface-container-lowest": "#ffffff",
+                            "error": "#ba1a1a",
+                            "on-primary-fixed": "#1c1b1b",
+                            "primary-fixed-dim": "#c8c6c5",
+                            "on-tertiary": "#ffffff",
+                            "on-primary-container": "#858383",
+                            "on-secondary": "#ffffff",
+                            "surface-container": "#f0eee9",
+                            "on-tertiary-container": "#8b8376",
+                            "tertiary": "#000000",
+                            "secondary-fixed": "#e6e2dc",
+                            "on-error-container": "#93000a",
+                            "inverse-surface": "#30312e",
+                            "secondary-fixed-dim": "#cac6c1",
+                            "surface-dim": "#dcdad5",
+                            "tertiary-fixed": "#ece1d2",
+                            "surface-bright": "#fbf9f4",
+                            "on-secondary-fixed": "#1c1c18",
+                            "surface": "#fbf9f4",
+                            "tertiary-container": "#201b12",
+                            "on-error": "#ffffff",
+                            "background": "#fbf9f4",
+                            "primary-fixed": "#e5e2e1",
+                            "surface-container-low": "#f5f3ee",
+                            "on-tertiary-fixed-variant": "#4d463b",
+                            "on-background": "#1b1c19",
+                            "on-secondary-container": "#666460",
+                            "surface-variant": "#e4e2dd",
+                            "outline-variant": "#c4c7c7",
+                            "inverse-primary": "#c8c6c5",
+                            "secondary-container": "#e6e2dc",
+                            "surface-container-highest": "#e4e2dd",
+                            "on-tertiary-fixed": "#201b12",
+                            "secondary": "#605e5a",
+                            "primary-container": "#1c1b1b",
+                            "on-surface-variant": "#444748",
+                            "surface-tint": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "xl": "48px",
+                            "gutter": "24px",
+                            "sm": "8px",
+                            "xxl": "96px",
+                            "xs": "4px",
+                            "md": "16px",
+                            "lg": "24px",
+                            "margin-mobile": "16px",
+                            "container-max-app": "1280px",
+                            "container-max-marketing": "1440px"
+                    },
+                    "fontFamily": {
+                            "headline-lg-mobile": [
+                                    "plusJakartaSans"
+                            ],
+                            "body-lg": [
+                                    "plusJakartaSans"
+                            ],
+                            "headline-md": [
+                                    "plusJakartaSans"
+                            ],
+                            "label-sm": [
+                                    "plusJakartaSans"
+                            ],
+                            "body-md": [
+                                    "plusJakartaSans"
+                            ],
+                            "display-xl": [
+                                    "notoSerif"
+                            ],
+                            "headline-lg": [
+                                    "plusJakartaSans"
+                            ]
+                    },
+                    "fontSize": {
+                            "headline-lg-mobile": [
+                                    "32px",
+                                    {
+                                            "lineHeight": "38px",
+                                            "letterSpacing": "-0.01em",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "body-lg": [
+                                    "18px",
+                                    {
+                                            "lineHeight": "28px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "headline-md": [
+                                    "24px",
+                                    {
+                                            "lineHeight": "32px",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "label-sm": [
+                                    "12px",
+                                    {
+                                            "lineHeight": "16px",
+                                            "letterSpacing": "0.05em",
+                                            "fontWeight": "600"
+                                    }
+                            ],
+                            "body-md": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "24px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "display-xl": [
+                                    "72px",
+                                    {
+                                            "lineHeight": "84px",
+                                            "letterSpacing": "-0.02em",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "headline-lg": [
+                                    "40px",
+                                    {
+                                            "lineHeight": "48px",
+                                            "letterSpacing": "-0.01em",
+                                            "fontWeight": "600"
+                                    }
+                            ]
+                    }
+            },
+                },
+            }
+    </script>
+<style>
+        .custom-radio:checked + div {
+            border-color: #000000;
+        }
+        .custom-radio:checked + div .overlay-check {
+            opacity: 1;
+        }
+        .custom-radio:checked + div .image-overlay {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-md max-w-container-max-marketing mx-auto bg-background dark:bg-background border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md tracking-tighter text-primary dark:text-on-background">Kanso</span>
+</div>
+<nav class="hidden md:flex gap-lg">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300" href="#">Projects</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300" href="#">Portfolio</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300" href="#">Materials</a>
+</nav>
+<div class="flex items-center">
+<button class="p-xs text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[100px] pb-xxl px-gutter md:px-[128px] max-w-container-max-marketing mx-auto w-full">
+<!-- Header Section -->
+<div class="mb-xl text-center md:text-left mt-lg">
+<span class="inline-block text-label-sm font-label-sm text-secondary tracking-widest uppercase mb-sm">Step 3 of 4</span>
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">Choose Your Style</h1>
+<p class="text-body-lg font-body-lg text-secondary">Select the aesthetic that feels most like home.</p>
+</div>
+<!-- Style Selection Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md md:gap-lg mb-xxl">
+<!-- Modern -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="modern"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A modern interior living space characterized by clean lines, a monochromatic palette of bone whites and soft grays, punctuated by sleek black metal accents. Natural light pours in through large, unadorned windows, casting soft shadows across a minimalist, low-profile sofa. The mood is sophisticated, uncluttered, and highly deliberate, embodying a premium, high-end editorial architectural style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuLtN4LKP2llCMmrubxs5T0NUxuQIp8ajeIJOVaLPX1r9-_toRh54wUskRPdAHPVmziHLTQKVL3IHJAqPeOpgzvza1WEBuq7hx4u9Y-4StEDLdccLwjuq-gBvDLp0m8nnAd5go4lK-jRU721wmM51f5XO2B2N1jTB_EeLmYND4u-5E2jt3NxjRNpia6dcsvwlnyQPdC_dW1QNE009R4eLDdbuPnNvFzaGsIuxY2Zde41WvbxYVqz57"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Modern</h3>
+<p class="text-body-md font-body-md text-secondary">Clean lines, neutral palette, and functional elegance.</p>
+</div>
+</div>
+</label>
+<!-- Minimal -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="minimal"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An ultra-minimalist interior space featuring vast expanses of white walls and light oak flooring. A single, sculptural wooden chair sits in the center of the room, illuminated by a sharp, dramatic beam of sunlight. The aesthetic relies entirely on negative space, texture, and the interaction of light, evoking a serene, almost gallery-like atmosphere in a pristine light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5-XG4dXKc8qWXMSZwJ_686XtUKVmwck4c_S-yrriJBEvfk9og_ViFTiL7oZwsKJscAHR4z1MPbDUENhUSx1DdiAVHE7w0uJQ3Fsd-fPYcOTOkZnDS54hNXK7gimLlDFDZnCPkh5EYyCSZzV1aw5msR5DgdjtvRmCqNcKRTElLijIfetB5fCTrAJSsekWWERlkg_7MgQWFkyJl1yqjutVm9Tlfm5Sfz7xGRQxssprGHaIuZ7fdAumP"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Minimal</h3>
+<p class="text-body-md font-body-md text-secondary">Intentional simplicity emphasizing space and light.</p>
+</div>
+</div>
+</label>
+<!-- Scandinavian -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="scandinavian"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A bright, inviting Scandinavian living room defined by pale woods, plush white textiles, and subtle touches of muted sage green. Soft, diffused daylight fills the space, highlighting the tactile quality of a knitted throw on a low slung sofa. The overall vibe is cozy (hygge) yet structured, maintaining a crisp, light-mode editorial standard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7L4v481in6MRRNGa4788bhH1jYnsAWpdK5Tq6bMvxHsVtJs7vKHM4nb8fWnKGl66JdeeINqLflrNAV0gnWMpZte40ze0aPr5g2MRaTJcfbSyjq5bPRI60Z6Y_iifpYDl3emi0msdi-H-C5UGBwlQ7BjAR42nVsIPQ6E9KuaGjlHGDcODk856A_GbOL86WUYIfEX9hoUIOPerk7_2ZZ_rkCHNao6SnEKtyT-PEVe6U2Sr7TesQkytB"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Scandinavian</h3>
+<p class="text-body-md font-body-md text-secondary">Hygge comfort blended with bright, functional design.</p>
+</div>
+</div>
+</label>
+<!-- Grey -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="grey"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A sophisticated interior study dominated by varying shades of grey, from soft dove to deep charcoal. The textures are rich: matte plaster walls, a velvet armchair, and brushed steel lighting fixtures. The lighting is moody yet clear, creating an atmosphere of quiet luxury and architectural precision within a modern, refined context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2l1OdZ0evAncC5cSsLo7y-tLaPkLZi2IGLSNync-JPXpeHf5gA-6w5vUN1_H6Om07eaviY51kJ1dmAaStRGnbc63gkbHDBK5L2vgC_uXegX2ru9AnfteCoGLwZyWnq2PhZ3BLmNRzKxlR4a5VoxZFqiUklmlEWGxHPm38DbwxH3PnQboxCtR-0-z4EDZGPRiU3cJrO7mxtqvC2D_tdOYIkGrwh0XhBcpbO2muWqyAUV03MlejvMtE"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Grey</h3>
+<p class="text-body-md font-body-md text-secondary">Sophisticated monochromatic layers for a calm atmosphere.</p>
+</div>
+</div>
+</label>
+<!-- Warm Neutral -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="warm_neutral"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An inviting, sun-drenched bedroom interior awash in warm neutral tones: beige, camel, soft terracotta, and cream. Organic materials like linen bedding, a jute rug, and unglazed ceramics add tactile warmth. The light is golden and soft, emphasizing an aesthetic of approachable, grounded, high-end comfort." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDga_mZQoBvzOh8xCUBB7CXl2fgkXANkPamOHXePEhXjFLPR7lt3qCHg2t0jM3mMV2SxncdpL3S5EeaPtet9Qxd1AsuF2_elUKeSBslwTU4zyKheG_3B33mF0-hTrtsry5HPz4-fKepQit56xOcaoYsMGyZXO4O7VFp8Ss3Boxx5UvNqbHAs61T8dXBEC49lfifYOxifVB_NOBYWKuGK4qsA_hKEign4riRnZiab2MEIpmbwuCFcqWc"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Warm Neutral</h3>
+<p class="text-body-md font-body-md text-secondary">Earthy, inviting tones providing grounded tranquility.</p>
+</div>
+</div>
+</label>
+<!-- Industrial -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="industrial"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A refined industrial loft interior showcasing exposed brick walls painted white, polished concrete floors, and matte black steel architectural elements. Large, steel-framed factory windows allow bright, natural light to flood the space, softening the raw materials. The furniture is a mix of rich brown leather and raw timber, maintaining a premium, curated aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbkZm3KEd_430SvRVgoX8QoADsRW9qcK3i_lUpb3BXKmhnj7RCWGUrZFfYVp2kEwjR8HGKIDGWQLbspUe264z9x02euiDGv-An1iA9e_iiprq-kn6t9IbPWSXoqQm5Dv_U3d5KaNnd1y9LwQRxYhdNPVx3TtlxWIjl_iHjDVVH-DxcTU-i5Xk01WM3a1acV7jvrThw_awziUhVTKnbec4xTdW-Vn-zN-IAIBleRkyz4newIXiMOxG3"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Industrial</h3>
+<p class="text-body-md font-body-md text-secondary">Raw materials, exposed elements, and urban edge.</p>
+</div>
+</div>
+</label>
+<!-- Luxury -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="luxury"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A high-end, luxury dining room featuring a sculptural marble dining table, bespoke brass lighting fixtures, and deeply textured silk drapery. The color palette is restrained—principally crisp white and deep charcoal, with metallic gold accents catching the light. The composition is flawlessly balanced, exuding exclusivity and timeless architectural editorial quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcm-iVhFvssI54g7j7H8RCNkSqeAdQvvafJpToD4BjwcLZEVQ5q0Qpqar_XxYSdyw_EzbvmMAPHBKGgPsWUko6IJyYugYnC-C0d07TKkCiZZHqCR3jEZQ-pY1izZydYLFyK6cxzR4U3WgGgx7pwCdZrp1-NqcH51-R4oxJBa16B1Dv554Mkh3fAobvATn15x8AuAuSMnnwWGhU--39YGZm3eEAiITpG98RtEUdUIXK9iztHf6nCv36"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Luxury</h3>
+<p class="text-body-md font-body-md text-secondary">Premium materials, bespoke finishes, and refined details.</p>
+</div>
+</div>
+</label>
+<!-- Japandi -->
+<label class="cursor-pointer relative group block w-full h-full">
+<input class="sr-only custom-radio" name="style_selection" type="radio" value="japandi"/>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-300 h-full flex flex-col group-hover:border-outline">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A serene Japandi style interior blending Scandinavian warmth with Japanese wabi-sabi minimalism. The space features low-profile, crafted timber furniture against textured, pale plaster walls. A carefully placed branch in a ceramic vase provides an organic focal point. The lighting is diffused and ethereal, reinforcing a mood of calm, intentional living in a light-mode editorial context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjBCB6HEwjK63DhIS-ZplkA7oepNFBvIi5vHHkvLH4K8EN1GcMfpn_RfHA2k6UxhN4soAjkJrDYfFvC1KgT49GgFX4jSxtYJbEaNGR831-2rSl4P7remNZHNCPeViy0i0Ipc-Ydcx6yX_uPfiF1PigGWMY3J4CtIMaLCb1w3-QHkgx5ViY8a8Y9MejWllgjTyGNAEjNh4mGPejxer9E643z6JnuD1iv8HSWU4EfF--lhH9pfkyeqYl"/>
+<div class="image-overlay absolute inset-0 bg-transparent transition-colors duration-300"></div>
+<div class="overlay-check absolute top-md right-md bg-primary text-on-primary rounded-full p-xs opacity-0 transition-opacity duration-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="text-headline-md font-headline-md text-primary mb-xs">Japandi</h3>
+<p class="text-body-md font-body-md text-secondary">Wabi-sabi simplicity meets Nordic warmth.</p>
+</div>
+</div>
+</label>
+</div>
+<!-- Sticky Bottom CTA Area -->
+<div class="fixed bottom-0 left-0 w-full bg-background border-t border-outline-variant p-md z-40">
+<div class="max-w-container-max-marketing mx-auto flex justify-between items-center px-gutter md:px-[128px]">
+<button class="text-body-md font-body-md text-secondary hover:text-primary transition-colors py-sm px-md rounded-lg border border-transparent hover:border-outline-variant">
+                    Back
+                </button>
+<button class="bg-primary text-on-primary text-body-md font-body-md py-sm px-xl rounded-lg hover:opacity-90 transition-opacity">
+                    Continue
+                </button>
+</div>
+</div>
+</main>
+</body></html>

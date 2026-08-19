@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso - AI Results Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Noto+Serif:wght@400&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-surface": "#30312e",
+                        "surface-container-highest": "#e4e2dd",
+                        "outline-variant": "#c4c7c7",
+                        "secondary-fixed": "#e6e2dc",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "inverse-on-surface": "#f2f1ec",
+                        "background": "#fbf9f4",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-dim": "#dcdad5",
+                        "surface-variant": "#e4e2dd",
+                        "on-primary-fixed-variant": "#474746",
+                        "tertiary-container": "#201b12",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#c8c6c5",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#f0eee9",
+                        "on-primary-container": "#858383",
+                        "outline": "#747878",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#5f5e5e",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#201b12",
+                        "secondary-fixed-dim": "#cac6c1",
+                        "surface-container-low": "#f5f3ee",
+                        "on-secondary-fixed-variant": "#484743",
+                        "tertiary-fixed": "#ece1d2",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "on-surface-variant": "#444748",
+                        "on-secondary-fixed": "#1c1c18",
+                        "secondary-container": "#e6e2dc",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-bright": "#fbf9f4",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary": "#605e5a",
+                        "surface-container-high": "#eae8e3",
+                        "on-secondary-container": "#666460",
+                        "tertiary": "#000000",
+                        "primary-container": "#1c1b1b",
+                        "on-surface": "#1b1c19",
+                        "surface": "#fbf9f4",
+                        "on-tertiary-container": "#8b8376",
+                        "on-background": "#1b1c19"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "container-max-app": "1280px",
+                        "xxl": "96px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "container-max-marketing": "1440px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["notoSerif"],
+                        "display-xl": ["notoSerif"],
+                        "body-md": ["notoSerif"],
+                        "body-lg": ["notoSerif"],
+                        "label-sm": ["notoSerif"],
+                        "headline-md": ["notoSerif"],
+                        "headline-lg-mobile": ["notoSerif"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .ambient-shadow {
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<nav class="bg-background dark:bg-background border-b border-outline-variant dark:border-outline fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-md max-w-container-max-marketing mx-auto">
+<div class="text-headline-md font-headline-md tracking-tighter text-primary dark:text-on-background">
+            Kanso
+        </div>
+<ul class="hidden md:flex space-x-lg text-body-md font-body-md items-center">
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300" href="#">
+                    Projects
+                </a>
+</li>
+<li>
+<a class="text-primary dark:text-on-background font-bold border-b-2 border-primary hover:text-primary dark:hover:text-on-background transition-colors duration-300 opacity-80 transition-opacity duration-200" href="#">
+                    Portfolio
+                </a>
+</li>
+<li>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300" href="#">
+                    Materials
+                </a>
+</li>
+</ul>
+<div class="flex items-center space-x-sm text-primary dark:text-on-background">
+<button class="p-sm hover:text-primary dark:hover:text-on-background transition-colors duration-300">
+<span class="material-symbols-outlined block">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-[100px] pb-xxl">
+<div class="max-w-container-max-app mx-auto px-gutter md:px-xl">
+<!-- Hero Section -->
+<section class="mb-xxl">
+<div class="mb-lg flex flex-col md:flex-row md:items-end justify-between gap-lg">
+<div>
+<h1 class="text-display-xl font-display-xl text-primary mb-sm">The Serene Retreat</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">
+                            AI-Generated Primary Concept emphasizing Warm Minimalism, tactile natural materials, and abundant natural light. Designed for contemplation and calm.
+                        </p>
+</div>
+<button class="bg-primary text-on-primary font-label-sm text-label-sm rounded-[4px] px-xl py-md hover:bg-inverse-surface transition-colors duration-300 whitespace-nowrap">
+                        Book a Specialist
+                    </button>
+</div>
+<div class="w-full aspect-[16/9] md:aspect-[2/1] rounded-xl overflow-hidden ambient-shadow relative border border-outline-variant">
+<img alt="Primary AI Concept" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLt2oIV5y5Uosw6yEkzajef7cziXuqJQhfqSPvXvxhZaIIIKTI_anpxNgl2uQcQADd-mo33isae6r6OqvL7d_7K4ohEr11xxAcwLdWklmLdAJfgaIhEgjjP1FxYx-2RL0z0fTSh98ZiKLwJxaTK0vNnMbktR9bU3aRDokv4O-eUC_mUTQQmzaVYu57o0AUmeuWcd1XakwBdBY2SvVQOVkw_ufl56o_QG-imt62XrjM5JrDQi2V4uDTRckFk"/>
+</div>
+</section>
+<!-- 2-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl items-start">
+<!-- Left: Alternative Concepts -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<h2 class="text-headline-lg font-headline-lg text-primary mb-md">Alternative Explorations</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg h-full">
+<!-- Concept Card 1 -->
+<div class="bg-surface-container-lowest rounded-[16px] p-lg ambient-shadow border border-surface-dim flex flex-col transition-transform duration-500 hover:-translate-y-1 h-full">
+<div class="w-full aspect-square rounded-lg overflow-hidden mb-lg flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A sophisticated living room design interior with an urban zen aesthetic. The space features deep charcoal walls contrasting with light natural oak flooring. Low-slung, minimalist furniture arranged around a monolithic stone coffee table. Soft, directional architectural lighting highlights the textures of a raw linen sofa and a sparse, sculptural Ikebana floral arrangement in the corner. The mood is moody, quiet, and highly curated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBF5J3-5oKJurqD72mMddD3ZFfLm5DsBGa9Pi2LhESF3zUTvo6fG8jWdPWHR4BvzbsHHrmUP-h5PMwTUMr0MwTwTkEiNBTJc00ftZxaT_JumjK8C3HC26-gg_oIkhtxt49HQ5j4oBQtFcCZpoLfxPb7Mi2OlIxNBmqPfHNh6QceENIe_2cq1OefAJzR3Lw9VvcCl02dZsjmKXeAjXnb0GtP4c8t_tNnMI4IYlCaFdoueZPhFbxZFLw"/>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary mb-sm">Concept 2: Urban Zen</h3>
+<p class="text-body-md font-body-md text-on-surface-variant mb-lg flex-grow">
+                                A darker, more introspective take using deep charcoals and raw stone elements to anchor the space.
+                            </p>
+<button class="border border-outline text-primary font-label-sm text-label-sm rounded-[4px] px-lg py-sm w-fit hover:bg-surface-container transition-colors duration-300 mt-auto">
+                                View Details
+                            </button>
+</div>
+<!-- Concept Card 2 -->
+<div class="bg-surface-container-lowest rounded-[16px] p-lg ambient-shadow border border-surface-dim flex flex-col transition-transform duration-500 hover:-translate-y-1 h-full">
+<div class="w-full aspect-square rounded-lg overflow-hidden mb-lg flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A bright, airy architectural interior space focusing on raw elements. Expansive floor-to-ceiling glass reveals a sparse desert landscape. Inside, the design utilizes monolithic forms made of polished concrete and pale travertine stone. Minimalist seating elements upholstered in textured white bouclé fabric. The lighting is intensely bright and natural, casting sharp shadows that emphasize the geometric purity of the architecture. The atmosphere is stark, pure, and monumental." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7qsVo4-keCnwyqRWjvNmQ2sTQcns3HGiMVGKv0t4ewTbRU1gnnq_HlWw4NSnhHckeP0lnH8J8L_Db6HJz91pFEKTo2VaLRnjs8wTnskE6bH_wOXQeVTxRatQmh39vWpralOeyHxqnRkVkpJDb7kqsFlVpVZ96sc3ey6ZnHsW3RHTwWcE5p4g_hKCS1ToJ8o260rL7jNN9658JqiyvXS-DzUx-vaNijsrxYn6hHZbeEM2AEM3tU0Us"/>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary mb-sm">Concept 3: Raw Elements</h3>
+<p class="text-body-md font-body-md text-on-surface-variant mb-lg flex-grow">
+                                Pushing the minimalist boundary with monolithic concrete forms and stark, geometric light play.
+                            </p>
+<button class="border border-outline text-primary font-label-sm text-label-sm rounded-[4px] px-lg py-sm w-fit hover:bg-surface-container transition-colors duration-300 mt-auto">
+                                View Details
+                            </button>
+</div>
+</div>
+</div>
+<!-- Right: Design Specs Panel -->
+<aside class="lg:col-span-4 h-full">
+<div class="sticky top-[120px] bg-surface-container-lowest rounded-[16px] p-xl ambient-shadow border border-surface-dim flex flex-col h-full">
+<h2 class="text-headline-md font-headline-md text-primary mb-lg pb-sm border-b border-outline-variant">Design Specs</h2>
+<div class="mb-xl flex-grow">
+<h4 class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest mb-md">Primary Materials</h4>
+<div class="flex flex-wrap gap-sm">
+<span class="border border-outline-variant rounded-[4px] px-md py-sm text-label-sm font-label-sm text-primary">Polished Limestone</span>
+<span class="border border-outline-variant rounded-[4px] px-md py-sm text-label-sm font-label-sm text-primary">Natural Oak</span>
+<span class="border border-outline-variant rounded-[4px] px-md py-sm text-label-sm font-label-sm text-primary">Textured Linen</span>
+<span class="border border-outline-variant rounded-[4px] px-md py-sm text-label-sm font-label-sm text-primary">Matte Black Steel</span>
+</div>
+</div>
+<div class="mb-xl flex-grow">
+<h4 class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest mb-md">Spatial Tone</h4>
+<p class="text-body-md font-body-md text-primary">
+                                Calm, grounding, and expansive. The layout prioritizes negative space, allowing the high-quality materials to dictate the room's character without visual clutter.
+                            </p>
+</div>
+<div class="pt-lg border-t border-outline-variant mt-auto">
+<button class="w-full bg-primary text-on-primary font-label-sm text-label-sm rounded-[4px] px-lg py-md hover:bg-inverse-surface transition-colors duration-300 flex items-center justify-center gap-sm">
+<span>Book a Specialist</span>
+<span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+</button>
+<p class="text-label-sm font-label-sm text-on-surface-variant text-center mt-md">
+                                Discuss this concept with our design team.
+                            </p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest w-full py-xl px-gutter flex flex-col md:flex-row justify-between items-center max-w-container-max-marketing mx-auto mt-auto border-t border-outline-variant">
+<div class="text-headline-md font-headline-md text-primary mb-md md:mb-0">
+            Kanso
+        </div>
+<div class="flex flex-wrap gap-lg justify-center text-label-sm font-label-sm mb-md md:mb-0">
+<a class="text-secondary hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Sustainability</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="text-body-md font-body-md text-secondary dark:text-secondary">
+            © 2024 Kanso Interior Design. All rights reserved.
+        </div>
+</footer>
+</body></html>

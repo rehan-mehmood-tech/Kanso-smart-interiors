@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Onboarding | Kanso Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-variant": "#c4c7c7",
+                      "secondary-container": "#e6e2dc",
+                      "inverse-on-surface": "#f2f1ec",
+                      "primary-container": "#1c1b1b",
+                      "on-secondary-container": "#666460",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#1c1b1b",
+                      "on-tertiary-container": "#8b8376",
+                      "on-background": "#1b1c19",
+                      "on-primary-fixed-variant": "#474746",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#201b12",
+                      "surface-variant": "#e4e2dd",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#c8c6c5",
+                      "surface-dim": "#dcdad5",
+                      "on-surface-variant": "#444748",
+                      "on-surface": "#1b1c19",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "surface": "#fbf9f4",
+                      "secondary": "#605e5a",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#e6e2dc",
+                      "background": "#fbf9f4",
+                      "surface-container-highest": "#e4e2dd",
+                      "on-secondary-fixed": "#1c1c18",
+                      "inverse-surface": "#30312e",
+                      "secondary-fixed-dim": "#cac6c1",
+                      "surface-container-high": "#eae8e3",
+                      "tertiary-fixed": "#ece1d2",
+                      "on-secondary": "#ffffff",
+                      "primary": "#000000",
+                      "tertiary-fixed-dim": "#cfc5b7",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f5f3ee",
+                      "on-secondary-fixed-variant": "#484743",
+                      "surface-tint": "#5f5e5e",
+                      "on-tertiary-fixed-variant": "#4d463b",
+                      "tertiary": "#000000",
+                      "surface-bright": "#fbf9f4",
+                      "primary-fixed": "#e5e2e1",
+                      "surface-container": "#f0eee9",
+                      "on-primary-container": "#858383",
+                      "outline": "#747878",
+                      "tertiary-container": "#201b12",
+                      "inverse-primary": "#c8c6c5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xxl": "96px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "container-max-app": "1280px",
+                      "sm": "8px",
+                      "container-max-marketing": "1440px",
+                      "xl": "48px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "plusJakartaSans"
+                      ],
+                      "headline-lg-mobile": [
+                              "plusJakartaSans"
+                      ],
+                      "display-xl": [
+                              "notoSerif"
+                      ],
+                      "body-md": [
+                              "plusJakartaSans"
+                      ],
+                      "headline-lg": [
+                              "plusJakartaSans"
+                      ],
+                      "body-lg": [
+                              "plusJakartaSans"
+                      ],
+                      "headline-md": [
+                              "plusJakartaSans"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-xl": [
+                              "72px",
+                              {
+                                      "lineHeight": "84px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { background-color: #fbf9f4; color: #1b1c19; }
+        .ambient-shadow { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04); }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased h-screen flex overflow-hidden">
+<!-- SideNavBar (Suppressed due to linear/task-focused intent) -->
+<!-- Content Canvas -->
+<main class="flex-1 flex flex-col h-full overflow-y-auto">
+<!-- Header -->
+<header class="px-xl py-lg border-b border-outline-variant bg-surface-container-lowest sticky top-0 z-10">
+<div class="max-w-container-max-app mx-auto flex justify-between items-center">
+<div>
+<h1 class="font-headline-lg text-headline-lg tracking-tighter text-primary">Pending Verifications</h1>
+<p class="font-body-md text-body-md text-secondary mt-xs">Review and approve new interior design specialists for Kanso Pro.</p>
+</div>
+<div class="flex items-center gap-md">
+<button class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">filter_list</span>
+                        Filter
+                    </button>
+<button class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">sort</span>
+                        Sort
+                    </button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<div class="flex-1 max-w-container-max-app mx-auto w-full px-xl py-xxl">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Application List -->
+<div class="md:col-span-8 flex flex-col gap-lg">
+<!-- Candidate Card 1 -->
+<article class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border border-outline-variant/30 flex flex-col md:flex-row gap-xl items-start md:items-center group">
+<div class="flex-shrink-0">
+<img class="w-24 h-24 rounded-full object-cover border-2 border-surface-container-highest" data-alt="A highly detailed portrait of a modern, professional interior designer in a minimalist studio setting. The lighting is soft and architectural, casting gentle shadows. The overall aesthetic is 'Quiet Luxury' with a warm neutral color palette consisting of bone white, soft greys, and deep charcoal. The mood is calm and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFXaJBAACkF_mvbykpx5JeJrcLQM4wf3ipMNV4ZJ47_B013jkUuxoRFUF2-nXVTKec7I9hI6-gi7939gCB2LdmCMGM7YVftsemGtycpPMtAbcsKJg3w9y3X2mPe0GkohWcBJPPTpglLp4lwwUHHyTj6U09QuDzWD5yIyQ3npY1Cs9hNDW52tlObHwGtVZyEhYxlm7V0LTNhZuGtmrFNug1q659JKsg5pxksI2-EpdKBNFLbv7-D0fx"/>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-primary">Elena Rodriguez</h2>
+<span class="bg-surface-container-highest text-secondary font-label-sm text-label-sm px-sm py-xs rounded">Pending Review</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">architecture</span>
+                                Residential Architecture &amp; Minimalism
+                            </p>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">work_history</span>
+                                8 Years Experience
+                            </p>
+<div class="mt-md flex gap-sm">
+<span class="border border-outline-variant text-secondary font-label-sm text-label-sm px-sm py-xs rounded">Portfolio Attached</span>
+<span class="border border-outline-variant text-secondary font-label-sm text-label-sm px-sm py-xs rounded">References Checked</span>
+</div>
+</div>
+<div class="flex-shrink-0 flex flex-col md:flex-row gap-sm w-full md:w-auto mt-lg md:mt-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<button class="border border-outline text-primary font-label-sm text-label-sm px-md py-sm rounded-lg hover:bg-surface-container-low transition-colors w-full md:w-auto text-center">
+                                Request More Info
+                            </button>
+<button class="bg-primary text-on-primary font-label-sm text-label-sm px-md py-sm rounded-lg hover:opacity-90 transition-opacity w-full md:w-auto text-center">
+                                Approve
+                            </button>
+</div>
+</article>
+<!-- Candidate Card 2 -->
+<article class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border border-outline-variant/30 flex flex-col md:flex-row gap-xl items-start md:items-center group">
+<div class="flex-shrink-0">
+<img class="w-24 h-24 rounded-full object-cover border-2 border-surface-container-highest" data-alt="A highly detailed portrait of a sophisticated male interior designer in a brightly lit, high-end showroom. The lighting highlights textures of stone and wood in the background. The overall aesthetic is 'Warm Minimalism' with a clean, high-contrast palette of crisp white and deep black. The mood is professional and creative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwo3YtwD2j5N7Cl3ACMQVBb_qa_qmkW9NFarn6YMgsKE3fgRIXt2Z7a_RrhqO45dumC0ZyTH_Vz_05QiA-FRgd4wGrPaKXgxRgzGDAL6GuNtEy27-KKVbFiS3-RorvD4Es8ILNonhxRUS6wQj53xr0czlkVyE3sHJfmB9ZD6JEH7EZHwT1OlBVA_U87Z0WbqkcwGALjAUeMq2GtaaaYR5ojU8i0okgRTBEMA38YdeBg7WTrpdw4_VY"/>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-primary">Julian Vance</h2>
+<span class="bg-surface-container-highest text-secondary font-label-sm text-label-sm px-sm py-xs rounded">Pending Review</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">chair</span>
+                                Commercial Spaces &amp; Hospitality
+                            </p>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">work_history</span>
+                                12 Years Experience
+                            </p>
+<div class="mt-md flex gap-sm">
+<span class="border border-outline-variant text-secondary font-label-sm text-label-sm px-sm py-xs rounded">Portfolio Attached</span>
+</div>
+</div>
+<div class="flex-shrink-0 flex flex-col md:flex-row gap-sm w-full md:w-auto mt-lg md:mt-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+<button class="border border-outline text-primary font-label-sm text-label-sm px-md py-sm rounded-lg hover:bg-surface-container-low transition-colors w-full md:w-auto text-center">
+                                Request More Info
+                            </button>
+<button class="bg-primary text-on-primary font-label-sm text-label-sm px-md py-sm rounded-lg hover:opacity-90 transition-opacity w-full md:w-auto text-center">
+                                Approve
+                            </button>
+</div>
+</article>
+</div>
+<!-- Contextual Sidebar/Summary -->
+<aside class="md:col-span-4 flex flex-col gap-lg">
+<div class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border border-outline-variant/30">
+<h3 class="font-headline-md text-headline-md text-primary mb-md">Verification Queue</h3>
+<div class="flex justify-between items-center py-sm border-b border-surface-container-highest">
+<span class="font-body-md text-body-md text-secondary">Total Pending</span>
+<span class="font-headline-md text-headline-md text-primary">24</span>
+</div>
+<div class="flex justify-between items-center py-sm border-b border-surface-container-highest">
+<span class="font-body-md text-body-md text-secondary">Awaiting Info</span>
+<span class="font-headline-md text-headline-md text-primary">5</span>
+</div>
+<div class="flex justify-between items-center py-sm">
+<span class="font-body-md text-body-md text-secondary">Approved Today</span>
+<span class="font-headline-md text-headline-md text-primary">12</span>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+</body></html>
