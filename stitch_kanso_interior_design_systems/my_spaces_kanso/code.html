@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Spaces - Kanso</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#f2f1ec",
+                        "surface-container-highest": "#e4e2dd",
+                        "tertiary-container": "#201b12",
+                        "primary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "on-primary-container": "#858383",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "surface-dim": "#dcdad5",
+                        "secondary-fixed": "#e6e2dc",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#30312e",
+                        "outline-variant": "#c4c7c7",
+                        "surface": "#fbf9f4",
+                        "surface-variant": "#e4e2dd",
+                        "on-secondary-fixed-variant": "#484743",
+                        "on-surface": "#1b1c19",
+                        "primary-fixed": "#e5e2e1",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-container": "#f0eee9",
+                        "surface-tint": "#5f5e5e",
+                        "on-tertiary-container": "#8b8376",
+                        "tertiary-fixed": "#ece1d2",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#000000",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#201b12",
+                        "on-secondary": "#ffffff",
+                        "background": "#fbf9f4",
+                        "on-secondary-fixed": "#1c1c18",
+                        "surface-bright": "#fbf9f4",
+                        "on-background": "#1b1c19",
+                        "on-surface-variant": "#444748",
+                        "primary-container": "#1c1b1b",
+                        "outline": "#747878",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "surface-container-high": "#eae8e3",
+                        "secondary-container": "#e6e2dc",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#666460",
+                        "surface-container-low": "#f5f3ee",
+                        "on-primary-fixed": "#1c1b1b",
+                        "secondary": "#605e5a",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed-dim": "#cac6c1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-app": "1280px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xl": "48px",
+                        "xxl": "96px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "container-max-marketing": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-xl": ["Noto Serif"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-xl": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #fbf9f4; }
+        .ambient-shadow { box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.04); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="bg-surface border-b border-outline-variant flex justify-between items-center h-20 px-lg max-w-container-max-marketing mx-auto w-full docked full-width top-0 z-50 sticky">
+<div class="flex items-center gap-xl">
+<a class="font-display-xl text-headline-md tracking-tighter text-primary" href="#">Kanso</a>
+<div class="hidden md:flex gap-md">
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-body-md text-body-md py-sm" href="#">How It Works</a>
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-body-md text-body-md py-sm" href="#">Explore</a>
+<a class="text-primary font-bold border-b-2 border-primary font-body-md text-body-md py-sm opacity-80 transition-opacity" href="#">My Spaces</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="hidden md:block px-md py-sm bg-primary text-on-primary rounded-lg font-label-sm text-label-sm hover:bg-primary-container transition-colors">Design My Room</button>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="max-w-container-max-app mx-auto px-margin-mobile md:px-lg py-xl md:py-xxl">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-xl gap-md">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-xs">My Spaces</h1>
+<p class="font-body-md text-body-md text-secondary">Manage and explore your interior design projects.</p>
+</div>
+<button class="px-md py-sm bg-primary text-on-primary rounded-lg font-label-sm text-label-sm hover:bg-primary-container transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[16px]">add</span>
+                Design a New Room
+            </button>
+</header>
+<!-- Project Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest rounded-[16px] ambient-shadow border border-outline-variant/30 overflow-hidden group cursor-pointer flex flex-col">
+<div class="relative w-full h-[280px] overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-in-out" data-alt="A bright, airy living room with a large beige modular sofa, a raw wood organic coffee table, and an olive tree in a terracotta pot by large windows. Minimalist Japandi style with soft natural light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAl50PwcUjuIoDEqF95zuM-Uqd5grtbtB95WVJM9MVHCjdNh4TGDdX8M1x8-oREF6OkaTmTxqVrUaxbPuUNMlq2CHwSx1rmazTuCpjviHcLpCJRgXrOFrqppLkuhLUFdO1X6Y4o5Wus2mAni0ERhKOL4maioM3ZFpz6tS4SU28dR2_dAIItChooYcMRr1gZi8p6D6wfjqq9D5SYhqRzKia_qcSRvn6W-IMk-B5_4RGBhRyqaksoAugK')"></div>
+</div>
+<div class="p-lg flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-sm">
+<h2 class="font-headline-md text-headline-md text-primary">Living Room Retreat</h2>
+<span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+<div class="flex gap-sm mb-md flex-wrap">
+<span class="px-sm py-xs border border-outline-variant rounded-[4px] font-label-sm text-label-sm text-secondary">Japandi</span>
+<span class="px-sm py-xs border border-outline-variant rounded-[4px] font-label-sm text-label-sm text-secondary">3 Concepts</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-auto text-sm">Last updated 2 days ago</p>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest rounded-[16px] ambient-shadow border border-outline-variant/30 overflow-hidden group cursor-pointer flex flex-col">
+<div class="relative w-full h-[280px] overflow-hidden bg-surface-container-low">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-in-out" data-alt="A serene bedroom with a low profile wooden bed, crisp white linen sheets, and minimalist built-in wardrobes. Warm ambient lighting highlights the architectural details and textured plaster walls." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAAJSQbEff4OXQl3HABYdf8Q361Jf2PC9GBRMh3Yr9uzAaQatWpUV-YxBqb8z0uNhjViFkxVp2KAcmX0P8XxFfRj1DMtpFdanywk3Vn5chc0YrIXo2Jr1O-WWRIusR7QBC0_voZkPbd_ILbY37buteVi_t_sDUQEwbVTKW-cdkAYhQ0Ter5G3xCYWiXPoRNtM4laKyYpMb3a3rXrJ2KmLRLQzp5RuDIog-_K8Gds1YhjwqsqPMrhwrD')"></div>
+</div>
+<div class="p-lg flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-sm">
+<h2 class="font-headline-md text-headline-md text-primary">Master Bedroom</h2>
+<span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+<div class="flex gap-sm mb-md flex-wrap">
+<span class="px-sm py-xs border border-outline-variant rounded-[4px] font-label-sm text-label-sm text-secondary">Warm Minimalist</span>
+<span class="px-sm py-xs border border-outline-variant rounded-[4px] font-label-sm text-label-sm text-secondary">1 Concept</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-auto text-sm">Last updated 1 week ago</p>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-surface-container-lowest rounded-[16px] ambient-shadow border border-outline-variant/30 overflow-hidden group cursor-pointer flex flex-col">
+<div class="relative w-full h-[280px] overflow-hidden bg-surface-container-low flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-in-out" data-alt="A clean, modern kitchen featuring matte charcoal cabinetry, light oak open shelving, and a monolithic marble island. Subtle natural light filters through sheer curtains, creating a soft, sophisticated atmosphere." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTXSD-b6vHaqtGNFbEF3Vp8WKn0GIb0yZGYUBsaKsypOcZ0DgPNIzBAc6UQPCDog7H-vmeeqJR-IVkW6m-pkndCr-m9twD9XXwCxlTHiBh_IPASlwXUtB18H-EeErIBmGW37J6y816TABkQXNDCt_EhvNljblY66UzzndGOqyYxVRq6b_z9akjSVwohmsfyTR4KDB_B9e3Iec2C_p6bi6GlXjEEzRN1E-8gzvLeDL6cYs7qzR6gJe8')"></div>
+</div>
+<div class="p-lg flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-sm">
+<h2 class="font-headline-md text-headline-md text-primary">Kitchen Remodel</h2>
+<span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+</div>
+<div class="flex gap-sm mb-md flex-wrap">
+<span class="px-sm py-xs border border-outline-variant rounded-[4px] font-label-sm text-label-sm text-secondary">Modern Architecture</span>
+<span class="px-sm py-xs border border-outline-variant rounded-[4px] font-label-sm text-label-sm text-secondary">5 Concepts</span>
+</div>
+<p class="font-body-md text-body-md text-secondary mt-auto text-sm">Last updated 2 weeks ago</p>
+</div>
+</article>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant py-xl">
+<div class="max-w-container-max-marketing mx-auto px-lg flex flex-col md:flex-row justify-between items-center gap-md">
+<span class="font-display-xl text-headline-md text-primary">Kanso</span>
+<div class="flex gap-md">
+<a class="text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">Privacy Policy</a>
+<a class="text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">Terms of Service</a>
+<a class="text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">Cookies</a>
+</div>
+<span class="text-secondary font-body-md text-body-md">© 2024 Kanso AI. All rights reserved.</span>
+</div>
+</footer>
+</body></html>

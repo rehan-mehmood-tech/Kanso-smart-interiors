@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso - Generating Vision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#30312e",
+                        "surface-container-highest": "#e4e2dd",
+                        "outline-variant": "#c4c7c7",
+                        "secondary-fixed": "#e6e2dc",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "inverse-on-surface": "#f2f1ec",
+                        "background": "#fbf9f4",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-dim": "#dcdad5",
+                        "surface-variant": "#e4e2dd",
+                        "on-primary-fixed-variant": "#474746",
+                        "tertiary-container": "#201b12",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#c8c6c5",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#f0eee9",
+                        "on-primary-container": "#858383",
+                        "outline": "#747878",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#5f5e5e",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#201b12",
+                        "secondary-fixed-dim": "#cac6c1",
+                        "surface-container-low": "#f5f3ee",
+                        "on-secondary-fixed-variant": "#484743",
+                        "tertiary-fixed": "#ece1d2",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "on-surface-variant": "#444748",
+                        "on-secondary-fixed": "#1c1c18",
+                        "secondary-container": "#e6e2dc",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-bright": "#fbf9f4",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary": "#605e5a",
+                        "surface-container-high": "#eae8e3",
+                        "on-secondary-container": "#666460",
+                        "tertiary": "#000000",
+                        "primary-container": "#1c1b1b",
+                        "on-surface": "#1b1c19",
+                        "surface": "#fbf9f4",
+                        "on-tertiary-container": "#8b8376",
+                        "on-background": "#1b1c19"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "container-max-app": "1280px",
+                        "xxl": "96px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "container-max-marketing": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["plusJakartaSans"],
+                        "display-xl": ["notoSerif"],
+                        "body-md": ["plusJakartaSans"],
+                        "body-lg": ["plusJakartaSans"],
+                        "label-sm": ["plusJakartaSans"],
+                        "headline-md": ["plusJakartaSans"],
+                        "headline-lg-mobile": ["plusJakartaSans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Noto+Serif:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .crossfade-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .image-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 10s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #img-finished {
+            opacity: 0;
+        }
+        .progress-bar {
+            width: 0%;
+            transition: width 12s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+        .status-text {
+            animation: fadeInOut 4s infinite;
+        }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="h-full bg-surface text-on-surface antialiased overflow-hidden">
+<div class="crossfade-container">
+<!-- Empty Room -->
+<div class="image-layer" id="img-empty" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLv_mWExvxNScjJJ-Ja6pXEcJz0bgcB2C2V9nlqX8YEr63g7ZzE8RZ5229FXtqv8FVBISUazDKmj6igJsfsBNe0B5xsqV6cll5TsXAn7i-1ctDG5hyLTex2q1AzqhAIA6EQ_XSoSe4HXym5RZK8gsjIPSSA0yKeKkY-qbrIgW2xQLlX3dR7hCg3n-0snQthxKx56hp7HeFoTIZf7PV1ev6IjGazwGzdNBQ9TNq3u-bPSvb9dhrR5pJ9HuxA');"></div>
+<!-- Designed Room -->
+<div class="image-layer" id="img-finished" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLt2oIV5y5Uosw6yEkzajef7cziXuqJQhfqSPvXvxhZaIIIKTI_anpxNgl2uQcQADd-mo33isae6r6OqvL7d_7K4ohEr11xxAcwLdWklmLdAJfgaIhEgjjP1FxYx-2RL0z0fTSh98ZiKLwJxaTK0vNnMbktR9bU3aRDokv4O-eUC_mUTQQmzaVYu57o0AUmeuWcd1XakwBdBY2SvVQOVkw_ufl56o_QG-imt62XrjM5JrDQi2V4uDTRckFk');"></div>
+<!-- Overlay -->
+<div class="absolute inset-0 bg-surface/80 backdrop-blur-md flex flex-col justify-center items-center px-lg text-center">
+<h1 class="font-display-xl text-display-xl text-primary mb-xl">Kanso</h1>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-md">Architecting your vision...</h2>
+<p class="font-body-md text-body-md text-secondary status-text h-6 mb-xl" id="status-indicator">
+                Analyzing spatial geometry
+            </p>
+<div class="w-full max-w-md h-[1px] bg-outline-variant rounded-full overflow-hidden">
+<div class="progress-bar h-full bg-primary rounded-full" id="progress"></div>
+</div>
+</div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const finishedImg = document.getElementById('img-finished');
+            const emptyImg = document.getElementById('img-empty');
+            const progress = document.getElementById('progress');
+            const statusText = document.getElementById('status-indicator');
+            
+            const statuses = [
+                'Analyzing spatial geometry',
+                'Curating materials',
+                'Finalizing lighting',
+                'Applying finishes'
+            ];
+            
+            let statusIndex = 0;
+
+            // Start crossfade after a short delay
+            setTimeout(() => {
+                finishedImg.style.opacity = '0.7';
+                emptyImg.style.opacity = '0.3';
+                progress.style.width = '100%';
+            }, 500);
+
+            // Cycle status text
+            setInterval(() => {
+                statusIndex = (statusIndex + 1) % statuses.length;
+                statusText.textContent = statuses[statusIndex];
+            }, 4000);
+        });
+    </script>
+</body></html>

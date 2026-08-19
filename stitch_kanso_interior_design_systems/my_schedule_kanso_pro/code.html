@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso - Schedule</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Serif:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#c8c6c5",
+                    "secondary-container": "#e6e2dc",
+                    "primary-container": "#1c1b1b",
+                    "outline-variant": "#c4c7c7",
+                    "tertiary": "#000000",
+                    "inverse-primary": "#c8c6c5",
+                    "on-secondary-fixed": "#1c1c18",
+                    "tertiary-fixed-dim": "#cfc5b7",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#484743",
+                    "on-primary-fixed-variant": "#474746",
+                    "on-surface-variant": "#444748",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#e5e2e1",
+                    "tertiary-fixed": "#ece1d2",
+                    "inverse-on-surface": "#f2f1ec",
+                    "on-tertiary-container": "#8b8376",
+                    "tertiary-container": "#201b12",
+                    "surface-container-highest": "#e4e2dd",
+                    "surface-container-low": "#f5f3ee",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#4d463b",
+                    "secondary": "#605e5a",
+                    "surface-variant": "#e4e2dd",
+                    "secondary-fixed-dim": "#cac6c1",
+                    "on-surface": "#1b1c19",
+                    "on-primary-container": "#858383",
+                    "background": "#fbf9f4",
+                    "surface-bright": "#fbf9f4",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#f0eee9",
+                    "outline": "#747878",
+                    "on-background": "#1b1c19",
+                    "surface": "#fbf9f4",
+                    "on-tertiary-fixed": "#201b12",
+                    "on-error-container": "#93000a",
+                    "primary": "#000000",
+                    "inverse-surface": "#30312e",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-container": "#666460",
+                    "on-primary-fixed": "#1c1b1b",
+                    "surface-dim": "#dcdad5",
+                    "surface-container-high": "#eae8e3",
+                    "secondary-fixed": "#e6e2dc",
+                    "surface-tint": "#5f5e5e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-max-app": "1280px",
+                    "container-max-marketing": "1440px",
+                    "xxl": "96px",
+                    "margin-mobile": "16px",
+                    "xl": "48px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "body-md": [
+                            "plusJakartaSans"
+                    ],
+                    "body-lg": [
+                            "plusJakartaSans"
+                    ],
+                    "display-xl": [
+                            "notoSerif"
+                    ],
+                    "label-sm": [
+                            "plusJakartaSans"
+                    ],
+                    "headline-lg": [
+                            "plusJakartaSans"
+                    ],
+                    "headline-lg-mobile": [
+                            "plusJakartaSans"
+                    ],
+                    "headline-md": [
+                            "plusJakartaSans"
+                    ]
+            },
+            "fontSize": {
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-xl": [
+                            "72px",
+                            {
+                                    "lineHeight": "84px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg": [
+                            "40px",
+                            {
+                                    "lineHeight": "48px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "32px",
+                            {
+                                    "lineHeight": "38px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ambient-shadow {
+            box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden min-h-screen flex selection:bg-surface-dim selection:text-primary">
+<!-- Desktop Side Navigation -->
+<aside class="hidden md:flex flex-col h-screen p-md space-y-4 bg-surface-container dark:bg-surface-container docked left-0 w-64 fixed top-0 z-50 border-r border-outline-variant/30">
+<div class="px-md pt-lg pb-xl">
+<h1 class="font-display-xl text-headline-md text-primary tracking-tighter">Kanso</h1>
+</div>
+<nav class="flex-1 space-y-2 px-sm">
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-primary dark:text-on-primary-fixed bg-white dark:bg-surface-bright shadow-sm transition-all" href="#">
+<span class="material-symbols-outlined fill text-[20px]" data-icon="calendar_month" data-weight="fill">calendar_month</span>
+<span class="font-label-sm text-label-sm">Schedule</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="architecture">architecture</span>
+<span class="font-label-sm text-label-sm">Projects</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group">group</span>
+<span class="font-label-sm text-label-sm">Clients</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<div class="p-sm">
+<button class="w-full bg-primary text-on-primary font-label-sm text-label-sm py-sm px-md rounded-DEFAULT hover:opacity-90 transition-opacity flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Project
+            </button>
+</div>
+<div class="mt-auto px-sm pb-md space-y-2 border-t border-outline-variant/30 pt-md">
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+<div class="flex items-center gap-sm px-md py-sm mt-4">
+<img class="w-8 h-8 rounded-full object-cover outline outline-1 outline-outline-variant/50" data-alt="A small, circular avatar portrait of an elegant professional interior architect, styled in a minimalist, high-key lighting environment with soft neutral tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb4mZbVWgjEWJGs59pvgUwgLxSHAQuhnyPLMfOCQHPhYvYMn6x733RPJ_EO5DdGRKPmKPcs4prgHDZEIj-qWYG9-9VVycoqtdN0OqEgJ6j5InlOTZwm6jlaEdw0pImft6QSZh-j7wYL8o6PwroiXbuWYGE7RXiSNM78qKMp0l9nxGQtojyvelBXu3B0NMwNTYvOANzNfNo8qSFhDt6OPY243E8MOO0w4YfWVhgCC-vSmze1y6i7wm_"/>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary">Kanso Pro</span>
+<span class="font-body-md text-[10px] text-secondary">Interior Architect</span>
+</div>
+</div>
+<a class="flex items-center gap-sm px-md py-sm rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span class="font-label-sm text-label-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 w-full min-h-screen flex flex-col">
+<!-- Mobile Top Nav -->
+<header class="md:hidden flex justify-between items-center h-20 px-lg bg-surface sticky top-0 z-40">
+<div class="font-display-xl text-headline-md tracking-tighter text-primary">Kanso</div>
+<button class="text-primary p-sm rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 max-w-container-max-app mx-auto w-full px-margin-mobile md:px-lg py-xl">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-xxl gap-lg">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">Schedule</h2>
+<p class="font-body-lg text-secondary">Manage your upcoming consultations and site visits.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-lg py-sm border border-outline-variant rounded-DEFAULT font-label-sm text-label-sm text-primary hover:bg-surface-container transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+                        Sync Calendar
+                    </button>
+<button class="px-lg py-sm bg-primary text-on-primary rounded-DEFAULT font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New Event
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout for Schedule -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Mini Calendar & Stats -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Date Picker Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border border-outline-variant/30">
+<div class="flex justify-between items-center mb-lg">
+<h3 class="font-headline-md text-primary">October 2024</h3>
+<div class="flex gap-sm">
+<button class="p-xs text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-xs text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<!-- Simple Calendar Grid -->
+<div class="grid grid-cols-7 gap-y-sm text-center mb-sm">
+<div class="font-label-sm text-label-sm text-secondary">S</div>
+<div class="font-label-sm text-label-sm text-secondary">M</div>
+<div class="font-label-sm text-label-sm text-secondary">T</div>
+<div class="font-label-sm text-label-sm text-secondary">W</div>
+<div class="font-label-sm text-label-sm text-secondary">T</div>
+<div class="font-label-sm text-label-sm text-secondary">F</div>
+<div class="font-label-sm text-label-sm text-secondary">S</div>
+</div>
+<div class="grid grid-cols-7 gap-y-sm text-center font-body-md">
+<!-- Empty days -->
+<div class="p-sm text-outline">29</div>
+<div class="p-sm text-outline">30</div>
+<div class="p-sm text-outline">1</div>
+<div class="p-sm text-primary">2</div>
+<div class="p-sm text-primary">3</div>
+<div class="p-sm text-primary">4</div>
+<div class="p-sm text-primary relative">5
+                                <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary"></div>
+</div>
+<div class="p-sm text-primary">6</div>
+<div class="p-sm text-primary relative">7
+                                <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-secondary"></div>
+</div>
+<div class="p-sm text-primary">8</div>
+<div class="p-sm text-primary">9</div>
+<div class="p-sm text-primary">10</div>
+<div class="p-sm text-primary">11</div>
+<div class="p-sm text-primary">12</div>
+<div class="p-sm text-primary relative">13</div>
+<div class="p-sm text-primary">14</div>
+<div class="p-sm bg-primary text-on-primary rounded-full relative">15</div> <!-- Active Day -->
+<div class="p-sm text-primary relative">16
+                                <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary"></div>
+</div>
+<div class="p-sm text-primary">17</div>
+<div class="p-sm text-primary">18</div>
+<div class="p-sm text-primary">19</div>
+</div>
+</div>
+<!-- Availability Summary -->
+<div class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border border-outline-variant/30 flex flex-col gap-md">
+<h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">This Week</h4>
+<div class="flex justify-between items-end border-b border-outline-variant/20 pb-sm">
+<span class="font-body-md text-primary">Consultations</span>
+<span class="font-headline-md text-primary">8</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant/20 pb-sm">
+<span class="font-body-md text-primary">Site Visits</span>
+<span class="font-headline-md text-primary">3</span>
+</div>
+<div class="flex justify-between items-end pb-sm">
+<span class="font-body-md text-primary">Open Slots</span>
+<span class="font-headline-md text-secondary">4</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Agenda View -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<div class="flex justify-between items-center mb-md border-b border-outline-variant/30 pb-sm">
+<h3 class="font-headline-md text-primary">Tuesday, Oct 15</h3>
+<div class="flex gap-md font-label-sm text-label-sm">
+<button class="text-primary border-b-2 border-primary pb-xs">Agenda</button>
+<button class="text-secondary hover:text-primary pb-xs transition-colors">Week</button>
+</div>
+</div>
+<!-- Event Item: Consultation -->
+<div class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border-l-4 border-l-primary flex flex-col sm:flex-row gap-lg sm:items-center hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex flex-col min-w-[100px]">
+<span class="font-headline-md text-primary">09:00</span>
+<span class="font-label-sm text-label-sm text-secondary">10:00 AM</span>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="px-2 py-1 bg-surface-dim rounded-sm font-label-sm text-[10px] text-primary uppercase tracking-widest">Virtual Call</span>
+</div>
+<h4 class="font-body-lg text-primary font-medium">Initial Design Consultation</h4>
+<p class="font-body-md text-secondary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">person</span>
+                                Sarah Jenkins • Minimalist Living Room Reno
+                            </p>
+</div>
+<div class="flex sm:flex-col gap-sm sm:items-end opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-4 py-2 border border-outline-variant rounded-DEFAULT font-label-sm text-label-sm text-primary hover:bg-surface-container transition-colors">Join</button>
+</div>
+</div>
+<!-- Event Item: Site Visit -->
+<div class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border-l-4 border-l-secondary flex flex-col sm:flex-row gap-lg sm:items-center hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex flex-col min-w-[100px]">
+<span class="font-headline-md text-primary">11:30</span>
+<span class="font-label-sm text-label-sm text-secondary">01:00 PM</span>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="px-2 py-1 border border-outline-variant rounded-sm font-label-sm text-[10px] text-secondary uppercase tracking-widest">Site Visit</span>
+</div>
+<h4 class="font-body-lg text-primary font-medium">Space Measurement &amp; Assessment</h4>
+<p class="font-body-md text-secondary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                                142 Artisan Lofts, Brooklyn
+                            </p>
+</div>
+<div class="flex sm:flex-col gap-sm sm:items-end opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-4 py-2 border border-outline-variant rounded-DEFAULT font-label-sm text-label-sm text-primary hover:bg-surface-container transition-colors">Details</button>
+</div>
+</div>
+<!-- Break / Empty State Indicator -->
+<div class="flex items-center gap-lg py-md opacity-60">
+<div class="flex flex-col min-w-[100px]">
+<span class="font-body-md text-secondary">01:00</span>
+</div>
+<div class="flex-1 border-t border-dashed border-outline-variant"></div>
+<span class="font-label-sm text-label-sm text-secondary">Open Block</span>
+</div>
+<!-- Event Item: Review -->
+<div class="bg-surface-container-lowest rounded-xl p-lg ambient-shadow border-l-4 border-l-primary flex flex-col sm:flex-row gap-lg sm:items-center hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex flex-col min-w-[100px]">
+<span class="font-headline-md text-primary">15:00</span>
+<span class="font-label-sm text-label-sm text-secondary">16:30 PM</span>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<div class="flex items-center gap-sm">
+<span class="px-2 py-1 bg-surface-dim rounded-sm font-label-sm text-[10px] text-primary uppercase tracking-widest">Virtual Call</span>
+</div>
+<h4 class="font-body-lg text-primary font-medium">Concept Presentation</h4>
+<p class="font-body-md text-secondary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">person</span>
+                                Marcus &amp; Elena • Kitchen Redesign
+                            </p>
+</div>
+<div class="flex sm:flex-col gap-sm sm:items-end opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-4 py-2 border border-outline-variant rounded-DEFAULT font-label-sm text-label-sm text-primary hover:bg-surface-container transition-colors">Join</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Nav (Visible only on mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container border-t border-outline-variant/30 flex justify-around items-center h-16 z-50">
+<a class="flex flex-col items-center gap-1 text-secondary p-2" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary p-2" href="#">
+<span class="material-symbols-outlined fill text-[24px]">calendar_month</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-secondary p-2" href="#">
+<span class="material-symbols-outlined text-[24px]">architecture</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-secondary p-2" href="#">
+<span class="material-symbols-outlined text-[24px]">group</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up - Kanso</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#f2f1ec",
+                        "surface-container-highest": "#e4e2dd",
+                        "tertiary-container": "#201b12",
+                        "primary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "on-primary-container": "#858383",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "surface-dim": "#dcdad5",
+                        "secondary-fixed": "#e6e2dc",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#30312e",
+                        "outline-variant": "#c4c7c7",
+                        "surface": "#fbf9f4",
+                        "surface-variant": "#e4e2dd",
+                        "on-secondary-fixed-variant": "#484743",
+                        "on-surface": "#1b1c19",
+                        "primary-fixed": "#e5e2e1",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-container": "#f0eee9",
+                        "surface-tint": "#5f5e5e",
+                        "on-tertiary-container": "#8b8376",
+                        "tertiary-fixed": "#ece1d2",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#000000",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#201b12",
+                        "on-secondary": "#ffffff",
+                        "background": "#fbf9f4",
+                        "on-secondary-fixed": "#1c1c18",
+                        "surface-bright": "#fbf9f4",
+                        "on-background": "#1b1c19",
+                        "on-surface-variant": "#444748",
+                        "primary-container": "#1c1b1b",
+                        "outline": "#747878",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "surface-container-high": "#eae8e3",
+                        "secondary-container": "#e6e2dc",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#666460",
+                        "surface-container-low": "#f5f3ee",
+                        "on-primary-fixed": "#1c1b1b",
+                        "secondary": "#605e5a",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed-dim": "#cac6c1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-app": "1280px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xl": "48px",
+                        "xxl": "96px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "margin-mobile": "16px",
+                        "container-max-marketing": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-xl": ["Noto Serif", "serif"],
+                        "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-md": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.surface');
+            color: theme('colors.on-surface');
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 1.2s cubic-bezier(0.2, 0, 0, 1) forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+    </style>
+</head>
+<body class="min-h-screen flex antialiased bg-surface">
+<!-- Left Split: Image (Hidden on Mobile) -->
+<div class="hidden lg:block lg:w-1/2 relative bg-surface-container-lowest overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A serene, minimalist living space featuring a sculptural wooden chair against a smooth, soft beige plaster wall. The lighting is diffused and natural, casting soft shadows that highlight the textures of a coarse linen curtain and a polished concrete floor. The mood is tranquil, embodying warm minimalism and high-end architectural editorial style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2oNd_RIkFzOdnYJc_Gq2nx71pl0vcoMAPQrYrDHz6drqQwdKk_yGQkzx1HPdmJ4yizhmx1eqHXSKZY9JxD4O6dskITBrmDEy1c4J9FpHr6RiiyxzNVft06v7DW8qWWmwY-iL1TnC1YbSypZ1IdZ-zVeV7SgwOsxRZbZXi9g5TK0ABVapNmHkvit9OC6wjCMGLKI2nH1ZLgmjrwFhAXPx0d71_bpz0-1UN8VGb_nOCGOGLLT5qgFoA');">
+</div>
+<!-- Subtle gradient overlay to soften the image edge -->
+<div class="absolute inset-0 bg-gradient-to-r from-transparent to-surface/40"></div>
+<!-- Logo Overlay -->
+<div class="absolute top-xl left-xl z-10">
+<span class="font-display-xl text-headline-md tracking-tighter text-on-primary">Kanso</span>
+</div>
+</div>
+<!-- Right Split: Form -->
+<div class="w-full lg:w-1/2 flex flex-col justify-center px-margin-mobile md:px-xl py-xxl bg-surface relative z-10">
+<!-- Mobile Logo (Visible only on mobile) -->
+<div class="lg:hidden absolute top-xl left-margin-mobile">
+<span class="font-display-xl text-headline-md tracking-tighter text-primary">Kanso</span>
+</div>
+<div class="w-full max-w-md mx-auto fade-in">
+<!-- Header -->
+<div class="mb-xl text-center lg:text-left">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-sm">Create an Account</h1>
+<p class="font-body-md text-body-md text-secondary">Begin your journey to a more intentional space.</p>
+</div>
+<!-- Form -->
+<form action="#" class="space-y-md fade-in delay-100" method="POST">
+<!-- Full Name Input -->
+<div class="relative">
+<label class="sr-only" for="fullName">Full Name</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary focus:ring-0 px-0 py-sm font-body-lg text-body-lg text-primary placeholder-secondary-fixed-dim transition-colors duration-300" id="fullName" name="fullName" placeholder="Full Name" required="" type="text"/>
+</div>
+<!-- Email Input -->
+<div class="relative">
+<label class="sr-only" for="email">Email address</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary focus:ring-0 px-0 py-sm font-body-lg text-body-lg text-primary placeholder-secondary-fixed-dim transition-colors duration-300" id="email" name="email" placeholder="Email address" required="" type="email"/>
+</div>
+<!-- Password Input -->
+<div class="relative">
+<label class="sr-only" for="password">Password</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary focus:ring-0 px-0 py-sm font-body-lg text-body-lg text-primary placeholder-secondary-fixed-dim transition-colors duration-300" id="password" name="password" placeholder="Password" required="" type="password"/>
+</div>
+<div class="pt-sm">
+<p class="font-label-sm text-label-sm text-secondary-fixed-dim normal-case tracking-normal mb-md">
+                        By signing up, you agree to our <a class="text-primary hover:underline underline-offset-4" href="#">Terms of Service</a> and <a class="text-primary hover:underline underline-offset-4" href="#">Privacy Policy</a>.
+                    </p>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md py-md rounded-DEFAULT hover:opacity-90 transition-opacity duration-300 flex items-center justify-center gap-sm mt-lg" type="submit">
+                    Get Started
+                    <span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Footer Link -->
+<div class="mt-xl text-center fade-in delay-200">
+<p class="font-body-md text-body-md text-secondary">
+                    Already have an account? 
+                    <a class="text-primary font-medium hover:underline underline-offset-4 transition-all" href="#">Log in</a>
+</p>
+</div>
+</div>
+</div>
+</body></html>

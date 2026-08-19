@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso - Review Project</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Noto+Serif:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#484743",
+                        "outline": "#747878",
+                        "on-surface": "#1b1c19",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#eae8e3",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "primary": "#000000",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-primary-fixed-variant": "#474746",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#1c1b1b",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#858383",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#f0eee9",
+                        "on-tertiary-container": "#8b8376",
+                        "tertiary": "#000000",
+                        "secondary-fixed": "#e6e2dc",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#30312e",
+                        "secondary-fixed-dim": "#cac6c1",
+                        "surface-dim": "#dcdad5",
+                        "tertiary-fixed": "#ece1d2",
+                        "surface-bright": "#fbf9f4",
+                        "on-secondary-fixed": "#1c1c18",
+                        "surface": "#fbf9f4",
+                        "tertiary-container": "#201b12",
+                        "on-error": "#ffffff",
+                        "background": "#fbf9f4",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-container-low": "#f5f3ee",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "on-background": "#1b1c19",
+                        "on-secondary-container": "#666460",
+                        "surface-variant": "#e4e2dd",
+                        "outline-variant": "#c4c7c7",
+                        "inverse-primary": "#c8c6c5",
+                        "secondary-container": "#e6e2dc",
+                        "surface-container-highest": "#e4e2dd",
+                        "on-tertiary-fixed": "#201b12",
+                        "secondary": "#605e5a",
+                        "primary-container": "#1c1b1b",
+                        "on-surface-variant": "#444748",
+                        "surface-tint": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "48px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "xxl": "96px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "container-max-app": "1280px",
+                        "container-max-marketing": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["plusJakartaSans"],
+                        "body-lg": ["plusJakartaSans"],
+                        "headline-md": ["plusJakartaSans"],
+                        "label-sm": ["plusJakartaSans"],
+                        "body-md": ["plusJakartaSans"],
+                        "display-xl": ["notoSerif"],
+                        "headline-lg": ["plusJakartaSans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        .ambient-shadow {
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- Header (Transactional - No Navigation Links) -->
+<header class="w-full fixed top-0 left-0 z-50 bg-background border-b border-outline-variant px-gutter py-md">
+<div class="max-w-container-max-app mx-auto flex justify-between items-center">
+<div class="flex items-center gap-sm cursor-pointer group">
+<span class="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<span class="text-body-md font-body-md text-primary">Back</span>
+</div>
+<div class="text-headline-md font-headline-md tracking-tighter text-primary">Kanso</div>
+<div class="text-label-sm font-label-sm text-secondary">Step 4 of 4</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-xxl pb-xxl px-gutter md:px-xl">
+<div class="max-w-3xl mx-auto w-full flex flex-col gap-xl">
+<!-- Headline -->
+<div class="text-center md:text-left pt-lg">
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">Ready to see your room?</h1>
+<p class="text-body-lg font-body-lg text-secondary">Review your selections before we generate your concepts.</p>
+</div>
+<!-- Review Summary Cards -->
+<div class="flex flex-col gap-lg">
+<!-- Room Type Card -->
+<div class="bg-surface-container-lowest rounded-xl p-xl ambient-shadow border border-outline-variant flex flex-col md:flex-row justify-between md:items-center gap-md">
+<div>
+<h3 class="text-label-sm font-label-sm text-secondary mb-xs uppercase">Room Type</h3>
+<p class="text-headline-md font-headline-md text-primary">Living Room</p>
+</div>
+<button class="text-label-sm font-label-sm text-primary underline hover:text-secondary transition-colors text-left md:text-right w-fit">Edit</button>
+</div>
+<!-- Style Card -->
+<div class="bg-surface-container-lowest rounded-xl p-xl ambient-shadow border border-outline-variant flex flex-col md:flex-row justify-between md:items-center gap-md">
+<div>
+<h3 class="text-label-sm font-label-sm text-secondary mb-xs uppercase">Selected Style</h3>
+<p class="text-headline-md font-headline-md text-primary">Modern Grey</p>
+</div>
+<button class="text-label-sm font-label-sm text-primary underline hover:text-secondary transition-colors text-left md:text-right w-fit">Edit</button>
+</div>
+<!-- Photos Card -->
+<div class="bg-surface-container-lowest rounded-xl p-xl ambient-shadow border border-outline-variant flex flex-col gap-lg">
+<div class="flex justify-between items-center">
+<h3 class="text-label-sm font-label-sm text-secondary uppercase">Uploaded Photos</h3>
+<button class="text-label-sm font-label-sm text-primary underline hover:text-secondary transition-colors">Edit</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant bg-surface-variant relative group cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A brightly lit living room interior before renovation, showing bare walls, wooden flooring, and a large window letting in natural daylight. The space feels empty and waiting for a minimalist design intervention. High fidelity photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlr7xaslIV1FkccwZ3kc-fzMPcpeEwfhPUkj_1FkC6BwLRd-T7KGGkbgtQCd9qvXKqUIhR2MQpVgk3-IqMQqBXPm4nAEsob5JYvKrFEHZNv0YwuhVBjziyPzPHC66e8Vm3sQBvMyX5Mva0okycLzo-zg6f_goRdED-lLF1ifmYggaV16Iu0W_etVeY4ddeUVILdZ7etzW4YlbM8JpzlrU_--zlTyHUmDnyO-P6Urs2Vvf5ydYy2KHV"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant bg-surface-variant relative group cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Another angle of an empty living room prior to interior design, focusing on a corner with plain white walls and hardwood floors. Natural light spills across the room, highlighting the textures of the raw space. Architectural photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf3mrFA5fLUU7SwyW_7nZYfRVbvaS4JT4zqITK8oEGP_86Q2DMek2ers864OivWOMGsqXH5RNZd8BhlClnWq5vyvNrL_uQNOabUbn77ikgataC-Gn0iS0zTEAReD4DTRwi1oLX1LL0XbwFwcV3d1mxZz-2XGxsQOIDt5HY1eH0XOZq5fPRui8YzUk31cFbYMy6D4Melz8_r9Dc-UmuNgnH9hwSY6ws6PLKxaEqsEG2Hc3vO14tcGCa"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant bg-surface-variant relative group cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A close-up shot of architectural details in an unfinished room, showing window frames and clean lines where walls meet the floor. The image has a calm, minimalist tone, setting a blank canvas for high-end interior styling." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBud4I4gQuV7Iv4se6HrMG3RAuuRrXFe_V37jLoZRTG7OHAWvS_OV08262IsTdezcD8djXVRH7p4SePPbL5_UWNXFyFDPmi6WIhyo1plJ-lSYszkRIFEF2mu8xYyblShY8qG8I8BYpWXgWDpkREZlDt9SS4vA0cVDquUdbe8hDGOl3WcWz9CFy5RKeq8xr-mOO3grr0lldVhi_6cV7SAUmlVCS489gc6y1Pa8P1CgqniWCARUmMlmSf"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant bg-surface-variant relative group cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Wide shot of a spacious, empty room destined to be a living area. The lighting is soft and diffused, emphasizing the volume and potential of the space. Styled as a premium pre-renovation architectural photograph." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_Xo4PDig0hnaOslV6XBXJmYK8HcA6srAgA6lg83_ttTXCLtND4vvvhutXaVfg-EypfrEin_lCABpBGYQRr6q7NbxX0cMfl4n4j7NRWNrrZiEbzgX8wn1LCXzaUhrG5Q3gjsFWCzqdx9ZxhNy-PEomctxIOhJwmbMZ26nZ6owsOlxLdRr6gdiEXishkCBI_HSHLAH_q_oOH9bpZXFQwefH8I6HKC6063PmOI9R-3lVGNMVvkWVIe0l"/>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<div class="pt-lg flex justify-end">
+<button class="bg-primary text-on-primary rounded-lg px-xl py-md text-body-md font-label-sm font-semibold hover:opacity-90 transition-opacity w-full md:w-auto flex items-center justify-center gap-sm">
+                    Generate Concepts
+                    <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Your Journey Begins - Kanso</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary-container": "#e6e2dc",
+                        "primary-container": "#1c1b1b",
+                        "outline-variant": "#c4c7c7",
+                        "tertiary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "on-secondary-fixed": "#1c1c18",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#484743",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-surface-variant": "#444748",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e5e2e1",
+                        "tertiary-fixed": "#ece1d2",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-tertiary-container": "#8b8376",
+                        "tertiary-container": "#201b12",
+                        "surface-container-highest": "#e4e2dd",
+                        "surface-container-low": "#f5f3ee",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "secondary": "#605e5a",
+                        "surface-variant": "#e4e2dd",
+                        "secondary-fixed-dim": "#cac6c1",
+                        "on-surface": "#1b1c19",
+                        "on-primary-container": "#858383",
+                        "background": "#fbf9f4",
+                        "surface-bright": "#fbf9f4",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#f0eee9",
+                        "outline": "#747878",
+                        "on-background": "#1b1c19",
+                        "surface": "#fbf9f4",
+                        "on-tertiary-fixed": "#201b12",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "inverse-surface": "#30312e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#666460",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-dim": "#dcdad5",
+                        "surface-container-high": "#eae8e3",
+                        "secondary-fixed": "#e6e2dc",
+                        "surface-tint": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container-max-app": "1280px",
+                        "container-max-marketing": "1440px",
+                        "xxl": "96px",
+                        "margin-mobile": "16px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["plusJakartaSans"],
+                        "body-lg": ["plusJakartaSans"],
+                        "display-xl": ["notoSerif"],
+                        "label-sm": ["plusJakartaSans"],
+                        "headline-lg": ["plusJakartaSans"],
+                        "headline-lg-mobile": ["plusJakartaSans"],
+                        "headline-md": ["plusJakartaSans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fbf9f4; /* surface-bright */
+            color: #1b1c19; /* on-background */
+        }
+        .display-font {
+            font-family: 'Noto Serif', serif;
+        }
+        
+        /* Ambient shadow for cards */
+        .ambient-shadow {
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Subtle fade in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .delay-100 { animation-delay: 100ms; opacity: 0; }
+        .delay-200 { animation-delay: 200ms; opacity: 0; }
+        .delay-300 { animation-delay: 300ms; opacity: 0; }
+    </style>
+</head>
+<body class="bg-background dark:bg-background text-on-background min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+<!-- Ambient background texture / subtle gradient -->
+<div class="absolute inset-0 z-0 opacity-30 pointer-events-none" style="background: radial-gradient(circle at 50% 30%, #e6e2dc 0%, transparent 60%);"></div>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-2xl mx-auto px-gutter py-xl relative z-10 flex flex-col items-center text-center">
+<!-- Success Icon -->
+<div class="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center mb-12 animate-fade-in">
+<span class="material-symbols-outlined text-primary text-4xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Headline -->
+<h1 class="font-display-xl text-display-xl text-primary mb-6 animate-fade-in delay-100">
+            Your Journey Begins
+        </h1>
+<!-- Confirmation Message -->
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-12 animate-fade-in delay-200">
+            Elena Rossi has been assigned to your project. Expect a call within 24 hours to discuss your vision and next steps.
+        </p>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-4 w-full justify-center items-center animate-fade-in delay-300">
+<!-- Primary Action -->
+<a class="inline-flex items-center justify-center px-8 py-4 bg-primary text-on-primary font-label-sm text-label-sm rounded-lg hover:bg-inverse-surface transition-colors duration-300 min-w-[240px]" href="#">
+                View Project Dashboard
+            </a>
+<!-- Secondary Action -->
+<a class="inline-flex items-center justify-center px-8 py-4 border border-outline text-primary font-label-sm text-label-sm rounded-lg hover:bg-surface-container transition-colors duration-300 min-w-[240px]" href="#">
+<span class="material-symbols-outlined mr-2 text-xl" style="font-variation-settings: 'FILL' 0;">calendar_add_on</span>
+                Add to Calendar
+            </a>
+</div>
+</main>
+</body></html>

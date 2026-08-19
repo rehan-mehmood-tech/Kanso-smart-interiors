@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Elena Rossi - Architectural Designer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary-container": "#e6e2dc",
+                        "primary-container": "#1c1b1b",
+                        "outline-variant": "#c4c7c7",
+                        "tertiary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "on-secondary-fixed": "#1c1c18",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#484743",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-surface-variant": "#444748",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e5e2e1",
+                        "tertiary-fixed": "#ece1d2",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-tertiary-container": "#8b8376",
+                        "tertiary-container": "#201b12",
+                        "surface-container-highest": "#e4e2dd",
+                        "surface-container-low": "#f5f3ee",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "secondary": "#605e5a",
+                        "surface-variant": "#e4e2dd",
+                        "secondary-fixed-dim": "#cac6c1",
+                        "on-surface": "#1b1c19",
+                        "on-primary-container": "#858383",
+                        "background": "#fbf9f4",
+                        "surface-bright": "#fbf9f4",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#f0eee9",
+                        "outline": "#747878",
+                        "on-background": "#1b1c19",
+                        "surface": "#fbf9f4",
+                        "on-tertiary-fixed": "#201b12",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "inverse-surface": "#30312e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#666460",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-dim": "#dcdad5",
+                        "surface-container-high": "#eae8e3",
+                        "secondary-fixed": "#e6e2dc",
+                        "surface-tint": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container-max-app": "1280px",
+                        "container-max-marketing": "1440px",
+                        "xxl": "96px",
+                        "margin-mobile": "16px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["plusJakartaSans", "sans-serif"],
+                        "body-lg": ["plusJakartaSans", "sans-serif"],
+                        "display-xl": ["notoSerif", "serif"],
+                        "label-sm": ["plusJakartaSans", "sans-serif"],
+                        "headline-lg": ["plusJakartaSans", "sans-serif"],
+                        "headline-lg-mobile": ["plusJakartaSans", "sans-serif"],
+                        "headline-md": ["plusJakartaSans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    },
+                    boxShadow: {
+                        'ambient': '0 4px 24px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'plusJakartaSans', sans-serif; background-color: #fbf9f4; color: #1b1c19; }
+        .ambient-shadow { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04); }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-md max-w-container-max-marketing mx-auto bg-background border-b border-outline-variant">
+<div class="text-headline-md font-headline-md tracking-tighter text-primary">
+            Kanso
+        </div>
+<nav class="hidden md:flex gap-lg">
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-label-sm text-label-sm" href="#">Projects</a>
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-label-sm text-label-sm" href="#">Portfolio</a>
+<a class="text-secondary hover:text-primary transition-colors duration-300 font-label-sm text-label-sm" href="#">Materials</a>
+</nav>
+<div class="flex items-center">
+<button class="text-primary hover:opacity-80 transition-opacity duration-200">
+<span class="material-symbols-outlined" data-icon="account_circle" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-[100px] pb-xxl px-margin-mobile md:px-gutter max-w-container-max-app mx-auto w-full">
+<!-- Profile Header Section -->
+<section class="flex flex-col md:flex-row gap-xl md:gap-xxl items-start mb-xxl">
+<!-- Profile Image -->
+<div class="w-full md:w-1/3 flex-shrink-0">
+<div class="relative w-full aspect-[3/4] rounded-lg overflow-hidden ambient-shadow border border-surface-container-highest">
+<img alt="Elena Rossi" class="object-cover w-full h-full" data-alt="A highly professional and sophisticated portrait of an architectural designer, Elena Rossi. She is standing in a brightly lit, minimalist studio with subtle architectural models in the background. The lighting is soft and natural, emphasizing a clean, contemporary aesthetic. She wears neutral, tailored clothing fitting a premium design consultant. The mood is calm, confident, and editorial, perfectly aligned with a luxury design brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUh7pD1FjwcXY7HWrJahNwKXSUrpOvHUrw9oeNTEmMBnTrd8_XOEpdLJUv0awFpOcNQCEDQCGSLdhh5Suehu8EZH7jMeSsNcOqMv7FVFX2HnyxnqUw-4l37Ef9WIub_tHYnIWklI8DCUdCkPZzQ9nngWUtOdHpLa9ttUFm41gwVuDXeJqI7Nm-usfYuQuhmlAEC_QUJaC6L7OdlAtYHQRvRCYrDTxpKkZNiopGPvgIRrcaEUg2mhnd"/>
+</div>
+</div>
+<!-- Profile Info -->
+<div class="w-full md:w-2/3 flex flex-col justify-center">
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">Elena Rossi</h1>
+<p class="text-body-lg font-body-lg text-secondary mb-lg">Architectural Designer &amp; Spatial Consultant</p>
+<div class="prose prose-p:text-body-md prose-p:font-body-md text-on-surface-variant max-w-3xl mb-xl">
+<p>
+                        Elena specializes in crafting environments that embody 'Quiet Luxury'—spaces that speak through material integrity and spatial harmony rather than overt decoration. With over a decade of experience in residential and boutique commercial design, her approach is deeply tactile and intentionally reductive, drawing inspiration from natural light and pure architectural forms.
+                    </p>
+</div>
+<!-- Expertise/Materials -->
+<div class="mb-xl">
+<h3 class="text-label-sm font-label-sm text-secondary uppercase tracking-wider mb-md">Key Materials</h3>
+<div class="flex flex-wrap gap-sm">
+<span class="px-md py-xs bg-surface-container-lowest border border-outline-variant rounded-sm text-label-sm font-label-sm text-on-surface">Limestone</span>
+<span class="px-md py-xs bg-surface-container-lowest border border-outline-variant rounded-sm text-label-sm font-label-sm text-on-surface">European Oak</span>
+<span class="px-md py-xs bg-surface-container-lowest border border-outline-variant rounded-sm text-label-sm font-label-sm text-on-surface">Tadelakt</span>
+<span class="px-md py-xs bg-surface-container-lowest border border-outline-variant rounded-sm text-label-sm font-label-sm text-on-surface">Brushed Brass</span>
+</div>
+</div>
+<!-- CTA -->
+<div>
+<button class="bg-primary text-on-primary px-lg py-md rounded-lg font-label-sm text-label-sm uppercase tracking-wider hover:bg-secondary transition-colors duration-300 ambient-shadow">
+                        Schedule Introductory Call
+                    </button>
+</div>
+</div>
+</section>
+<!-- Gallery Section (Bento Grid) -->
+<section>
+<div class="flex justify-between items-end mb-lg">
+<h2 class="text-headline-md font-headline-md text-primary">Selected Works</h2>
+<span class="text-label-sm font-label-sm text-secondary uppercase">Quiet Luxury</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Large Feature Image -->
+<div class="md:col-span-2 relative aspect-[4/3] rounded-lg overflow-hidden ambient-shadow group cursor-pointer border border-surface-container-highest">
+<img alt="Project 1" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105" data-alt="A stunning interior shot of a minimalist living space designed in a 'Quiet Luxury' style. The room features a large, plush modular sofa in bone white, resting on a textured limestone floor. Soft, diffused daylight pours through floor-to-ceiling sheer curtains, highlighting the subtle grain of a European oak coffee table. The overall palette is neutral, calm, and sophisticated, reflecting high-end architectural editorial photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzQHw9_gwkfg_eqDbfgEB9efgLUag3wAikViP4_WqfL1MJ5T4JhFQokdMfWRMVZN7tnCQJvepX2-0Lk4vFdXZohSNvcRZzu_H-pGUeD4LU3jN-wmmcV_UM7ZIVJl1jR2ZV8DLTyEI3n3v3NHCmC295UrerR9oDEVDDzc9H2ZJOG2-tmFpb6CdqrZ-zluFPfTfwmUSnpisgjSHsm2YuiDcF7x6Qw5YZUF0SvMVJcmUbff22OXnh3dWD"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-lg">
+<span class="text-on-primary font-body-md text-body-md">Villa Lyskamm</span>
+</div>
+</div>
+<!-- Stacked Smaller Images -->
+<div class="flex flex-col gap-md">
+<div class="relative flex-1 rounded-lg overflow-hidden ambient-shadow group cursor-pointer border border-surface-container-highest">
+<img alt="Project 2" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105" data-alt="A detailed close-up shot of architectural materials in a high-end interior. The image focuses on a seamless transition between smooth Tadelakt plaster walls and a brushed brass fixture. The lighting is moody and directional, emphasizing the tactile quality of the surfaces. The aesthetic is extremely clean, modern, and aligned with minimalist luxury design principles." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChnvM_9n5JuctCYavVNFS3Wx3NUc8vui1CjVTl7VHzlCHHPE71St6nMiQe7QwzJQN7fhmaS0Gx6I4AZHOxFErB4bg0bfk2X04EB1huvkE0KV9WA7WWkJW__abjE9g_Nnd8NmimnZ5Yow8MJpU44-ZsHeEuRTFXR5ez8wj_jmz3MrfoTl_I4TBgF2v7J4fF3n83Sz-LL110XgnxLYb-VKYUeQ7UC9XcdrT0DWkOMoA87U30WxGSAiPU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-md">
+<span class="text-on-primary font-label-sm text-label-sm">Materiality Study</span>
+</div>
+</div>
+<div class="relative flex-1 rounded-lg overflow-hidden ambient-shadow group cursor-pointer border border-surface-container-highest">
+<img alt="Project 3" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105" data-alt="A serene, minimalist dining room featuring a long, solid European oak table surrounded by sculptural wooden chairs. The walls are a soft, warm bone white with minimal art. A large window frames a view of a serene courtyard, allowing natural light to wash over the space. The composition is highly structured, elegant, and perfectly aligned with a premium architectural gallery style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyVEkvs0yTlZcSeFjZxr7pp-ZG_wuzi8NTz3oXnoAl_DiKisBYTKlFyU5b7tAwsDR0ejTS-aHsWrxuAsxTMuHkgsuMXJX8fdmz22R1wRsHYs1fVs8v6Gf2bZCckN23w7txg55efPJ8tZSaFdiN4k1kksoVExNmkX3xPqYqOMe4vuRxN1Cfm6hQJHI491ogOs52AAZ3fUO_ycAMhKbOd6hUtBRPJvbuVcf0kJ3ki706ZIWK2aBxgkdL"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-md">
+<span class="text-on-primary font-label-sm text-label-sm">Oak House</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl px-gutter flex flex-col md:flex-row justify-between items-center max-w-container-max-marketing mx-auto bg-surface-container-lowest border-t border-outline-variant">
+<div class="text-headline-md font-headline-md text-primary mb-md md:mb-0">
+            Kanso
+        </div>
+<nav class="flex gap-lg mb-md md:mb-0">
+<a class="text-secondary hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Privacy Policy</a>
+<a class="text-secondary hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Terms of Service</a>
+<a class="text-secondary hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Sustainability</a>
+<a class="text-secondary hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Contact</a>
+</nav>
+<div class="text-secondary font-label-sm text-label-sm">
+            © 2024 Kanso Interior Design. All rights reserved.
+        </div>
+</footer>
+</body></html>

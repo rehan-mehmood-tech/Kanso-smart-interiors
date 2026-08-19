@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso Pro - Specialist Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary-container": "#e6e2dc",
+                        "primary-container": "#1c1b1b",
+                        "outline-variant": "#c4c7c7",
+                        "tertiary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "on-secondary-fixed": "#1c1c18",
+                        "tertiary-fixed-dim": "#cfc5b7",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#484743",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-surface-variant": "#444748",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e5e2e1",
+                        "tertiary-fixed": "#ece1d2",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-tertiary-container": "#8b8376",
+                        "tertiary-container": "#201b12",
+                        "surface-container-highest": "#e4e2dd",
+                        "surface-container-low": "#f5f3ee",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#4d463b",
+                        "secondary": "#605e5a",
+                        "surface-variant": "#e4e2dd",
+                        "secondary-fixed-dim": "#cac6c1",
+                        "on-surface": "#1b1c19",
+                        "on-primary-container": "#858383",
+                        "background": "#fbf9f4",
+                        "surface-bright": "#fbf9f4",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#f0eee9",
+                        "outline": "#747878",
+                        "on-background": "#1b1c19",
+                        "surface": "#fbf9f4",
+                        "on-tertiary-fixed": "#201b12",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "inverse-surface": "#30312e",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#666460",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-dim": "#dcdad5",
+                        "surface-container-high": "#eae8e3",
+                        "secondary-fixed": "#e6e2dc",
+                        "surface-tint": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container-max-app": "1280px",
+                        "container-max-marketing": "1440px",
+                        "xxl": "96px",
+                        "margin-mobile": "16px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["plusJakartaSans"],
+                        "body-lg": ["plusJakartaSans"],
+                        "display-xl": ["notoSerif"],
+                        "label-sm": ["plusJakartaSans"],
+                        "headline-lg": ["plusJakartaSans"],
+                        "headline-lg-mobile": ["plusJakartaSans"],
+                        "headline-md": ["plusJakartaSans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-xl": ["72px", { "lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=notoSerif:wght@100..900&family=plusJakartaSans:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'plusJakartaSans', sans-serif; }
+        .ambient-shadow { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex antialiased">
+<!-- SideNavBar Component -->
+<nav class="hidden md:flex flex-col h-screen p-md space-y-4 docked left-0 w-64 bg-surface-container shadow-sm border-r border-surface-container-low shrink-0 sticky top-0">
+<div class="flex items-center gap-sm mb-lg px-sm">
+<span class="font-display-xl text-headline-md text-primary tracking-tighter">Kanso Pro</span>
+</div>
+<div class="flex items-center gap-md px-sm py-md border-b border-surface-container-high mb-md">
+<div class="w-10 h-10 rounded-full overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a professional interior architect in a well-lit modern studio setting. Soft natural light illuminates their face, conveying approachability and expertise. The aesthetic is clean, light-mode, and sophisticated, matching a premium warm minimalism style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZgCqjGZz0ZcAirldFES0F5s6M2CuHrpCplATkpGISy9iVbCFxaxaru9SCVBY0-Cr8caeR9v_krEr84ut2ddJwMGrHCO2CEPjHNBIMUikfukADwxDfrEXVkolRHduhHG3Rrcjw-0fOgP4iEoPDa0wAzZcU8JTXZG14fMLgK1BhqqSoW0kpRarhBCR7_omhkaHOvpS1cD-OsAbaHFdglDVSanvQOxoGFNFTtCWAIRheZxS3h8jxn45X"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold">Pro User Profile</span>
+<span class="font-label-sm text-label-sm text-secondary">Interior Architect</span>
+</div>
+</div>
+<button class="w-full py-sm px-md bg-primary text-on-primary font-label-sm text-label-sm rounded-DEFAULT mb-md hover:opacity-90 transition-opacity">
+            New Project
+        </button>
+<ul class="flex flex-col space-y-sm flex-grow">
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary bg-surface-bright font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="architecture">architecture</span>
+                    Projects
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="analytics">analytics</span>
+                    Analytics
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="group">group</span>
+                    Clients
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<ul class="flex flex-col space-y-sm mt-auto pt-md border-t border-surface-container-high">
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="help">help</span>
+                    Support
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-secondary" data-icon="logout">logout</span>
+                    Logout
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col w-full max-w-container-max-app mx-auto min-h-screen relative">
+<!-- TopAppBar (Mobile Only - representing the shell context) -->
+<header class="md:hidden flex justify-between items-center h-20 px-md border-b border-outline-variant bg-surface sticky top-0 z-50">
+<span class="font-display-xl text-headline-md tracking-tighter text-primary">Kanso Pro</span>
+<button class="text-primary p-sm">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</header>
+<div class="p-lg md:p-xl flex-1 flex flex-col gap-lg md:gap-xl max-w-full">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-xs">Welcome back, Architect.</h1>
+<p class="font-body-md text-body-md text-secondary">Here's what's happening with your studio today.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm border border-outline text-on-surface font-label-sm text-label-sm rounded-DEFAULT hover:bg-surface-container transition-colors">Generate Report</button>
+</div>
+</section>
+<!-- Metrics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-md md:gap-lg">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-container flex flex-col justify-between min-h-[140px]">
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-secondary">New Leads</span>
+<span class="material-symbols-outlined text-primary" data-icon="person_add">person_add</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">12</div>
+<div class="font-label-sm text-label-sm text-on-secondary-container mt-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-on-tertiary-container text-[16px]" data-icon="trending_up">trending_up</span>
+                            +3 since last week
+                        </div>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-container flex flex-col justify-between min-h-[140px]">
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-secondary">Active Projects</span>
+<span class="material-symbols-outlined text-primary" data-icon="architecture">architecture</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">8</div>
+<div class="font-label-sm text-label-sm text-on-secondary-container mt-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="pending_actions">pending_actions</span>
+                            2 pending review
+                        </div>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-container flex flex-col justify-between min-h-[140px]">
+<div class="flex justify-between items-start">
+<span class="font-body-md text-body-md text-secondary">Est. Earnings</span>
+<span class="material-symbols-outlined text-primary" data-icon="payments">payments</span>
+</div>
+<div>
+<div class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">$24.5k</div>
+<div class="font-label-sm text-label-sm text-on-secondary-container mt-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-on-tertiary-container text-[16px]" data-icon="check_circle">check_circle</span>
+                            On track for Q3
+                        </div>
+</div>
+</div>
+</section>
+<!-- Main Workspace Area -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-lg flex-1">
+<!-- Client Leads List (Takes up more space) -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl ambient-shadow border border-surface-container flex flex-col">
+<div class="p-lg border-b border-surface-container flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface">Recent Leads</h2>
+<a class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors" href="#">View All</a>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Lead Item 1 -->
+<div class="p-lg border-b border-surface-container hover:bg-surface-container-low transition-colors cursor-pointer flex flex-col md:flex-row gap-md items-start md:items-center justify-between">
+<div class="flex gap-md items-center">
+<div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A bright, airy living room interior featuring minimalist warm-toned furniture, a textured cream rug, and a large window letting in natural light. The style is modern architectural editorial with a calm, inviting mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUuQhtuFpgtZIas1oergn59xiZ0_S1q-cE-wS8bzaRhPW5sSkg47Znl8WHN57E7pJbAn_CzGZKdTik471IRFhIqbXSPEOY5w0KUnhxvu6H4xVjvD9jFRyzDQSaEQYEhFPAJ2wHslCbDkU_1vdC1Hg4AG4ftzsP65Ji7GJf2lNWKU6qK-HNgJlRazrAXoLvEDlYVRzwHWoepYs8WY_tXWFmlQhUwUs3-lt9f-5N8zbXXeq1wk2w2pJ_"/>
+</div>
+<div>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold">Sarah Jenkins</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-xs">Living Room & Kitchen</p>
+</div>
+</div>
+<div class="flex gap-sm flex-wrap">
+<span class="px-sm py-xs border border-outline-variant text-secondary font-label-sm text-label-sm rounded-sm">Japandi</span>
+<span class="px-sm py-xs border border-outline-variant text-secondary font-label-sm text-label-sm rounded-sm">High Budget</span>
+</div>
+</div>
+<!-- Lead Item 2 -->
+<div class="p-lg border-b border-surface-container hover:bg-surface-container-low transition-colors cursor-pointer flex flex-col md:flex-row gap-md items-start md:items-center justify-between">
+<div class="flex gap-md items-center">
+<div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A sleek, minimalist master bedroom with neutral gray walls, a low-profile timber bed frame, and crisp white linens. Ambient lighting highlights the subtle textures of the walls, conveying a sophisticated, quiet high-end aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCImo25JJBXz2Hdent_xFO1laAQY2mI8IZmZ42NbjDEihfgTToN_rULPzr4wsbkSsehYAgC4YBiL4Y05YziqSEjhdEJdKjKcsJNQGQWJRG9QdyPcx2zUSuIP05Ww7I1McNIVD8GheQyqdz5zG8lUmGx_uVh4OF_Nf5CLJUT8_WoNHv3r35MMbWSb1gESTFpk41XTsNSF-HWKRBNOWeYfB_pPTQLfUsgxhSuLGHU3SJWBO9PoA1VztHB"/>
+</div>
+<div>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold">Michael Chen</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-xs">Master Suite Remodel</p>
+</div>
+</div>
+<div class="flex gap-sm flex-wrap">
+<span class="px-sm py-xs border border-outline-variant text-secondary font-label-sm text-label-sm rounded-sm">Minimalist</span>
+<span class="px-sm py-xs border border-outline-variant text-secondary font-label-sm text-label-sm rounded-sm">Medium Budget</span>
+</div>
+</div>
+<!-- Lead Item 3 -->
+<div class="p-lg hover:bg-surface-container-low transition-colors cursor-pointer flex flex-col md:flex-row gap-md items-start md:items-center justify-between">
+<div class="flex gap-md items-center">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center shrink-0 text-secondary">
+<span class="font-headline-md text-headline-md">E</span>
+</div>
+<div>
+<h3 class="font-body-md text-body-md text-on-surface font-semibold">Elena Rossi</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-xs">Home Office</p>
+</div>
+</div>
+<div class="flex gap-sm flex-wrap">
+<span class="px-sm py-xs border border-outline-variant text-secondary font-label-sm text-label-sm rounded-sm">Mid-Century</span>
+<span class="px-sm py-xs bg-surface-container-high text-on-surface font-label-sm text-label-sm rounded-sm">Action Req</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Secondary Panel (Schedule / Quick Actions) -->
+<div class="flex flex-col gap-lg">
+<!-- Schedule -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-container flex-1">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-md">Today's Schedule</h2>
+<div class="flex flex-col gap-md">
+<div class="flex gap-md">
+<div class="w-16 text-right shrink-0">
+<span class="font-label-sm text-label-sm text-secondary">10:00 AM</span>
+</div>
+<div class="flex-1 border-l-2 border-outline-variant pl-md pb-md">
+<div class="font-body-md text-body-md text-on-surface">Initial Consultation</div>
+<div class="font-label-sm text-label-sm text-secondary">Sarah Jenkins - Video Call</div>
+</div>
+</div>
+<div class="flex gap-md">
+<div class="w-16 text-right shrink-0">
+<span class="font-label-sm text-label-sm text-secondary">1:30 PM</span>
+</div>
+<div class="flex-1 border-l-2 border-primary pl-md pb-md relative">
+<div class="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-primary"></div>
+<div class="font-body-md text-body-md text-on-surface font-semibold">Material Review</div>
+<div class="font-label-sm text-label-sm text-secondary">Studio Downtown</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

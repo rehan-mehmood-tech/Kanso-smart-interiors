@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso - Interior Design Concepts</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#c8c6c5",
+                      "surface-tint": "#5f5e5e",
+                      "on-surface-variant": "#444748",
+                      "surface-container-low": "#f5f3ee",
+                      "on-primary": "#ffffff",
+                      "tertiary": "#000000",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#1c1b1b",
+                      "outline-variant": "#c4c7c7",
+                      "primary-container": "#1c1b1b",
+                      "on-tertiary-container": "#8b8376",
+                      "on-surface": "#1b1c19",
+                      "surface-bright": "#fbf9f4",
+                      "on-tertiary-fixed-variant": "#4d463b",
+                      "on-tertiary-fixed": "#201b12",
+                      "tertiary-fixed-dim": "#cfc5b7",
+                      "inverse-on-surface": "#f2f1ec",
+                      "secondary-fixed": "#e6e2dc",
+                      "secondary-container": "#e6e2dc",
+                      "surface-container-highest": "#e4e2dd",
+                      "on-primary-container": "#858383",
+                      "primary-fixed-dim": "#c8c6c5",
+                      "primary": "#000000",
+                      "on-background": "#1b1c19",
+                      "on-error": "#ffffff",
+                      "on-secondary-container": "#666460",
+                      "surface-variant": "#e4e2dd",
+                      "surface-container": "#f0eee9",
+                      "inverse-surface": "#30312e",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#605e5a",
+                      "surface-container-high": "#eae8e3",
+                      "error-container": "#ffdad6",
+                      "outline": "#747878",
+                      "secondary-fixed-dim": "#cac6c1",
+                      "surface-dim": "#dcdad5",
+                      "on-secondary-fixed-variant": "#484743",
+                      "tertiary-fixed": "#ece1d2",
+                      "tertiary-container": "#201b12",
+                      "on-secondary-fixed": "#1c1c18",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#474746",
+                      "primary-fixed": "#e5e2e1",
+                      "on-error-container": "#93000a",
+                      "background": "#fbf9f4",
+                      "surface": "#fbf9f4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "container-max-marketing": "1440px",
+                      "lg": "24px",
+                      "container-max-app": "1280px",
+                      "xxl": "96px",
+                      "gutter": "24px",
+                      "xl": "48px",
+                      "sm": "8px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "plusJakartaSans"
+                      ],
+                      "label-sm": [
+                              "plusJakartaSans"
+                      ],
+                      "headline-lg": [
+                              "notoSerif"
+                      ],
+                      "display-xl": [
+                              "notoSerif"
+                      ],
+                      "headline-lg-mobile": [
+                              "notoSerif"
+                      ],
+                      "body-md": [
+                              "plusJakartaSans"
+                      ],
+                      "headline-md": [
+                              "notoSerif"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-xl": [
+                              "84px",
+                              {
+                                      "lineHeight": "96px",
+                                      "letterSpacing": "-0.03em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1, h2, h3, .font-display-xl, .font-headline-lg, .font-headline-md, .font-headline-lg-mobile {
+            font-family: 'Noto Serif', serif;
+        }
+        
+        /* Slider Custom Styles */
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slider-image-before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 20;
+        }
+        
+        .slider-image-before img {
+            width: 200%; /* Important: needs to map back to full container width */
+            max-width: none;
+            height: 100%;
+            object-fit: cover;
+            object-position: left center;
+        }
+
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            bottom: 0;
+            width: 2px;
+            background-color: white;
+            z-index: 30;
+            transform: translateX(-50%);
+            cursor: ew-resize;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .slider-handle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%231b1c19" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline><polyline points="9 18 15 12 9 6" transform="translate(6, 0) scale(-1, 1) translate(-24, 0)"></polyline></svg>');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 24px;
+            transition: transform 0.2s ease;
+        }
+        
+        .slider-handle:hover::after {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-light">
+<!-- TopNavBar -->
+<nav class="bg-surface border-b border-outline-variant w-full sticky top-0 z-50 backdrop-blur-md bg-opacity-90 transition-all duration-300">
+<div class="flex justify-between items-center h-24 px-lg max-w-container-max-marketing mx-auto w-full">
+<a class="font-display-xl text-headline-md tracking-tight text-primary flex items-center gap-sm" href="#">
+<img alt="Kanso Logo" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD619gXCicDen4279VQpj6sKzeObCcbjVsCHWy-Tdx1jw6N_FodMSuOy3QkDTgxxJ6yP699qm30uvhjyYucym3xCAkI5ul6l6xoYmOKT3wsLMwJCEzhkSCjq1pcE1G1PziGiHn5-xQz9YLI6rrcPbM82bSi8ob2Xfi0NmML7rPr59U_Vog1YX5ieZH_wPbl9o7LOxRxxcfKK2Fm71hgJJM9v-nuGq5jyr1DOApmDJeaBO-qscCCDBd"/>
+<span class="sr-only">Kanso</span>
+</a>
+<div class="hidden md:flex gap-xl items-center">
+<a class="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors duration-300" href="#how-it-works">How It Works</a>
+<a class="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors duration-300" href="#explore">Explore</a>
+</div>
+<button class="bg-primary text-on-primary font-body-md text-sm uppercase tracking-widest px-lg py-3 rounded-sm hover:bg-secondary transition-colors duration-300">Design My Room</button>
+</div>
+</nav>
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="max-w-container-max-marketing mx-auto px-margin-mobile md:px-lg py-24 md:py-32 flex flex-col items-center text-center gap-16">
+<div class="max-w-4xl flex flex-col gap-8 items-center">
+<h1 class="font-display-xl text-[56px] md:text-display-xl text-primary leading-[1.1] tracking-tight">See what your room could look like — before you spend a dollar.</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl font-light">Upload photos of your room, choose a style, and explore realistic interior concepts designed around your space.</p>
+</div>
+<div class="w-full mt-8 rounded-sm overflow-hidden border border-outline-variant/30">
+<img alt="Hero Room Design" class="w-full h-auto max-h-[80vh] object-cover" data-alt="A highly realistic, wide-angle interior photograph of a beautifully designed living room in a Japandi style. Soft natural light floods the space, highlighting natural textures, light wood accents, and minimalist, high-quality furniture. The room feels serene, expansive, and professionally styled with warm neutral tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATyWfK7DefZzuT1J2f_k1Cc3aOclJ8_oxrK_RWucnIcs5xBgoGAHQd-NvENEH68ArR9fMPHAiXcXwpt_ZRaJDNzjpPQ1PxBNK2KgZXYzQSrHOL__ZZNSXWda9fr_NR5WUCgyx2b-j0GaF7i6d78ltcoV8QZ-gLZNfFpqvPK6ZZdJ533UuIUQ0VERM6iFx2WLti50sSDVcrtm-FJIyjw_oDSOIfNtldO5XTwnaNuklCuQsXeOhkN2x0"/>
+</div>
+</section>
+<!-- Before/After Interactive Section -->
+<section class="max-w-container-max-app mx-auto px-margin-mobile md:px-lg py-24 md:py-32 flex flex-col items-center gap-16">
+<div class="text-center">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-4 tracking-tight">Experience the Transformation</h2>
+</div>
+<div class="w-full relative h-[70vh] rounded-sm overflow-hidden border border-outline-variant/30 slider-container" id="before-after-slider">
+<!-- After Image (Background) -->
+<img alt="After Design" class="w-full h-full object-cover object-center absolute inset-0 z-10" data-alt="A highly realistic, wide-angle interior photograph of a beautifully designed living room in a Japandi style. Soft natural light floods the space, highlighting natural textures, light wood accents, and minimalist, high-quality furniture. The room feels serene, expansive, and professionally styled with warm neutral tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvhxxssbMecNYK5onkUQOjLat4R-RKDRe-DnhJ3B29nAouyHODTuWQ0veTBkVWbqtfwGiqz-Wd0pe5O8mSDf04AJ9iNXoXHQ9D8pUjfi4LFDkU4SUFRzWBfGmM2SdCkJtp8AH3fT9t9_Wr0w1zjuECfTokSwqPgO34yCFqPQWByQ5GCM5fOAQ2u24rIA-yK72P6EVkrudX6oEzoApXNXXPIr_Jit52F4tSULFmB-gjL6CWtpkkPYMX"/>
+<!-- Before Image (Overlay) -->
+<div class="slider-image-before" id="slider-before">
+<img alt="Before Design" class="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHC1hYju0ijgdUsJImcVibJiD_ylpFzLHybgOXsHRwRKoW2OdE_MSSu9TmhgE96bkofrWFXIqIQ3YKTgbSm-IdkLgTmdZ9Vkb2DECWMzGQjnfnB1oTuzQyqc0_Qw3HQJTH-8IdwRSq2IdVf8EtVgR4WAgRscxhL0Z2_LbMireeAS56MEK-8zqS8ACJCSaB-VNyNJD_d4uaT7sWgSdigJQHee9GwkYZ-yD5FgH_1L2cmiUwu2NTOwGs"/>
+</div>
+<!-- Slider Handle -->
+<div class="slider-handle" id="slider-handle"></div>
+</div>
+</section>
+<!-- How It Works (Editorial Style) -->
+<section class="bg-surface-container-low py-24 md:py-32 border-y border-outline-variant/30" id="how-it-works">
+<div class="max-w-container-max-marketing mx-auto px-margin-mobile md:px-lg">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-24">
+<div class="flex flex-col gap-6">
+<span class="font-display-xl text-5xl text-tertiary-fixed-dim/50 italic">01</span>
+<h3 class="font-headline-md text-headline-md text-primary tracking-tight">Capture Your Space</h3>
+<p class="font-body-md text-body-md text-secondary font-light leading-relaxed">Take a few clear photos of your empty or current room. The better the lighting, the more precise the concept.</p>
+</div>
+<div class="flex flex-col gap-6">
+<span class="font-display-xl text-5xl text-tertiary-fixed-dim/50 italic">02</span>
+<h3 class="font-headline-md text-headline-md text-primary tracking-tight">Choose Your Style</h3>
+<p class="font-body-md text-body-md text-secondary font-light leading-relaxed">Select from our curated list of professional design aesthetics, from Warm Neutral to Industrial.</p>
+</div>
+<div class="flex flex-col gap-6">
+<span class="font-display-xl text-5xl text-tertiary-fixed-dim/50 italic">03</span>
+<h3 class="font-headline-md text-headline-md text-primary tracking-tight">Explore Your New Room</h3>
+<p class="font-body-md text-body-md text-secondary font-light leading-relaxed">Instantly receive photorealistic renderings of your space transformed, ready to inspire your project.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Style Showcase -->
+<section class="max-w-container-max-marketing mx-auto px-margin-mobile md:px-lg py-24 md:py-32 flex flex-col gap-16" id="explore">
+<div class="flex justify-between items-end border-b border-outline-variant/30 pb-6">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">Curated Aesthetics</h2>
+<a class="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors hidden md:block" href="#">View all styles →</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Style Card 1 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="A modern interior living space, minimalist furniture, sleek lines, monochromatic palette with subtle warm accents, high-end architectural styling, bright natural light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhd-hzlX221ajxAM8ApGgJ60wAS56QS-_JmnGorrA23oQA9Ke-wBf1rFrr9AFH6nahHZNCKRNUEdkk0q5AX9ARlfZfcygva_MB3c53VnaCrxLZh9JKtbklg-WzGv_2kOlp5CBD7P4evoNnS-U168WkkHiUFkOn6cQHyzYx2pV2pBhUcSPkUG7jQbW3hsge_qluVDvNWQKf1-pwrZEb3xNGhOOgroW4thXXMuJFYSZdjT68l1HP9uIl')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Modern</span>
+</div>
+</div>
+<!-- Style Card 2 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="A minimal interior room, extremely clean aesthetic, negative space, sparse but highly intentional furniture placement, stark white walls, soft diffuse lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDWY7T0TTnQ37KmxTjToZBHyEiql2a192nLfzWi7jTlU9GWnMTq9k0z9bBr1eGfk_Z6A3d3R2QIUSxBroUa5LezWCuxHjeFsAdQmNSET59whyw5GG8bKIjs8ifAokcua6Yg4fz-CHeMJwKM64eTSJIAs6uIpNYk5ozqCyMePIp_7HKxPvpB3uctPYEqFz0XOd3COJC087GX2tvwEZi9oPJSQZvslwHh8Cud0uYGElGuELVuIN3uCvPe')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Minimal</span>
+</div>
+</div>
+<!-- Style Card 3 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="A Scandinavian style living room, light ash wood furniture, cozy textiles, white and pale grey palette, functional and simple design, natural light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCU3lw0yy4WzhzmijmxiGgr2xp1G1UGwGnsyg0VZI4JospE69wMDV6v87OcdvU05N-cs3FzOgVCsEkPqqgUyNndjxSF0spmNAQaOd7hiQSB8YdGKAtgH6_rYHpWLy7r7fecOI2IxUKQnPiRZ1Z37Qg6bHd1mjcwBIvcXgIu-qFF--NhpnjOiEpnBwgPvG4ti_8OadD0sEUxa5YuADn-y_3e8daiJwmHdvyUiqSkPTYgQ8S8t8yLs6Sy')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Scandinavian</span>
+</div>
+</div>
+<!-- Style Card 4 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="A sophisticated living area dominated by varying shades of grey, elegant soft furnishings, matte finishes, dramatic and moody lighting, contemporary feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDyFW-woydMiFPEh-5OOsvSIyuI_SHwHhNw1IZqbYNvi4xifAAxEPAk-1x-vKGF4OwvcsE1dk9SDnCMFlPSEuyT5EaPKenNG9iU4uobxCbtirjkwtxiZF97iLuITx2aV7fUEKqe_je6QYKzJ5IMrTZqLra7ZrUkRpKSbzERJ75IaXvN83j4JGUmPO0ZjuAxJNk1vFOGO71tr9ytAns4Z9F-pIluauDMOdQ1JkpXsYymKSNm19NPRmIa')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Grey</span>
+</div>
+</div>
+<!-- Style Card 5 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="A warm neutral living space, beige and cream tones, textured fabrics like boucle and linen, organic shapes, inviting and calm atmosphere, soft golden hour light." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIGYnScauBudcDi3cuub05b-7_t0rhM6ZRY3kEN5-SExcZmyDyKIi1IwMkk5YZwDpcOBaAfenw_SYfebcCTYzdKDQ7QK_YAMkclFZ7O-0z8hWDzc3YUYmUZcQkx9TCByu4VzgXGW6zVbHvxu25v7-TsgWTkh1CIoAufMOT9BJTOxkmj5_m6nC0Cyvm8OftN0ftV9m__kIGi1QWrvboREb3gTsWCQVjzJUYjZdY08bWGgJRcn_r6rxU')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Warm Neutral</span>
+</div>
+</div>
+<!-- Style Card 6 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="An industrial loft interior, exposed brick walls, steel framed windows, dark leather sofa, raw materials, concrete floor, dramatic architectural lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZdq1sLcFnDR5U9afN-cO7MqeybFK0thS3FM_8SOGLvEyPnbXexeb6x0m7FhaP9OF2j8yal-H5t1fuxT52R-Jcu42_OVFuZZCbTRqwnsYEw8WnGgmB52cZs_FiHyc0oUBtG-8sD9nzAeAPV4iD-2Cf676sEt3-1nLr-3GqgGSW1y9YyA110syBCGuePgoaj3cIa-boCHBZEQdI18u8sMLMdk_QHVHAGCSMROl6fpieDfCSRK2QKWYD')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Industrial</span>
+</div>
+</div>
+<!-- Style Card 7 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="A luxury interior space, high-end materials like marble and velvet, metallic accents in brass or gold, rich deep colors, opulent and refined aesthetic, perfect studio lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmzrOw4xlHUjbEGEv4Ixv692SgmBEp-4VQI3qc8uNH74vPHURfjWUDq9uoIvVtmOfn60590EwlwKhgTXIT9bFxn6htIAsiCimKMZ8aQ_5RpxEh0G_W3jGuhzxFLoMZI_lr_Sk7M0xfFrIJvr13vM8QlI70yx8ROKha36dBzLTD_4rC40lK3TOByNC3kwoxlhdQvn0YqN-1TG1MkDLU3N2xvJfneY1un6ipskeSdOf3skW9UND_In5f')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Luxury</span>
+</div>
+</div>
+<!-- Style Card 8 -->
+<div class="group relative rounded-sm overflow-hidden aspect-[4/5] cursor-pointer border border-outline-variant/30">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-1000 ease-out group-hover:scale-105" data-alt="A Japandi style room, blending Japanese minimalism with Scandinavian functionality. Wabi-sabi elements, low furniture, natural fibers, bamboo, tranquil and serene mood." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYplbei-r0I8RUrh7utftdjupEFOXaHWKybn-I0jwL8hYw2O3unZPTsPW6SVEz_jy5GnI4QX7kKuw-xkftql0bUvNToEeH6rNNSzjxZV6XwtNxQDvQ_lMJJopW5i_fnAihjmL4A4fSdmggKuwtPOtG57IQvYniclkSq1ZJAvdjSenueqtb_kt37riQFibukU1V0I5cFmXiI2H9ezvt19kARFiPDpY07009LcUEJXiLYAjpAQ0R3hkI')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="absolute bottom-8 left-8">
+<span class="text-on-primary font-headline-md text-[24px] tracking-wide">Japandi</span>
+</div>
+</div>
+</div>
+<div class="md:hidden mt-8 text-center">
+<a class="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors" href="#">View all styles →</a>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface border-t border-outline-variant/30 full-width py-16 mt-24">
+<div class="max-w-container-max-marketing mx-auto px-lg flex flex-col md:flex-row justify-between items-center gap-12">
+<div class="flex flex-col items-center md:items-start gap-4">
+<img alt="Kanso Logo" class="h-6 w-auto opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD619gXCicDen4279VQpj6sKzeObCcbjVsCHWy-Tdx1jw6N_FodMSuOy3QkDTgxxJ6yP699qm30uvhjyYucym3xCAkI5ul6l6xoYmOKT3wsLMwJCEzhkSCjq1pcE1G1PziGiHn5-xQz9YLI6rrcPbM82bSi8ob2Xfi0NmML7rPr59U_Vog1YX5ieZH_wPbl9o7LOxRxxcfKK2Fm71hgJJM9v-nuGq5jyr1DOApmDJeaBO-qscCCDBd"/>
+<span class="text-secondary font-body-md text-sm font-light">© 2024 Kanso AI. All rights reserved.</span>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors" href="#">Cookies</a>
+</div>
+<div class="text-secondary/60 font-body-md text-sm text-center md:text-right max-w-sm font-light">
+                Concepts generated are AI representations and may not reflect exact architectural feasibility.
+            </div>
+</div>
+</footer>
+<script>
+        // Simple slider logic
+        const sliderContainer = document.getElementById('before-after-slider');
+        const sliderHandle = document.getElementById('slider-handle');
+        const sliderBefore = document.getElementById('slider-before');
+        
+        let isDragging = false;
+
+        sliderHandle.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            sliderContainer.style.cursor = 'ew-resize';
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            sliderContainer.style.cursor = 'default';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const rect = sliderContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            
+            // Constrain within bounds
+            x = Math.max(0, Math.min(x, rect.width));
+            
+            const percentage = (x / rect.width) * 100;
+            
+            sliderHandle.style.left = `${percentage}%`;
+            sliderBefore.style.width = `${percentage}%`;
+        });
+        
+        // Touch support
+        sliderHandle.addEventListener('touchstart', (e) => {
+            isDragging = true;
+        }, {passive: true});
+        
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+        
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            const rect = sliderContainer.getBoundingClientRect();
+            let x = touch.clientX - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            const percentage = (x / rect.width) * 100;
+            sliderHandle.style.left = `${percentage}%`;
+            sliderBefore.style.width = `${percentage}%`;
+        }, {passive: true});
+    </script>
+</body></html>

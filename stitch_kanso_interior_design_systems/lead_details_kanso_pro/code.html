@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lead Detail - Kanso Pro</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Serif:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#c8c6c5",
+                      "secondary-container": "#e6e2dc",
+                      "primary-container": "#1c1b1b",
+                      "outline-variant": "#c4c7c7",
+                      "tertiary": "#000000",
+                      "inverse-primary": "#c8c6c5",
+                      "on-secondary-fixed": "#1c1c18",
+                      "tertiary-fixed-dim": "#cfc5b7",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#484743",
+                      "on-primary-fixed-variant": "#474746",
+                      "on-surface-variant": "#444748",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#e5e2e1",
+                      "tertiary-fixed": "#ece1d2",
+                      "inverse-on-surface": "#f2f1ec",
+                      "on-tertiary-container": "#8b8376",
+                      "tertiary-container": "#201b12",
+                      "surface-container-highest": "#e4e2dd",
+                      "surface-container-low": "#f5f3ee",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed-variant": "#4d463b",
+                      "secondary": "#605e5a",
+                      "surface-variant": "#e4e2dd",
+                      "secondary-fixed-dim": "#cac6c1",
+                      "on-surface": "#1b1c19",
+                      "on-primary-container": "#858383",
+                      "background": "#fbf9f4",
+                      "surface-bright": "#fbf9f4",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#f0eee9",
+                      "outline": "#747878",
+                      "on-background": "#1b1c19",
+                      "surface": "#fbf9f4",
+                      "on-tertiary-fixed": "#201b12",
+                      "on-error-container": "#93000a",
+                      "primary": "#000000",
+                      "inverse-surface": "#30312e",
+                      "error-container": "#ffdad6",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-container": "#666460",
+                      "on-primary-fixed": "#1c1b1b",
+                      "surface-dim": "#dcdad5",
+                      "surface-container-high": "#eae8e3",
+                      "secondary-fixed": "#e6e2dc",
+                      "surface-tint": "#5f5e5e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "container-max-app": "1280px",
+                      "container-max-marketing": "1440px",
+                      "xxl": "96px",
+                      "margin-mobile": "16px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                      "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                      "display-xl": ["Noto Serif", "serif"],
+                      "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                      "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+                      "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+                      "headline-md": ["Plus Jakarta Sans", "sans-serif"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-xl": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .h-screen { height: 100vh; }
+        .shadow-ambient { box-shadow: 0 4px 24px -4px rgba(0,0,0,0.04); }
+    </style>
+</head>
+<body class="bg-background flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container dark:bg-surface-container docked left-0 h-full w-64 flex flex-col h-screen p-md space-y-4 border-r border-outline-variant shadow-sm z-20 flex-shrink-0 hidden md:flex">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary text-[32px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">architecture</span>
+<div>
+<h1 class="font-display-xl text-headline-md text-primary tracking-tighter">Kanso Pro</h1>
+<p class="font-label-sm text-label-sm text-secondary">Interior Architect</p>
+</div>
+</div>
+<button class="bg-primary text-on-primary w-full py-3 rounded-lg font-label-sm text-label-sm mb-lg hover:opacity-90 transition-opacity flex justify-center items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">add</span> New Project
+        </button>
+<ul class="flex-grow space-y-2">
+<li><a class="flex items-center gap-md px-md py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#"><span class="material-symbols-outlined">dashboard</span> Dashboard</a></li>
+<li><a class="flex items-center gap-md px-md py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#"><span class="material-symbols-outlined">architecture</span> Projects</a></li>
+<li><a class="flex items-center gap-md px-md py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#"><span class="material-symbols-outlined">analytics</span> Analytics</a></li>
+<li><a class="flex items-center gap-md px-md py-3 rounded-lg text-primary dark:text-on-primary-fixed bg-white dark:bg-surface-bright rounded-lg font-label-sm text-label-sm shadow-sm scale-95" href="#"><span class="material-symbols-outlined">group</span> Clients</a></li>
+<li><a class="flex items-center gap-md px-md py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#"><span class="material-symbols-outlined">settings</span> Settings</a></li>
+</ul>
+<div class="mt-auto pt-4 border-t border-surface-container-low space-y-2">
+<a class="flex items-center gap-md px-md py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#"><span class="material-symbols-outlined">help</span> Support</a>
+<a class="flex items-center gap-md px-md py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-label-sm text-label-sm hover:bg-surface-container-high transition-all" href="#"><span class="material-symbols-outlined">logout</span> Logout</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-y-auto w-full relative">
+<!-- Header -->
+<header class="bg-surface sticky top-0 z-10 border-b border-outline-variant px-lg py-md flex justify-between items-center bg-opacity-90 backdrop-blur-md">
+<div>
+<a class="text-secondary font-label-sm text-label-sm flex items-center gap-xs hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-[16px]">arrow_back</span> Back to Clients</a>
+<h2 class="font-display-xl text-headline-md mt-xs">Lead Inquiry: Emma Watson</h2>
+</div>
+<div class="flex gap-md">
+<button class="border border-outline text-secondary font-label-sm text-label-sm px-lg py-sm rounded-lg hover:bg-surface-container transition-colors">Decline</button>
+<button class="bg-primary text-on-primary font-label-sm text-label-sm px-lg py-sm rounded-lg hover:opacity-90 transition-opacity">Accept Lead</button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-lg md:p-xl max-w-container-max-app mx-auto w-full flex flex-col gap-xl pb-xxl">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Left Column: Concepts & Photos -->
+<div class="lg:col-span-2 flex flex-col gap-lg">
+<!-- AI Concept Highlight -->
+<section class="bg-surface-container-lowest rounded-[16px] shadow-ambient border border-surface-container-high p-lg flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary">AI Proposed Concept</h3>
+<span class="bg-surface-container text-secondary font-label-sm text-label-sm px-sm py-xs rounded-sm">Japandi Minimalism</span>
+</div>
+<div class="relative w-full aspect-video rounded-lg overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A high-resolution, photorealistic render of a minimalist living room blending Japanese and Scandinavian design (Japandi). The space features warm oak wood tones, light cream walls, and low-profile furniture. Large windows let in soft, diffused natural daylight. A subtle, textured rug grounds the seating area. The mood is serene, highly curated, and architectural, adhering strictly to a premium light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz-ZxLL9ZmiQlTEz82J6rFq-OowxTqU7hznuAY8aPrHvbw6CTH1GmsyJyjaAu4lRr3iwTu3kE-Gco5lSXaOXGqs8ciZhZpd4LbmKZ-UKLxxyLe2WUPzDYqNDSZ5q56OICNnoNLAVDVsoM-0NvcmwDRuLd7jPs4o7T8OVxgv2gQuYSJOYx9aN67Mwn8_UnLC3R3Ql0fVJtJo4mBoC9_-Y-2pqdRrJ6gdY5MrDkAlrsIrm5HKrPq5oSn"/>
+</div>
+<div class="flex gap-sm">
+<span class="border border-outline-variant text-secondary font-label-sm text-label-sm px-sm py-xs rounded-sm">Oak Wood</span>
+<span class="border border-outline-variant text-secondary font-label-sm text-label-sm px-sm py-xs rounded-sm">Linen</span>
+<span class="border border-outline-variant text-secondary font-label-sm text-label-sm px-sm py-xs rounded-sm">Matte Black Accents</span>
+</div>
+</section>
+<!-- Original Photos -->
+<section class="bg-surface-container-lowest rounded-[16px] shadow-ambient border border-surface-container-high p-lg flex flex-col gap-md">
+<h3 class="font-headline-md text-headline-md text-primary">Original Space</h3>
+<div class="grid grid-cols-2 gap-sm">
+<div class="aspect-square rounded-lg overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A raw, unedited photo of an empty, slightly dated living room before renovation. The room has off-white walls, standard hardwood floors, and typical residential windows. The lighting is average interior daylight. The image is functional, serving as a 'before' reference for an interior design project, maintaining a neutral, slightly cool color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-1JyqsshLHZMeL23Ygyz3lvhW2LDgQZaGg9fT1gANxjYcFfpyFQY3EX7e-PkDVigk4AruOqpkRB6b-H0h76RaZ4tGcB8F1brWu_TazbE768EG_yXakhtossah3Bv_aaSnWP1S_dMtmurPj0ZcUHegUvFzIYmHP43WgPCXxD2WZ8OWR18J2RTzD7JCPgMkwSuYRtcmsrgxPW9BnjFCLIEBrVFVjui8zvl14_UEo0b2r_FlVqervmhO"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="Another angle of the raw, unedited empty living room before renovation. Showing an alternate corner with a plain radiator and standard baseboards. The lighting is functional, average interior daylight. The image serves as a structural reference for an interior architect, neutral and unstyled." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPfqHIVYrTBTciwQyRddXEcOmwHZm5h_w4W-zHJWjqB02TH9-E5BaN8v2ITh70cLygPrCXLjCRANsHsiUrNLtBkx1EOSBgV4H0mwGjFnGLuhFOaRcTBxtY_WIF2vogkWjpyr-aw4yVjuTK-oyVPMSexaJtyK4ATqs0qVFVLdSofzbcdm0hlP_FqUjSsjqF8nGw-urri0WTCPKgBvShFLkPUctPymzyGZEYU3GtuPnT_r5eqOLoHKFQ"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Info & Messaging -->
+<div class="lg:col-span-1 flex flex-col gap-lg h-full">
+<!-- Client Details -->
+<section class="bg-surface-container-lowest rounded-[16px] shadow-ambient border border-surface-container-high p-lg flex flex-col gap-md">
+<h3 class="font-headline-md text-headline-md text-primary border-b border-surface-container-high pb-sm">Client Brief</h3>
+<div class="flex flex-col gap-sm">
+<div>
+<p class="font-label-sm text-label-sm text-secondary">Budget</p>
+<p class="font-body-md text-body-md text-primary">$15,000 - $25,000</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-secondary">Timeline</p>
+<p class="font-body-md text-body-md text-primary">Flexible (3-6 months)</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-secondary">Scope</p>
+<p class="font-body-md text-body-md text-primary">Living Room &amp; Entryway redesign. Needs better flow and integration of natural light.</p>
+</div>
+</div>
+</section>
+<!-- Messaging Interface -->
+<section class="bg-surface-container-lowest rounded-[16px] shadow-ambient border border-surface-container-high flex flex-col flex-grow min-h-[400px]">
+<div class="p-md border-b border-surface-container-high">
+<h3 class="font-headline-md text-headline-md text-primary">Messages</h3>
+</div>
+<div class="flex-grow p-md overflow-y-auto flex flex-col gap-md bg-surface-container-low">
+<!-- System Msg -->
+<div class="text-center text-secondary font-label-sm text-label-sm my-sm">
+                                Lead inquiry received today
+                            </div>
+<!-- Client Msg -->
+<div class="flex flex-col items-start gap-xs max-w-[85%]">
+<span class="font-label-sm text-label-sm text-secondary ml-sm">Emma</span>
+<div class="bg-surface-container-lowest border border-surface-container-high p-sm rounded-lg rounded-tl-none font-body-md text-body-md text-primary shadow-sm">
+                                    Hi! I generated this concept using Kanso and I love the direction. Are you available to help me actually build this out?
+                                </div>
+</div>
+</div>
+<div class="p-md border-t border-surface-container-high bg-surface-container-lowest mt-auto rounded-b-[16px]">
+<div class="flex gap-sm">
+<input class="flex-grow border-b border-outline-variant bg-transparent font-body-md text-body-md focus:outline-none focus:border-secondary py-sm" disabled="" placeholder="Type a message to accept..." type="text"/>
+<button class="text-secondary hover:text-primary transition-colors cursor-not-allowed opacity-50" disabled="">
+<span class="material-symbols-outlined text-[24px]">send</span>
+</button>
+</div>
+<p class="font-label-sm text-label-sm text-secondary mt-sm text-center">Accept lead to start messaging</p>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</body></html>

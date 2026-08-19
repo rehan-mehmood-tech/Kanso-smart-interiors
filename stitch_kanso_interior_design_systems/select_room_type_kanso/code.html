@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kanso Project Wizard - Step 1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Serif:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "error-container": "#ffdad6",
+                            "on-secondary-fixed-variant": "#484743",
+                            "outline": "#747878",
+                            "on-surface": "#1b1c19",
+                            "on-primary": "#ffffff",
+                            "surface-container-high": "#eae8e3",
+                            "tertiary-fixed-dim": "#cfc5b7",
+                            "primary": "#000000",
+                            "inverse-on-surface": "#f2f1ec",
+                            "on-primary-fixed-variant": "#474746",
+                            "surface-container-lowest": "#ffffff",
+                            "error": "#ba1a1a",
+                            "on-primary-fixed": "#1c1b1b",
+                            "primary-fixed-dim": "#c8c6c5",
+                            "on-tertiary": "#ffffff",
+                            "on-primary-container": "#858383",
+                            "on-secondary": "#ffffff",
+                            "surface-container": "#f0eee9",
+                            "on-tertiary-container": "#8b8376",
+                            "tertiary": "#000000",
+                            "secondary-fixed": "#e6e2dc",
+                            "on-error-container": "#93000a",
+                            "inverse-surface": "#30312e",
+                            "secondary-fixed-dim": "#cac6c1",
+                            "surface-dim": "#dcdad5",
+                            "tertiary-fixed": "#ece1d2",
+                            "surface-bright": "#fbf9f4",
+                            "on-secondary-fixed": "#1c1c18",
+                            "surface": "#fbf9f4",
+                            "tertiary-container": "#201b12",
+                            "on-error": "#ffffff",
+                            "background": "#fbf9f4",
+                            "primary-fixed": "#e5e2e1",
+                            "surface-container-low": "#f5f3ee",
+                            "on-tertiary-fixed-variant": "#4d463b",
+                            "on-background": "#1b1c19",
+                            "on-secondary-container": "#666460",
+                            "surface-variant": "#e4e2dd",
+                            "outline-variant": "#c4c7c7",
+                            "inverse-primary": "#c8c6c5",
+                            "secondary-container": "#e6e2dc",
+                            "surface-container-highest": "#e4e2dd",
+                            "on-tertiary-fixed": "#201b12",
+                            "secondary": "#605e5a",
+                            "primary-container": "#1c1b1b",
+                            "on-surface-variant": "#444748",
+                            "surface-tint": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "xl": "48px",
+                            "gutter": "24px",
+                            "sm": "8px",
+                            "xxl": "96px",
+                            "xs": "4px",
+                            "md": "16px",
+                            "lg": "24px",
+                            "margin-mobile": "16px",
+                            "container-max-app": "1280px",
+                            "container-max-marketing": "1440px"
+                    },
+                    "fontFamily": {
+                            "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+                            "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+                            "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                            "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                            "display-xl": ["Noto Serif", "serif"],
+                            "headline-lg": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                            "headline-lg-mobile": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                            "display-xl": ["72px", {"lineHeight": "84px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                            "headline-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F4F2ED; /* Bone White Background Requested */
+        }
+        /* Custom styles for the input field to match the minimalist aesthetic */
+        .kanso-input {
+            border: none;
+            border-bottom: 1px solid #c4c7c7; /* outline-variant */
+            background: transparent;
+            border-radius: 0;
+            padding: 8px 0;
+            outline: none;
+            box-shadow: none;
+            transition: border-color 0.3s ease;
+        }
+        .kanso-input:focus {
+            border-bottom: 1px solid #747878; /* outline */
+            box-shadow: none;
+            outline: none;
+            ring: 0;
+        }
+        
+        /* Subtle transition for cards */
+        .room-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .room-card:hover {
+            transform: translateY(-4px);
+        }
+        .room-card.selected {
+            border-color: #000000;
+            background-color: #eae8e3; /* surface-container-high (warm-grey equivalent) */
+        }
+        .room-card.selected img {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-body-md text-on-surface">
+<!-- Header / Nav Shell -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter py-md max-w-container-max-marketing mx-auto bg-background dark:bg-background border-b border-outline-variant dark:border-outline">
+<div class="text-headline-md font-headline-md tracking-tighter text-primary dark:text-on-background">
+            Kanso
+        </div>
+<nav class="hidden md:flex space-x-lg">
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300 font-label-sm text-label-sm" href="#">Projects</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300 font-label-sm text-label-sm" href="#">Portfolio</a>
+<a class="text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-on-background transition-colors duration-300 font-label-sm text-label-sm" href="#">Materials</a>
+</nav>
+<button class="text-primary dark:text-on-background opacity-80 transition-opacity duration-200 hover:opacity-100">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[100px] pb-[120px] px-gutter md:px-xl max-w-container-max-app mx-auto w-full flex flex-col items-center">
+<!-- Wizard Progress & Header -->
+<div class="w-full max-w-4xl mb-xl text-center md:text-left mt-lg">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-sm">Step 1 of 4</p>
+<h1 class="font-display-xl text-display-xl text-primary mb-md">Which room are we designing?</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Select the primary space you want to focus on to help us tailor our architectural editorial approach to your project.</p>
+</div>
+<!-- Room Selection Grid -->
+<div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Living Room Card -->
+<div class="room-card cursor-pointer bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col shadow-[0_4px_24px_rgba(0,0,0,0.04)]" onclick="selectCard(this)">
+<div class="h-48 w-full overflow-hidden relative bg-surface-variant">
+<img alt="Living Room preview" class="object-cover w-full h-full absolute inset-0 transition-transform duration-700 hover:scale-105" data-alt="A brightly lit, minimalist living room featuring warm bone white walls, a plush low-profile cream sofa, and subtle architectural details. The space is styled with high-end editorial precision, natural light pouring in from tall windows, casting soft ambient shadows on wide-plank oak flooring. The mood is calm, sophisticated, and spatial." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABDdRGIGfKKECMMFS9zhAcij5zOG-95NOA2_QXpG9NNCJZCAwbBEuJk2Vup8HMAEoIAxULhC9GsRm_cqIsTrv99jhSUDBYyfPILFqcgHtOsj0FXZKRgb_o3DBU3Ps-56LEh-gm0l0omKcinIsxP5PpIwOi903MA2XirzJIugXJMUduWMnYpF1h5gGz-W7Y3eAg25meT2UZpbbOlugrXP73gMvv89Vedrqmfp6R6-3hZ5_4-N_aXHDu"/>
+</div>
+<div class="p-md flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-primary">Living Room</span>
+<span class="material-symbols-outlined text-outline-variant check-icon hidden" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Bedroom Card -->
+<div class="room-card cursor-pointer bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col shadow-[0_4px_24px_rgba(0,0,0,0.04)]" onclick="selectCard(this)">
+<div class="h-48 w-full overflow-hidden relative bg-surface-variant">
+<img alt="Bedroom preview" class="object-cover w-full h-full absolute inset-0 transition-transform duration-700 hover:scale-105" data-alt="A serene, minimalist bedroom bathed in soft morning light. A low-profile platform bed dressed in crisp white luxury linens sits centrally. The walls are a calming light stone tone. Subtle tactile textures like a wool rug and a sculptural bedside lamp add warmth. The aesthetic is clean, restorative, and architectural." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADE1a_RfgxIIzunxgVAjfzNfmx3W3prda9_NbiowQtE-qkyiWV2egeN1Ur8fsOQQZoxKTWIYWYMA2QPOxfJdKBNvCJAI9MQYjbxUbqL5kIa3xl_t-J_XrF4Y3eRwL0EYCLgahc7f2u9gEcjLlpYY7zCUIjaw13K7UyfV1Im7W8z4vZ7wOXWJC50269h0wbiDdNSg0cC_vgVTsTfwUwstLRfDpqUgA2b0X-sBZYmAeG6Du83MfMPLeI"/>
+</div>
+<div class="p-md flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-primary">Bedroom</span>
+<span class="material-symbols-outlined text-outline-variant check-icon hidden" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Dining Room Card -->
+<div class="room-card cursor-pointer bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col shadow-[0_4px_24px_rgba(0,0,0,0.04)]" onclick="selectCard(this)">
+<div class="h-48 w-full overflow-hidden relative bg-surface-variant">
+<img alt="Dining Room preview" class="object-cover w-full h-full absolute inset-0 transition-transform duration-700 hover:scale-105" data-alt="An elegant minimalist dining room featuring a sculptural solid oak table and understated black dining chairs. A striking oversized contemporary pendant light hangs above. The room is enveloped in warm minimalist hues, with generous whitespace and diffuse ambient shadows creating a sophisticated, gallery-like atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7tngAJWpPBVyKxPVzT4TRPsVtBgvjsXdapo2Bjqwul6zFJmgcA0b6fgEq4euSxQOkLZeHcHwhfQtTdT7LsNqnq4ggvwCDCtmdVUQp0ID6qtkmt2jGIU_Uem6I2fi4XqeIfndiC1KB7VZ9OFB24mLRT0bEld_0r_xKvYAdhy7LTFxB4ORTLw3YIeRoa1vmvOX5t6jUuLc3t9e5vAKskZt1V_tYGdl0hHgv4U7LSxA0FTH1OHSn9tgU"/>
+</div>
+<div class="p-md flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-primary">Dining Room</span>
+<span class="material-symbols-outlined text-outline-variant check-icon hidden" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Home Office Card -->
+<div class="room-card cursor-pointer bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col shadow-[0_4px_24px_rgba(0,0,0,0.04)]" onclick="selectCard(this)">
+<div class="h-48 w-full overflow-hidden relative bg-surface-variant">
+<img alt="Home Office preview" class="object-cover w-full h-full absolute inset-0 transition-transform duration-700 hover:scale-105" data-alt="A focused, minimalist home office space. A sleek, unadorned walnut desk is positioned against a clean white wall. Minimalist shelving holds a few curated architectural books and an architectural model. The lighting is bright and intentional, creating a productive yet calming environment with sharp, clean lines and warm undertones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqvrpBNiQUcTxWWes4ktujXosb4-4KuP98VkEk5-3YzZwrbQAueK_LqE4T596w3RxXOTyx-q09VNRDIPQMqK1oc_tv6E_vRgj11ygBa0Dxhbk-DyGeddm6Gl4WOxqiozRu45V5WhT83bhnldmSlVSg1Vab7PDF_KBo9-2vFmT1K3qSL0ZoLqnu9WQ0Lxa9sGQHh2OnYhMn4w8Tziw2Ay_7TzWWJtOn28Lyf4pljyKiImfnmT2VpDxe"/>
+</div>
+<div class="p-md flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-primary">Home Office</span>
+<span class="material-symbols-outlined text-outline-variant check-icon hidden" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Kids Room Card -->
+<div class="room-card cursor-pointer bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col shadow-[0_4px_24px_rgba(0,0,0,0.04)]" onclick="selectCard(this)">
+<div class="h-48 w-full overflow-hidden relative bg-surface-variant">
+<img alt="Kids Room preview" class="object-cover w-full h-full absolute inset-0 transition-transform duration-700 hover:scale-105" data-alt="A modern, sophisticated kids room that maintains a minimalist aesthetic. Soft pastel accents in muted terracotta and sage green compliment a bone white base. Simple, playful geometric furniture pieces are arranged thoughtfully. The room feels airy, bright, and organized, reflecting a high-end editorial approach to playful spaces." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-Ca0Lh6tRipl5yi1kof-z6PAEr4_bEXRkxL4JKnWefPfBjEjReCCHCnA5P4V9TNh25CCL6Q9B2_wM7Xd9MR_8kyOpSO9hhkJzNufh3tRKjfdmGa9nsMibAZ4tmk3PEWaAGf7IOm_aXJixpTfZ4QKWSw768HhFXo5tzXWQ7_UBJEYI078o3ZoSnYe9oQWkdT-xDkI_qy2rZrtnw5WNcNvOYa7GMsebW_QkR_XUsJ3GgyYFG0VN21qH"/>
+</div>
+<div class="p-md flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-primary">Kids Room</span>
+<span class="material-symbols-outlined text-outline-variant check-icon hidden" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+<!-- Other / Custom Card -->
+<div class="room-card cursor-pointer bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden flex flex-col shadow-[0_4px_24px_rgba(0,0,0,0.04)]" onclick="selectCard(this, true)">
+<div class="h-48 w-full flex items-center justify-center bg-surface-container-low border-b border-outline-variant">
+<span class="material-symbols-outlined text-display-xl text-outline-variant font-light" data-icon="add" style="font-size: 64px;">add</span>
+</div>
+<div class="p-md flex flex-col justify-center h-full min-h-[72px]">
+<div class="flex items-center justify-between w-full" id="other-label-container">
+<span class="font-headline-md text-headline-md text-primary">Other</span>
+<span class="material-symbols-outlined text-outline-variant check-icon hidden" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Hidden input field shown only when selected -->
+<div class="hidden w-full mt-sm" id="custom-room-input-container" onclick="event.stopPropagation()">
+<input class="kanso-input w-full font-body-md text-body-md text-primary placeholder:text-outline-variant" id="custom-room-input" placeholder="Specify room type..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest/90 backdrop-blur-md border-t border-outline-variant p-md md:px-xl z-40 flex justify-between items-center shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
+<div class="max-w-container-max-app mx-auto w-full flex justify-between items-center">
+<button class="font-label-sm text-label-sm text-secondary hover:text-primary transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+                Back
+            </button>
+<button class="bg-primary text-on-primary font-label-sm text-label-sm px-lg py-sm rounded-lg opacity-50 cursor-not-allowed transition-all duration-300 flex items-center gap-sm" disabled="" id="continue-btn">
+                Continue
+                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Script for interaction logic -->
+<script>
+        function selectCard(clickedCard, isCustom = false) {
+            // Deselect all cards
+            document.querySelectorAll('.room-card').forEach(card => {
+                card.classList.remove('selected');
+                card.querySelector('.check-icon')?.classList.add('hidden');
+                
+                // Reset the 'Other' card specific elements if needed
+                const customInputContainer = card.querySelector('#custom-room-input-container');
+                const labelContainer = card.querySelector('#other-label-container');
+                if (customInputContainer && !isCustom) {
+                    customInputContainer.classList.add('hidden');
+                    labelContainer.classList.remove('hidden');
+                }
+            });
+
+            // Select clicked card
+            clickedCard.classList.add('selected');
+            
+            // Show checkmark, but handle custom differently
+            if (!isCustom) {
+                const checkIcon = clickedCard.querySelector('.check-icon');
+                if (checkIcon) {
+                    checkIcon.classList.remove('hidden');
+                    checkIcon.classList.add('text-primary');
+                    checkIcon.classList.remove('text-outline-variant');
+                }
+            } else {
+                // Handle 'Other' card specifics
+                const inputContainer = clickedCard.querySelector('#custom-room-input-container');
+                const labelContainer = clickedCard.querySelector('#other-label-container');
+                const input = clickedCard.querySelector('#custom-room-input');
+                
+                labelContainer.classList.add('hidden');
+                inputContainer.classList.remove('hidden');
+                setTimeout(() => input.focus(), 50); // slight delay to allow layout to settle
+            }
+
+            // Enable Continue button
+            const continueBtn = document.getElementById('continue-btn');
+            continueBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            continueBtn.removeAttribute('disabled');
+        }
+
+        // Prevent input clicks from deselecting the 'Other' card
+        document.getElementById('custom-room-input').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    </script>
+</body></html>
