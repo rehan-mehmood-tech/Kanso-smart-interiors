@@ -6,6 +6,7 @@ import { ResultsHeader } from '@/components/results/ResultsHeader';
 import { ConceptCarousel, DesignConcept } from '@/components/results/ConceptCarousel';
 import { MaterialPaletteBar, MaterialItem } from '@/components/results/MaterialPaletteBar';
 import { ActionFloatingBar } from '@/components/results/ActionFloatingBar';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 const MOCK_CONCEPTS: DesignConcept[] = [
   {
@@ -47,21 +48,10 @@ export default function ResultsPage() {
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#F4F2ED]">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1440px] mx-auto bg-[#F4F2ED]/90 backdrop-blur-sm border-b border-outline-variant/30">
-        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/')}>
-          <span className="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">close</span>
-          <span className="text-body-md font-body-md text-primary hidden md:inline">Exit</span>
-        </div>
-        <div className="text-2xl font-bold tracking-tight text-primary cursor-pointer absolute left-1/2 -translate-x-1/2 font-display-xl" onClick={() => router.push('/')}>
-          Kanso
-        </div>
-        <div className="text-sm font-semibold text-primary">
-          Results
-        </div>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[80px] pb-[140px] px-4 md:px-12 max-w-[1024px] mx-auto w-full flex flex-col">
+      <main className="flex-grow pt-24 pb-[140px] px-4 md:px-12 max-w-[1024px] mx-auto w-full flex flex-col">
         <ResultsHeader 
           title="Living Room Concept Deck" 
           styleTag="Warm Minimalist" 

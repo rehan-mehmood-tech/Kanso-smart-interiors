@@ -1,6 +1,9 @@
 import React from "react";
 
-/** Kanso wordmark — enso-inspired mark plus the full "Smart Interiors" lockup. */
+/**
+ * The one canonical Kanso brand lockup: enso-inspired mark + "KANSO / SMART INTERIORS".
+ * Every header in the app renders this component — never a hand-rolled copy.
+ */
 export function KansoLogo({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
@@ -30,10 +33,10 @@ export function KansoLogo({ className = "" }: { className?: string }) {
         />
       </svg>
       <span className="flex flex-col leading-none">
-        <span className="font-serif text-xl tracking-tight text-[#1b1c19]">
+        <span className="font-serif text-lg font-bold tracking-[0.12em] whitespace-nowrap text-[#1b1c19]">
           KANSO
         </span>
-        <span className="font-body text-[10px] uppercase tracking-[0.18em] text-[#1b1c19]/55">
+        <span className="mt-1 font-body text-[9px] font-medium tracking-[0.18em] whitespace-nowrap text-[#1b1c19]/55 uppercase">
           Smart Interiors
         </span>
       </span>

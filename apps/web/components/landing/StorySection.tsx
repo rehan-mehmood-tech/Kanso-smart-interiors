@@ -150,13 +150,13 @@ function ChapterBlock({ chapter }: { chapter: Chapter }) {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl"
         >
           <span className="font-body text-xs tracking-[0.2em] text-[#1b1c19]/45 uppercase">
             {chapter.number} — {chapter.kicker}
           </span>
-          <h2 className="mt-5 font-serif text-3xl leading-[1.15] text-[#1b1c19] sm:text-4xl lg:text-[2.75rem]">
+          <h2 className="mt-5 font-serif text-2xl leading-[1.18] text-[#1b1c19] sm:text-3xl md:text-4xl lg:text-[2.75rem]">
             {chapter.title}
           </h2>
           <p className="mt-5 max-w-2xl font-body text-lg leading-relaxed text-[#1b1c19]/70">
@@ -170,7 +170,7 @@ function ChapterBlock({ chapter }: { chapter: Chapter }) {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.75, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className={`lg:col-span-7 ${chapter.flip ? "lg:order-2" : ""}`}
           >
             <div className="max-w-2xl space-y-6">
@@ -178,7 +178,7 @@ function ChapterBlock({ chapter }: { chapter: Chapter }) {
                 <MagicText
                   key={i}
                   text={para}
-                  className="w-full text-[#1b1c19]"
+                  className="w-full max-w-[42rem] font-body text-base text-[#1b1c19]/75 sm:text-[1.0625rem]"
                 />
               ))}
 
@@ -195,7 +195,7 @@ function ChapterBlock({ chapter }: { chapter: Chapter }) {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className={`lg:col-span-5 ${chapter.flip ? "lg:order-1" : ""}`}
           >
             <div className="aspect-4/5 w-full overflow-hidden rounded-2xl border border-[#c4c7c7] bg-[#f4f0ea]">
@@ -223,9 +223,9 @@ function ChapterBlock({ chapter }: { chapter: Chapter }) {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className={`w-full cursor-default rounded-2xl border border-[#c4c7c7] p-6 transition-colors duration-300 hover:border-[#1b1c19] hover:shadow-lg ${
+                transition={{ duration: 0.8, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -6, scale: 1.01, transition: { duration: 0.45, ease: "easeOut" } }}
+                className={`w-full cursor-default rounded-2xl border border-[#c4c7c7] p-6 transition-colors duration-500 hover:border-[#1b1c19] hover:shadow-lg ${
                   chapter.tone === "surface" ? "bg-[#fbf9f4]" : "bg-[#f4f0ea]"
                 }`}
               >

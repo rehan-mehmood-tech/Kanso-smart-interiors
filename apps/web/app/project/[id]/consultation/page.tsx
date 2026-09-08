@@ -4,6 +4,7 @@ import { SelectedProjectMiniCard } from '@/components/consultation/SelectedProje
 import { BookingForm } from '@/components/consultation/BookingForm';
 import { PrivacyNotice } from '@/components/consultation/PrivacyNotice';
 import Link from 'next/link';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 const SELECTED_IMAGE = 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85';
 
@@ -17,21 +18,10 @@ export default async function ConsultationPage({ params }: ConsultationPageProps
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#F4F2ED]">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1440px] mx-auto bg-[#F4F2ED]/90 backdrop-blur-sm border-b border-outline-variant/30">
-        <Link href={`/project/${id}/selected`} className="flex items-center gap-2 cursor-pointer group">
-          <span className="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
-          <span className="text-body-md font-body-md text-primary hidden md:inline">Back</span>
-        </Link>
-        <div className="text-2xl font-bold tracking-tight text-primary cursor-pointer absolute left-1/2 -translate-x-1/2 font-display-xl">
-          <Link href="/">Kanso</Link>
-        </div>
-        <div className="text-sm font-semibold text-primary">
-          Consultation
-        </div>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[80px] pb-[80px]">
+      <main className="flex-grow pt-24 pb-[80px]">
         <section className="max-w-[1280px] mx-auto px-4 md:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 min-h-[calc(100vh-80px-100px)] items-center">
           
           {/* Left Side: Editorial Context & Form */}

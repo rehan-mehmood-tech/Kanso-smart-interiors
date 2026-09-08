@@ -76,10 +76,10 @@ export default function PricingPage() {
             <span className="font-body text-xs tracking-[0.2em] text-[#1b1c19]/45 uppercase">
               Pricing
             </span>
-            <h1 className="mt-5 font-serif text-4xl leading-tight text-[#1b1c19] sm:text-5xl">
+            <h1 className="mt-5 font-serif text-3xl leading-tight text-[#1b1c19] sm:text-4xl md:text-5xl">
               Start free. Pay when it becomes real.
             </h1>
-            <p className="mx-auto mt-6 w-full max-w-[36rem] font-body text-base leading-relaxed text-[#1b1c19]/70 sm:text-lg">
+            <p className="mx-auto mt-6 w-full max-w-[36rem] text-balance font-body text-sm leading-relaxed sm:text-base text-[#1b1c19]/70 sm:text-lg">
               Every account begins with free render credits, because you should see your
               own room resolved before deciding this is worth paying for.
             </p>
@@ -146,7 +146,7 @@ export default function PricingPage() {
 
                   <Link
                     href={tier.href}
-                    className={`group mt-9 inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-3.5 font-body text-sm font-medium transition-colors duration-300 ${
+                    className={`group mt-9 inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl px-7 py-3.5 font-body text-sm font-medium transition-colors duration-300 ${
                       tier.featured
                         ? "bg-[#fbf9f4] text-[#1b1c19] hover:bg-white"
                         : "bg-[#1b1c19] text-white hover:bg-black"

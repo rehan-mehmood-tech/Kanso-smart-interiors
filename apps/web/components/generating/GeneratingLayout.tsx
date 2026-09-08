@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { SiteHeader } from '@/components/layout/SiteHeader';
 
 interface GeneratingLayoutProps {
   children: ReactNode;
@@ -15,6 +16,7 @@ export function GeneratingLayout({ children, bgEmptyUrl, bgFinishedUrl, progress
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-surface text-on-surface antialiased">
+      <SiteHeader position="fixed" />
       {/* Background Images Crossfade */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-opacity duration-[100ms] ease-linear"

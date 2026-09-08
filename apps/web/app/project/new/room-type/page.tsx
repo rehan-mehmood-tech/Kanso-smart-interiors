@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { WizardProgressBar } from '@/components/wizard/WizardProgressBar';
 import { RoomTypeGrid } from '@/components/wizard/RoomTypeGrid';
 import { WizardFooter } from '@/components/wizard/WizardFooter';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 const ROOM_OPTIONS = [
   {
@@ -67,19 +68,10 @@ export default function SelectRoomTypePage() {
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#F4F2ED]">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1440px] mx-auto bg-[#F4F2ED] border-b border-outline-variant">
-        <div className="text-2xl font-medium tracking-tighter text-primary cursor-pointer" onClick={() => router.push('/')}>
-          Kanso
-        </div>
-        <button className="text-primary opacity-80 hover:opacity-100 transition-opacity duration-200">
-          <div className="w-8 h-8 bg-outline-variant rounded-full flex items-center justify-center text-on-surface text-xs font-bold">
-            U
-          </div>
-        </button>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[100px] pb-[120px] px-6 md:px-12 max-w-[1280px] mx-auto w-full flex flex-col items-center">
+      <main className="flex-grow pt-24 pb-[120px] px-6 md:px-12 max-w-[1280px] mx-auto w-full flex flex-col items-center">
         <WizardProgressBar 
           step={1} 
           title="Which room are we designing?" 

@@ -7,6 +7,7 @@ import { ScheduleHeader } from '@/components/pro/schedule/ScheduleHeader';
 import { WeeklyCalendarView, CalendarDay, CalendarSlot } from '@/components/pro/schedule/WeeklyCalendarView';
 import { UpcomingAppointmentsSidebar, Appointment } from '@/components/pro/schedule/UpcomingAppointmentsSidebar';
 import { AvailabilityToggleModal } from '@/components/pro/schedule/AvailabilityToggleModal';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 // Mock Data
 const MOCK_DAYS: CalendarDay[] = [
@@ -40,22 +41,10 @@ export default function ProSchedulePage() {
     <div className="min-h-screen bg-[#FBF9F4] text-[#1B1C19] font-body-md flex flex-col relative overflow-hidden">
       
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-4 md:px-8 h-20 bg-[#FBF9F4]/90 backdrop-blur-md border-b border-outline-variant/30">
-        <div className="flex items-center gap-6">
-          <span className="font-display-xl text-2xl tracking-tighter text-primary">Kanso Pro</span>
-          <nav className="hidden md:flex gap-6">
-            <Link href="/pro/dashboard" className="text-secondary hover:text-primary transition-colors font-label-sm text-xs uppercase tracking-widest">Dashboard</Link>
-            <Link href="/pro/profile" className="text-secondary hover:text-primary transition-colors font-label-sm text-xs uppercase tracking-widest">Profile</Link>
-            <Link href="#" className="text-primary font-label-sm text-xs uppercase tracking-widest font-semibold border-b-2 border-primary pb-1">Schedule</Link>
-          </nav>
-        </div>
-        <div className="w-10 h-10 rounded-full bg-[#EAE8E3] overflow-hidden border border-outline-variant/30 shrink-0 flex items-center justify-center font-display-xl text-lg text-primary">
-           ER
-        </div>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col w-full pt-28 pb-12 px-4 md:px-8 max-w-[1600px] mx-auto">
+      <main className="flex-1 flex flex-col w-full pt-24 pb-12 px-4 md:px-8 max-w-[1600px] mx-auto">
         
         <Link href="/pro/dashboard" className="inline-flex items-center gap-2 text-secondary hover:text-primary transition-colors font-label-sm text-xs uppercase tracking-widest mb-6 w-fit">
           <ArrowLeft className="w-4 h-4" /> Back to Dashboard
