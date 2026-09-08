@@ -15,13 +15,24 @@ interface WordProps {
   range: number[];
 }
 
+/**
+ * Renders one word with a scroll-driven opacity ramp.
+ *
+ * Deliberately carries NO font-family, font-size or font-weight utilities: every
+ * typographic property is inherited from whatever parent wraps <MagicText />, so the
+ * project's Noto Serif / Plus Jakarta scale stays authoritative. Only opacity is animated.
+ */
 const Word: React.FC<WordProps> = ({ children, progress, range }) => {
   const opacity = useTransform(progress, range, [0.2, 1]);
 
   return (
-    <span className="relative mr-2 text-xl leading-relaxed font-medium md:text-2xl">
-      <span className="absolute opacity-20">{children}</span>
-      <motion.span style={{ opacity: opacity }}>{children}</motion.span>
+    <span className="relative mr-[0.3em] inline-block [font:inherit]">
+      <span className="absolute opacity-20 select-none [font:inherit]" aria-hidden="true">
+        {children}
+      </span>
+      <motion.span className="[font:inherit]" style={{ opacity: opacity }}>
+        {children}
+      </motion.span>
     </span>
   );
 };
@@ -37,7 +48,7 @@ export const MagicText: React.FC<MagicTextProps> = ({ text, className = "" }) =>
   const words = text.split(" ");
 
   return (
-    <p ref={container} className={`flex flex-wrap p-2 leading-relaxed ${className}`}>
+    <p ref={container} className={`flex flex-wrap leading-relaxed ${className}`}>
       {words.map((word, i) => {
         const start = i / words.length;
         const end = start + 1 / words.length;

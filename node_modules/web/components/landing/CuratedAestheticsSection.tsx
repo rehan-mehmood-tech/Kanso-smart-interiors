@@ -50,10 +50,10 @@ export function CuratedAestheticsSection() {
           <span className="font-body text-xs tracking-[0.2em] text-[#1b1c19]/45 uppercase">
             Signature Styles
           </span>
-          <h2 className="mt-5 font-serif text-3xl leading-tight text-[#1b1c19] sm:text-4xl">
+          <h2 className="mt-5 font-serif text-2xl leading-tight text-[#1b1c19] sm:text-3xl md:text-4xl">
             Curated Kanso Aesthetics
           </h2>
-          <p className="mx-auto mt-5 w-full max-w-[36rem] font-body text-base leading-relaxed text-[#1b1c19]/65">
+          <p className="mx-auto mt-5 w-full max-w-[36rem] text-balance font-body text-sm leading-relaxed sm:text-base text-[#1b1c19]/65">
             Every style is tied to a locked database of locally sourceable materials, so
             the look you choose is a look you can actually buy.
           </p>
@@ -67,12 +67,12 @@ export function CuratedAestheticsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{
-                duration: 0.6,
+                duration: 0.8,
                 delay: index * 0.08,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              whileHover={{ y: -6, scale: 1.01 }}
-              className="group flex w-full flex-col overflow-hidden rounded-2xl border border-[#c4c7c7] bg-[#fbf9f4] transition-all duration-300 hover:border-[#1b1c19] hover:shadow-lg"
+              whileHover={{ y: -6, scale: 1.01, transition: { duration: 0.45, ease: "easeOut" } }}
+              className="group flex w-full flex-col overflow-hidden rounded-2xl border border-[#c4c7c7] bg-[#fbf9f4] transition-all duration-500 hover:border-[#1b1c19] hover:shadow-lg"
             >
               <div className="aspect-4/5 w-full overflow-hidden bg-[#f4f0ea]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -80,7 +80,7 @@ export function CuratedAestheticsSection() {
                   src={style.image}
                   alt={`${style.name} interior aesthetic`}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
                 />
               </div>
 

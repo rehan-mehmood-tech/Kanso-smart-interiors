@@ -9,10 +9,10 @@ export function VoicesSection() {
         <span className="font-body text-xs tracking-[0.2em] text-[#1b1c19]/45 uppercase">
           Voices
         </span>
-        <h2 className="mt-5 font-serif text-3xl leading-tight text-[#1b1c19] sm:text-4xl">
+        <h2 className="mt-5 font-serif text-2xl leading-tight text-[#1b1c19] sm:text-3xl md:text-4xl">
           From Both Sides of the Room
         </h2>
-        <p className="mx-auto mt-5 w-full max-w-[36rem] font-body text-base leading-relaxed text-[#1b1c19]/65">
+        <p className="mx-auto mt-5 w-full max-w-[36rem] text-balance font-body text-sm leading-relaxed sm:text-base text-[#1b1c19]/65">
           Homeowners who stopped guessing, and the specialists who finally received a
           brief they could build from.
         </p>

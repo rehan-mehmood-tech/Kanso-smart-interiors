@@ -17,9 +17,11 @@ const SLIDES = [
     src: "https://videos.pexels.com/video-files/3773486/3773486-hd_1920_1080_30fps.mp4",
     poster:
       "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=80",
-    hook: "Struggling to picture your space?",
-    solution:
-      "Kanso turns four wall photos into architectural-grade renders of your actual room, in the aesthetic you choose.",
+    hook: "From Fragmented 2D Blueprints to Price-Locked 4-Wall Spatial Reality",
+    homeowner:
+      "Eliminate visual guesswork, material budget overrun, and contractor ambiguity before buying a single item.",
+    business:
+      "Lock exact spatial specs, streamline execution, and eliminate unbillable site delays with verified trade partners.",
   },
   {
     id: "minimalist",
@@ -27,9 +29,11 @@ const SLIDES = [
     src: "https://videos.pexels.com/video-files/7578552/7578552-hd_1920_1080_30fps.mp4",
     poster:
       "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=1600&q=80",
-    hook: "Tired of contractor delays?",
-    solution:
-      "Every concept ships with a locked material scope, so your specialist quotes once and the number holds.",
+    hook: "Stop Paying Full Price for a Room You Have Only Ever Imagined",
+    homeowner:
+      "See your own walls, your own light, and your own proportions resolved into a finished concept before a single order is placed.",
+    business:
+      "Quote against an approved render and a costed bill of materials instead of a screenshot, a sentence, and an assumption.",
   },
   {
     id: "luxury",
@@ -37,9 +41,11 @@ const SLIDES = [
     src: "https://videos.pexels.com/video-files/3444434/3444434-hd_1920_1080_30fps.mp4",
     poster:
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80",
-    hook: "Buying furniture blind?",
-    solution:
-      "See the palette, the finish and the full cost against your own walls before a single order is placed.",
+    hook: "Every Finish Named, Sourced and Costed Before the First Tool Is Lifted",
+    homeowner:
+      "Walk into a supplier knowing the exact material, quantity and price, so the room you fell in love with is the room you can actually afford.",
+    business:
+      "Receive scope-locked briefs with the budget already agreed, so change orders stop being an argument you have to win.",
   },
   {
     id: "organic",
@@ -47,9 +53,11 @@ const SLIDES = [
     src: "https://videos.pexels.com/video-files/3773489/3773489-hd_1920_1080_30fps.mp4",
     poster:
       "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?auto=format&fit=crop&w=1600&q=80",
-    hook: "Losing clients to bad briefs?",
-    solution:
-      "Artisans and businesses receive pre-vetted, scope-locked projects — renders, materials and budget in one package.",
+    hook: "Where Spatial Imagination Finally Hands Off Cleanly to Execution",
+    homeowner:
+      "Four wall photos become architectural-grade concepts that preserve your geometry, your doors and your windows, not a stock catalogue interior.",
+    business:
+      "Renders, material schedules, wall-by-wall captures and client budget arrive as one pre-vetted package before the first site visit.",
   },
   {
     id: "editorial",
@@ -57,13 +65,15 @@ const SLIDES = [
     src: "https://videos.pexels.com/video-files/7578550/7578550-hd_1920_1080_30fps.mp4",
     poster:
       "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1600&q=80",
-    hook: "Guessing what it will cost?",
-    solution:
-      "Price-locked transparency from the first render to the final invoice, whether you are a homeowner or a business owner.",
+    hook: "Price-Locked Transparency From the First Render to the Final Invoice",
+    homeowner:
+      "No arbitrary change orders, no mystery markup, and no five-month overrun on a six-week project.",
+    business:
+      "Estimate on craft rather than risk, because the ambiguity you used to pad against has already been designed out.",
   },
 ];
 
-const SLIDE_MS = 9000;
+const SLIDE_MS = 10000;
 
 export function HeroSection() {
   const [index, setIndex] = useState(0);
@@ -87,7 +97,7 @@ export function HeroSection() {
   return (
     // Navbar (4rem) + hero + ticker (2.75rem) === 100vh above the fold.
     <section className="relative w-full overflow-hidden bg-[#1b1c19]">
-      <div className="relative h-[calc(100vh-6.75rem)] min-h-[440px] w-full">
+      <div className="relative flex min-h-[calc(100svh-6.75rem)] w-full max-w-full flex-col lg:block lg:h-[calc(100vh-6.75rem)]">
         {SLIDES.map((clip, i) => (
           <video
             key={clip.id}
@@ -99,7 +109,7 @@ export function HeroSection() {
             playsInline
             preload={i === 0 ? "auto" : "metadata"}
             aria-hidden="true"
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-[1500ms] ease-in-out ${
               i === index ? "opacity-100" : "opacity-0"
             }`}
           />
@@ -109,14 +119,14 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#1b1c19]/85 via-[#1b1c19]/45 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1b1c19]/55 via-transparent to-transparent" />
 
-        <div className="relative z-10 flex h-full items-center">
-          <div className="w-full max-w-7xl px-6 pl-8 sm:px-8 lg:px-12 lg:pl-16">
-            <div className="w-full max-w-[36rem] text-left">
+        <div className="relative z-10 flex w-full flex-1 items-center py-12 lg:h-full lg:py-0">
+          <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12 lg:pl-16">
+            <div className="w-full max-w-[38rem] text-left">
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.15, duration: 0.7 }}
-                className="mb-5 inline-block rounded-2xl border border-white/25 bg-white/10 px-4 py-1.5 font-body text-[11px] font-medium tracking-[0.14em] text-white/90 uppercase backdrop-blur-sm"
+                transition={{ delay: 0.15, duration: 0.8 }}
+                className="mb-4 inline-block rounded-2xl border border-white/25 bg-white/10 px-4 py-1.5 font-body text-[11px] font-medium tracking-[0.14em] text-white/90 uppercase backdrop-blur-sm"
               >
                 Spatial AI · Verified Artisans
               </motion.span>
@@ -128,33 +138,39 @@ export function HeroSection() {
                   initial={{ opacity: 0, y: 22 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -14 }}
-                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <h1 className="font-serif text-4xl leading-[1.05] font-bold text-white sm:text-5xl lg:text-[3.5rem]">
-                    <ShimmerText duration={2.2} delay={0.3}>
+                  <h1 className="font-serif text-2xl leading-[1.12] font-bold text-white sm:text-3xl md:text-4xl lg:text-[2.9rem]">
+                    <ShimmerText duration={4} delay={0.4}>
                       {slide.hook}
                     </ShimmerText>
                   </h1>
 
-                  <p className="mt-5 w-full max-w-[32rem] font-body text-base leading-relaxed font-medium text-white/85 sm:text-lg">
-                    {slide.solution}
-                  </p>
+                  <div className="mt-6 w-full max-w-[34rem] space-y-3">
+                    <p className="w-full text-balance font-body text-sm leading-relaxed text-white/85 md:text-base">
+                      {slide.homeowner}
+                    </p>
+                    <p className="w-full text-balance font-body text-sm leading-relaxed text-white/85 md:text-base">
+                      {slide.business}
+                    </p>
+                  </div>
+
                 </motion.div>
               </AnimatePresence>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              <div className="mt-7 flex w-full flex-col items-stretch gap-3 sm:flex-row sm:items-center">
                 <Link
                   href="/project/new/room-type"
-                  className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-[#fbf9f4] px-7 py-3.5 font-body text-sm font-semibold text-[#1b1c19] transition-all duration-300 hover:bg-white"
+                  className="group inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-[#fbf9f4] px-6 py-3.5 font-body text-sm font-semibold text-[#1b1c19] transition-all duration-500 hover:bg-white sm:w-auto sm:px-7"
                 >
-                  Design My Room
+                  Start Room Transformation
                   <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <a
-                  href="#how-it-works"
-                  className="inline-flex items-center justify-center rounded-2xl border border-white/35 px-7 py-3.5 font-body text-sm font-medium whitespace-nowrap text-white backdrop-blur-sm transition-colors duration-300 hover:bg-white/10"
+                  href="#artisans"
+                  className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-white/35 px-6 py-3.5 font-body text-sm font-medium whitespace-nowrap text-white backdrop-blur-sm transition-colors duration-500 hover:bg-white/10 sm:w-auto sm:px-7"
                 >
-                  See How It Works
+                  Explore Artisan Network
                 </a>
               </div>
             </div>
@@ -162,7 +178,7 @@ export function HeroSection() {
         </div>
 
         {/* Manual carousel controls */}
-        <div className="absolute right-6 bottom-6 z-20 flex items-center gap-3 sm:right-10">
+        <div className="absolute right-4 bottom-5 z-20 hidden items-center gap-3 sm:right-10 sm:flex">
           <span className="mr-2 hidden font-body text-xs tracking-[0.14em] whitespace-nowrap text-white/70 uppercase sm:inline">
             {slide.label}
           </span>
@@ -170,7 +186,7 @@ export function HeroSection() {
             type="button"
             onClick={() => go(index - 1)}
             aria-label="Previous aesthetic"
-            className="rounded-2xl border border-white/30 bg-white/10 p-2.5 text-white backdrop-blur-md transition-colors hover:bg-white/25"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/30 bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/25"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -178,13 +194,13 @@ export function HeroSection() {
             type="button"
             onClick={() => go(index + 1)}
             aria-label="Next aesthetic"
-            className="rounded-2xl border border-white/30 bg-white/10 p-2.5 text-white backdrop-blur-md transition-colors hover:bg-white/25"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/30 bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/25"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="absolute bottom-6 left-8 z-20 flex gap-2 lg:left-16">
+        <div className="absolute bottom-5 left-5 z-20 flex gap-2 sm:left-8 lg:left-16">
           {SLIDES.map((clip, i) => (
             <button
               key={clip.id}

@@ -1,27 +1,17 @@
 "use client";
 import Image from 'next/image';
+import Link from "next/link";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { KansoLogo } from "@/components/brand/KansoLogo";
 
 export default function myspaceskansoPage() {
   return (
     <>
       
 {/* TopNavBar */}
-<nav className="bg-surface border-b border-outline-variant flex justify-between items-center h-20 px-lg max-w-container-max-marketing mx-auto w-full docked full-width top-0 z-50 sticky">
-<div className="flex items-center gap-xl">
-<a className="font-display-xl text-headline-md tracking-tighter text-primary" href="#">Kanso</a>
-<div className="hidden md:flex gap-md">
-<a className="text-secondary hover:text-primary transition-colors duration-300 font-body-md text-body-md py-sm" href="#">How It Works</a>
-<a className="text-secondary hover:text-primary transition-colors duration-300 font-body-md text-body-md py-sm" href="#">Explore</a>
-<a className="text-primary font-bold border-b-2 border-primary font-body-md text-body-md py-sm opacity-80 transition-opacity" href="#">My Spaces</a>
-</div>
-</div>
-<div className="flex items-center gap-md">
-<button className="hidden md:block px-md py-sm bg-primary text-on-primary rounded-lg font-label-sm text-label-sm hover:bg-primary-container transition-colors">Design My Room</button>
-<button className="md:hidden text-primary">
-<span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>menu</span>
-</button>
-</div>
-</nav>
+<SiteHeader>
+<Link href="/project/new/room-type" className="rounded-2xl bg-[#1b1c19] px-5 py-2 font-body text-sm font-medium whitespace-nowrap text-white transition-colors duration-300 hover:bg-black">Design My Room</Link>
+</SiteHeader>
 {/* Main Content */}
 <main className="max-w-container-max-app mx-auto px-margin-mobile md:px-lg py-xl md:py-xxl">
 {/* Header Section */}
@@ -93,7 +83,7 @@ export default function myspaceskansoPage() {
 {/* Footer */}
 <footer className="bg-surface-container-lowest border-t border-outline-variant py-xl">
 <div className="max-w-container-max-marketing mx-auto px-lg flex flex-col md:flex-row justify-between items-center gap-md">
-<span className="font-display-xl text-headline-md text-primary">Kanso</span>
+<KansoLogo />
 <div className="flex gap-md">
 <a className="text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">Privacy Policy</a>
 <a className="text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">Terms of Service</a>

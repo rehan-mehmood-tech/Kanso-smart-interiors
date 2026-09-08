@@ -30,10 +30,10 @@ export function ArtisanTrustSection() {
           <span className="font-body text-xs tracking-[0.2em] text-[#1b1c19]/45 uppercase">
             Execution
           </span>
-          <h2 className="mt-5 font-serif text-3xl leading-tight text-[#1b1c19] sm:text-4xl">
+          <h2 className="mt-5 font-serif text-2xl leading-tight text-[#1b1c19] sm:text-3xl md:text-4xl">
             Expert Execution, Guaranteed
           </h2>
-          <p className="mx-auto mt-5 w-full max-w-[36rem] font-body text-base leading-relaxed text-[#1b1c19]/65">
+          <p className="mx-auto mt-5 w-full max-w-[36rem] text-balance font-body text-sm leading-relaxed sm:text-base text-[#1b1c19]/65">
             Your concept is only ever as good as the hands that build it, so we treat the
             handoff to a specialist as part of the design.
           </p>
@@ -49,12 +49,12 @@ export function ArtisanTrustSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{
-                  duration: 0.6,
+                  duration: 0.8,
                   delay: index * 0.1,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className="flex w-full cursor-default flex-col rounded-2xl border border-[#c4c7c7] bg-[#f4f0ea] p-7 transition-colors duration-300 hover:border-[#1b1c19] hover:shadow-lg"
+                whileHover={{ y: -6, scale: 1.01, transition: { duration: 0.45, ease: "easeOut" } }}
+                className="flex w-full cursor-default flex-col rounded-2xl border border-[#c4c7c7] bg-[#f4f0ea] p-7 transition-colors duration-500 hover:border-[#1b1c19] hover:shadow-lg"
               >
                 <Icon className="mb-6 h-7 w-7 shrink-0 text-[#1b1c19]" />
                 <h3 className="font-body text-lg font-semibold text-[#1b1c19]">

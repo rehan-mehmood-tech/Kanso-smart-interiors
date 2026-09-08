@@ -4,6 +4,7 @@ import { BookingSummaryCard, BookingSuccessSummary } from '@/components/success/
 import { NextStepsTimeline } from '@/components/success/NextStepsTimeline';
 import { SuccessActionButtons } from '@/components/success/SuccessActionButtons';
 import Link from 'next/link';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 interface SuccessPageProps {
   params: Promise<{ id: string }>;
@@ -26,17 +27,7 @@ export default async function SuccessPage({ params }: SuccessPageProps) {
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#FBF9F4] relative overflow-hidden">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1440px] mx-auto bg-[#FBF9F4]/80 backdrop-blur-md border-b border-outline-variant/30">
-        <div className="w-12" /> {/* Spacer for centering */}
-        <div className="text-2xl font-bold tracking-tight text-primary font-display-xl">
-          <Link href="/">Kanso</Link>
-        </div>
-        <div className="w-12 flex justify-end">
-          <Link href="/dashboard" className="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center transition-colors">
-            <span className="material-symbols-outlined text-primary">close</span>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Ambient background texture */}
       <div 
@@ -45,7 +36,7 @@ export default async function SuccessPage({ params }: SuccessPageProps) {
       />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[140px] pb-[100px] relative z-10 flex flex-col items-center justify-start px-4 md:px-8 w-full max-w-[800px] mx-auto">
+      <main className="flex-grow pt-24 pb-[100px] relative z-10 flex flex-col items-center justify-start px-4 md:px-8 w-full max-w-[800px] mx-auto">
         <SuccessHero />
         
         <div className="w-full">

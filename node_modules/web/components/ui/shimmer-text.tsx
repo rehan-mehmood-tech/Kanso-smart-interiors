@@ -61,7 +61,7 @@ export function ShimmerText({
   children,
   className,
   variant = "default",
-  duration = 1.5,
+  duration = 4,
   delay = 0.5,
 }: ShimmerTextProps) {
   return (
@@ -90,7 +90,7 @@ export function ShimmerText({
             duration: duration,
             delay: delay,
             repeat: Infinity,
-            repeatDelay: 1.5,
+            repeatDelay: 3,
             ease: "linear",
           }}
         >

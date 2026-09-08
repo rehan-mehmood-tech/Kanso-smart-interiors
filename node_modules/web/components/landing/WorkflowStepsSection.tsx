@@ -39,10 +39,10 @@ export function WorkflowStepsSection() {
           <span className="font-body text-xs tracking-[0.2em] text-[#1b1c19]/45 uppercase">
             The Process
           </span>
-          <h2 className="mt-5 font-serif text-3xl leading-tight text-[#1b1c19] sm:text-4xl">
+          <h2 className="mt-5 font-serif text-2xl leading-tight text-[#1b1c19] sm:text-3xl md:text-4xl">
             How Space Becomes Reality
           </h2>
-          <p className="mx-auto mt-5 w-full max-w-[36rem] font-body text-base leading-relaxed text-[#1b1c19]/65">
+          <p className="mx-auto mt-5 w-full max-w-[36rem] text-balance font-body text-sm leading-relaxed sm:text-base text-[#1b1c19]/65">
             A streamlined three-step journey from imagination to execution, guided by
             spatial intelligence and finished by vetted experts.
           </p>
@@ -58,12 +58,12 @@ export function WorkflowStepsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{
-                  duration: 0.6,
+                  duration: 0.8,
                   delay: index * 0.1,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className="flex w-full cursor-default flex-col items-start rounded-2xl border border-[#c4c7c7] bg-[#fbf9f4] p-7 text-left transition-colors duration-300 hover:border-[#1b1c19] hover:shadow-lg"
+                whileHover={{ y: -6, scale: 1.01, transition: { duration: 0.45, ease: "easeOut" } }}
+                className="flex w-full cursor-default flex-col items-start rounded-2xl border border-[#c4c7c7] bg-[#fbf9f4] p-7 text-left transition-colors duration-500 hover:border-[#1b1c19] hover:shadow-lg"
               >
                 <div className="flex w-full items-center justify-between">
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#c4c7c7] bg-[#f4f0ea] text-[#1b1c19]">

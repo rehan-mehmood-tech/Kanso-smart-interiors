@@ -7,6 +7,7 @@ import { DesignSpecSheet, SpecItem } from '@/components/selected/DesignSpecSheet
 import { DownloadProposalButton } from '@/components/selected/DownloadProposalButton';
 import { ConsultationCTASection } from '@/components/selected/ConsultationCTASection';
 import { SecondaryNavActions } from '@/components/selected/SecondaryNavActions';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 // Mock Data representing the chosen concept
 const SELECTED_IMAGE = 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85';
@@ -49,21 +50,10 @@ export default function ProjectSelectedPage() {
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#F4F2ED]">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1440px] mx-auto bg-[#F4F2ED]/90 backdrop-blur-sm border-b border-outline-variant/30">
-        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push(`/project/${projectId}/results`)}>
-          <span className="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
-          <span className="text-body-md font-body-md text-primary hidden md:inline">Back</span>
-        </div>
-        <div className="text-2xl font-bold tracking-tight text-primary cursor-pointer absolute left-1/2 -translate-x-1/2 font-display-xl" onClick={() => router.push('/')}>
-          Kanso
-        </div>
-        <div className="text-sm font-semibold text-primary">
-          Design Locked
-        </div>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[80px] pb-[80px] px-4 md:px-12 max-w-[1024px] mx-auto w-full flex flex-col">
+      <main className="flex-grow pt-24 pb-[80px] px-4 md:px-12 max-w-[1024px] mx-auto w-full flex flex-col">
         <ConfirmationBanner imageUrl={SELECTED_IMAGE} />
 
         <div className="flex justify-end mb-4">

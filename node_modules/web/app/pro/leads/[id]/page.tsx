@@ -5,6 +5,7 @@ import { SelectedConceptViewer } from '@/components/pro/leads/SelectedConceptVie
 import { WallCaptureGallery } from '@/components/pro/leads/WallCaptureGallery';
 import { MaterialSpecAccordion } from '@/components/pro/leads/MaterialSpecAccordion';
 import { ProNotesForm } from '@/components/pro/leads/ProNotesForm';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 // Mock Data
 const MOCK_LEAD = {
@@ -72,12 +73,10 @@ export default async function ProLeadDetailPage({ params }: ProLeadDetailPagePro
     <div className="min-h-screen bg-[#FBF9F4] text-[#1B1C19] font-body-md flex flex-col relative overflow-hidden">
       
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-8 h-20 bg-[#FBF9F4]/90 backdrop-blur-md border-b border-outline-variant/30">
-        <span className="font-display-xl text-2xl tracking-tighter text-primary">Kanso Pro</span>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col w-full pt-28 pb-20 px-4 md:px-8 max-w-[1400px] mx-auto">
+      <main className="flex-1 flex flex-col w-full pt-24 pb-20 px-4 md:px-8 max-w-[1400px] mx-auto">
         <LeadDetailHeader 
           leadId={id} 
           leadName={lead.name} 

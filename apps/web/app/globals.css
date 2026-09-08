@@ -64,8 +64,8 @@
   --font-body: var(--font-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
 
   /* Motion */
-  --animate-marquee: marquee 45s linear infinite;
-  --animate-marquee-slow: marquee 70s linear infinite;
+  --animate-marquee: marquee 90s linear infinite;
+  --animate-marquee-slow: marquee 140s linear infinite;
 
   /* Rounded */
   --radius-sm: 0.25rem;
@@ -96,6 +96,8 @@
 }
 
 body {
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: var(--color-background);
   color: var(--color-on-background);
   font-family: var(--font-sans);
@@ -108,6 +110,8 @@ body {
 
 html {
   scroll-behavior: smooth;
+  /* No page ever scrolls sideways on mobile */
+  overflow-x: hidden;
   /* keep anchor targets clear of the sticky navbar */
   scroll-padding-top: 4rem;
 }

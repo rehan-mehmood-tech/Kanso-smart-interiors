@@ -63,7 +63,7 @@ const TESTIMONIALS: Testimonial[] = [
 
 function TestimonialCard({ item }: { item: Testimonial }) {
   return (
-    <figure className="mx-3 flex w-[340px] shrink-0 flex-col justify-between rounded-2xl border border-[#c4c7c7] bg-[#fbf9f4] p-6 transition-all duration-300 hover:border-[#1b1c19] hover:shadow-lg sm:w-[400px]">
+    <figure className="mx-3 flex w-[min(85vw,340px)] shrink-0 flex-col justify-between rounded-2xl border border-[#c4c7c7] bg-[#fbf9f4] p-6 transition-all duration-500 hover:border-[#1b1c19] hover:shadow-lg sm:w-[400px]">
       <Quote className="mb-4 h-5 w-5 shrink-0 text-[#1b1c19]/30" />
       <blockquote className="w-full font-body text-sm leading-relaxed text-[#1b1c19]/80">
         {item.quote}

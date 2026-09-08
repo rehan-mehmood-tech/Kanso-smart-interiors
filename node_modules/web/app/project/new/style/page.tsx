@@ -6,6 +6,7 @@ import { WizardProgressBar } from '@/components/wizard/WizardProgressBar';
 import { StyleGrid } from '@/components/wizard/style/StyleGrid';
 import { BudgetScopeSelector, BudgetTier } from '@/components/wizard/style/BudgetScopeSelector';
 import { WizardFooter } from '@/components/wizard/WizardFooter';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 const STYLE_OPTIONS = [
   {
@@ -98,17 +99,10 @@ export default function ChooseStylePage() {
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#F4F2ED]">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1440px] mx-auto bg-[#F4F2ED] border-b border-outline-variant/30">
-        <div className="text-2xl font-bold tracking-tight text-primary cursor-pointer" onClick={() => router.push('/')}>
-          Kanso
-        </div>
-        <div className="text-xs font-semibold text-secondary uppercase tracking-wider">
-          Step 3 of 4
-        </div>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[100px] pb-[120px] px-6 md:px-12 max-w-[1440px] mx-auto w-full flex flex-col">
+      <main className="flex-grow pt-24 pb-[120px] px-6 md:px-12 max-w-[1440px] mx-auto w-full flex flex-col">
         <WizardProgressBar 
           step={3} 
           title="Choose Your Style" 

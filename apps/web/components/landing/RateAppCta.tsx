@@ -46,7 +46,7 @@ export function RateAppCta() {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-2.5 rounded-2xl border border-[#1b1c19] bg-transparent px-7 py-3.5 font-body text-sm font-medium text-[#1b1c19] transition-all duration-300 hover:bg-[#1b1c19] hover:text-[#fbf9f4]"
+          className="inline-flex min-h-[44px] items-center gap-2.5 rounded-2xl border border-[#1b1c19] bg-transparent px-6 py-3.5 sm:px-7 font-body text-sm font-medium text-[#1b1c19] transition-all duration-500 hover:bg-[#1b1c19] hover:text-[#fbf9f4]"
         >
           <MessageSquarePlus className="h-4 w-4 shrink-0" />
           Rate This App / Share Feedback
@@ -144,7 +144,7 @@ export function RateAppCta() {
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   placeholder="The renders felt accurate, but I wanted more control over lighting..."
-                  className="mt-2 w-full resize-none rounded-2xl border border-[#c4c7c7] bg-[#f4f0ea] px-4 py-3 font-body text-sm leading-relaxed text-[#1b1c19] outline-none transition-colors placeholder:text-[#1b1c19]/35 focus:border-[#1b1c19]"
+                  className="mt-2 w-full resize-none min-h-[44px] rounded-2xl border border-[#c4c7c7] bg-[#f4f0ea] px-4 py-3 font-body text-sm leading-relaxed text-[#1b1c19] outline-none transition-colors placeholder:text-[#1b1c19]/35 focus:border-[#1b1c19]"
                 />
 
                 <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">

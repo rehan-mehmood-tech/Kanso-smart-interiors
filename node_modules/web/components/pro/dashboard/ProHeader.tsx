@@ -1,12 +1,13 @@
 import React from 'react';
 import { Bell, Menu, Circle } from 'lucide-react';
+import { KansoLogo } from "@/components/brand/KansoLogo";
 
 export function ProHeader() {
   return (
     <>
       {/* TopAppBar (Mobile Only) */}
-      <header className="lg:hidden flex justify-between items-center h-20 px-4 border-b border-outline-variant bg-[#FBF9F4] sticky top-0 z-50 -mx-4 md:-mx-8 mb-8">
-        <span className="font-display-xl text-2xl tracking-tighter text-primary">Kanso Pro</span>
+      <header className="lg:hidden flex justify-between items-center h-16 px-4 border-b border-[#c4c7c7]/50 bg-[#f4f0ea]/85 backdrop-blur-md sticky top-0 z-50 -mx-4 md:-mx-8 mb-8">
+        <KansoLogo />
         <button className="text-primary p-2">
           <Menu className="w-6 h-6" />
         </button>

@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { SiteHeader } from '@/components/layout/SiteHeader';
 
 interface MatchingLayoutProps {
   children: ReactNode;
@@ -8,6 +9,7 @@ interface MatchingLayoutProps {
 export function MatchingLayout({ children, bgImageUrl }: MatchingLayoutProps) {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center bg-background text-on-background font-body-md overflow-hidden">
+      <SiteHeader position="fixed" />
       {/* Blurred Background Image Container */}
       <div className="absolute inset-0 z-0">
         <div 

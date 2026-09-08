@@ -3,14 +3,17 @@ import Image from 'next/image';
 import { ProHeader } from '@/components/pro/dashboard/ProHeader';
 import { ProStatsOverview } from '@/components/pro/dashboard/ProStatsOverview';
 import { LeadTable } from '@/components/pro/dashboard/LeadTable';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 export default function ProDashboardPage() {
   return (
-    <div className="min-h-screen bg-[#FBF9F4] text-[#1B1C19] font-body-md flex">
+    <div className="min-h-screen bg-[#FBF9F4] text-[#1B1C19] font-body-md">
+      <SiteHeader position="fixed" />
+      <div className="flex pt-16">
       {/* Static SideNavBar (Desktop) */}
-      <nav className="hidden lg:flex flex-col h-screen p-4 space-y-4 fixed left-0 w-64 bg-[#F0EEE9] border-r border-[#EAE8E3] shrink-0 z-20">
-        <div className="flex items-center gap-2 mb-8 px-2 pt-4">
-          <span className="font-display-xl text-[28px] text-primary tracking-tighter">Kanso Pro</span>
+      <nav className="hidden lg:flex flex-col h-[calc(100vh-4rem)] p-4 space-y-4 fixed left-0 top-16 w-64 bg-[#F0EEE9] border-r border-[#EAE8E3] shrink-0 z-20">
+        <div className="flex items-center gap-2 mb-4 px-2 pt-2">
+          <span className="font-body text-xs font-semibold tracking-[0.18em] text-[#1b1c19]/55 uppercase">Partner Workspace</span>
         </div>
         
         <div className="flex items-center gap-4 px-2 py-4 border-b border-[#EAE8E3] mb-4">
@@ -106,6 +109,7 @@ export default function ProDashboardPage() {
           </div>
         </div>
       </main>
+    </div>
     </div>
   );
 }

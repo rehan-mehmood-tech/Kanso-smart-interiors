@@ -8,6 +8,7 @@ import { PhotosSummaryCard } from '@/components/wizard/review/PhotosSummaryCard'
 import { StyleSummaryCard } from '@/components/wizard/review/StyleSummaryCard';
 import { GenerationDisclaimer } from '@/components/wizard/review/GenerationDisclaimer';
 import { WizardFooter } from '@/components/wizard/WizardFooter';
+import { SiteHeader } from "@/components/layout/SiteHeader";
 
 export default function ReviewProjectPage() {
   const router = useRouter();
@@ -50,21 +51,10 @@ export default function ReviewProjectPage() {
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#F4F2ED]">
       {/* Top Navbar */}
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1440px] mx-auto bg-[#F4F2ED] border-b border-outline-variant/30">
-        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/project/new/style' + window.location.search)}>
-          <span className="material-symbols-outlined text-primary group-hover:-translate-x-1 transition-transform">arrow_back</span>
-          <span className="text-body-md font-body-md text-primary hidden md:inline">Back</span>
-        </div>
-        <div className="text-2xl font-bold tracking-tight text-primary cursor-pointer absolute left-1/2 -translate-x-1/2" onClick={() => router.push('/')}>
-          Kanso
-        </div>
-        <div className="text-xs font-semibold text-secondary uppercase tracking-wider">
-          Step 4 of 4
-        </div>
-      </header>
+      <SiteHeader position="fixed" />
 
       {/* Main Content */}
-      <main className="flex-grow pt-[100px] pb-[120px] px-6 md:px-12 max-w-[768px] mx-auto w-full flex flex-col">
+      <main className="flex-grow pt-24 pb-[120px] px-6 md:px-12 max-w-[768px] mx-auto w-full flex flex-col">
         {/* Headline */}
         <div className="text-center md:text-left pt-6 mb-10">
           <h1 className="text-3xl md:text-[40px] font-semibold text-primary mb-2 leading-tight tracking-[-0.01em]">Ready to see your room?</h1>
