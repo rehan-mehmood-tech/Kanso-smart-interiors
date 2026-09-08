@@ -16,7 +16,7 @@ export function AvailabilityToggleModal({ isOpen, onClose }: AvailabilityToggleM
   return (
     <div className="fixed inset-0 z-[100] bg-background/80 backdrop-blur-sm flex justify-end">
       {/* Drawer */}
-      <div className="w-full max-w-md h-full bg-surface-container-lowest shadow-2xl border-l border-outline-variant/30 flex flex-col animate-in slide-in-from-right duration-300">
+      <div className="w-full max-w-[28rem] h-full bg-surface-container-lowest shadow-2xl border-l border-outline-variant/30 flex flex-col animate-in slide-in-from-right duration-300">
         
         <div className="flex items-center justify-between p-6 border-b border-outline-variant/30">
           <h2 className="font-display-xl text-xl text-primary tracking-tight">Availability Settings</h2>

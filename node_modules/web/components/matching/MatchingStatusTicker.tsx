@@ -26,7 +26,7 @@ export function MatchingStatusTicker() {
   }, []);
 
   return (
-    <div className="text-center mb-12 max-w-xl h-24 flex flex-col justify-center items-center">
+    <div className="text-center mb-12 max-w-[36rem] h-24 flex flex-col justify-center items-center">
       <h1 className="font-display-xl text-4xl md:text-5xl text-primary mb-4 tracking-tight">
         Finding your local specialist...
       </h1>

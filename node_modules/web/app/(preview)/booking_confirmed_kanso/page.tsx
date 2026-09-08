@@ -15,7 +15,7 @@ export default function bookingconfirmedkansoPage() {
             Your Journey Begins
         </h1>
 {/* Confirmation Message */}
-<p className="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-12 animate-fade-in delay-200">
+<p className="font-body-lg text-body-lg text-on-surface-variant max-w-[32rem] mb-12 animate-fade-in delay-200">
             Elena Rossi has been assigned to your project. Expect a call within 24 hours to discuss your vision and next steps.
         </p>
 {/* Actions */}

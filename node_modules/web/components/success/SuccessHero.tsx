@@ -10,7 +10,7 @@ export function SuccessHero() {
       <h1 className="font-display-xl text-4xl md:text-5xl lg:text-[64px] text-primary mb-6 animate-[fade-in-up_0.6s_ease-out_0.1s_forwards] opacity-0 tracking-tight leading-tight">
         Your Consultation is Requested
       </h1>
-      <p className="font-body-lg text-lg text-on-surface-variant max-w-xl animate-[fade-in-up_0.6s_ease-out_0.2s_forwards] opacity-0">
+      <p className="font-body-lg text-lg text-on-surface-variant max-w-[36rem] animate-[fade-in-up_0.6s_ease-out_0.2s_forwards] opacity-0">
         Elena Rossi has been tentatively assigned to your project. Expect a call within 24 hours to confirm your schedule and next steps.
       </p>
       

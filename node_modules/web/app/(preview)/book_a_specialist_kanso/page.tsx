@@ -25,7 +25,7 @@ export default function bookaspecialistkansoPage() {
 <div className="space-y-sm md:space-y-md">
 <p className="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Book a Specialist</p>
 <h1 className="font-display-xl text-[48px] md:text-display-xl leading-tight">Begin Your Physical Transformation</h1>
-<p className="font-body-lg text-body-lg text-on-surface-variant max-w-md pt-sm">Connect with a local Kanso-certified specialist to bring your vision to life.</p>
+<p className="font-body-lg text-body-lg text-on-surface-variant max-w-[28rem] pt-sm">Connect with a local Kanso-certified specialist to bring your vision to life.</p>
 </div>
 <div className="bg-surface-container-lowest rounded-xl shadow-ambient border border-surface-highest p-lg md:p-xl mt-lg relative overflow-hidden">
 <form className="space-y-lg relative z-10">

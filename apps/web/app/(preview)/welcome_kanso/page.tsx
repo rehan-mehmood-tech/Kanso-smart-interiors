@@ -77,7 +77,7 @@ export default function welcomekansoPage() {
 <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-4 tracking-tight">
                         Your first room is waiting.
                     </h1>
-<p className="font-body-lg text-body-lg text-secondary mb-10 max-w-md leading-relaxed">
+<p className="font-body-lg text-body-lg text-secondary mb-10 max-w-[28rem] leading-relaxed">
                         Start your journey to a beautifully designed home today. Tell us your style, and let our AI create a curated space tailored just for you.
                     </p>
 <button className="bg-primary text-on-primary px-8 py-4 rounded-lg font-label-sm text-label-sm flex items-center gap-3 hover:bg-surface-tint hover:-translate-y-0.5 transition-all duration-300 shadow-sm group">

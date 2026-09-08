@@ -154,7 +154,7 @@ export default function kansopremiumaiinteriordesignrefinedPage() {
 <a className="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors" href="#">Terms of Service</a>
 <a className="text-secondary font-body-md text-sm uppercase tracking-widest hover:text-primary transition-colors" href="#">Cookies</a>
 </div>
-<div className="text-secondary/60 font-body-md text-sm text-center md:text-right max-w-sm font-light">
+<div className="text-secondary/60 font-body-md text-sm text-center md:text-right max-w-[24rem] font-light">
                 Concepts generated are AI representations and may not reflect exact architectural feasibility.
             </div>
 </div>

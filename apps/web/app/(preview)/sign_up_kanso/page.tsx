@@ -27,7 +27,7 @@ export default function signupkansoPage() {
 <div className="lg:hidden absolute top-xl left-margin-mobile">
 <span className="font-display-xl text-headline-md tracking-tighter text-primary">Kanso</span>
 </div>
-<div className="w-full max-w-md mx-auto fade-in">
+<div className="w-full max-w-[28rem] mx-auto fade-in">
 {/* Header */}
 <div className="mb-xl text-center lg:text-left">
 <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-sm">Create an Account</h1>
