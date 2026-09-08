@@ -60,7 +60,12 @@
 
   /* Typography / Fonts */
   --font-serif: var(--font-noto-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-sans: var(--font-jakarta-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: var(--font-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion */
+  --animate-marquee: marquee 45s linear infinite;
+  --animate-marquee-slow: marquee 70s linear infinite;
 
   /* Rounded */
   --radius-sm: 0.25rem;
@@ -69,7 +74,15 @@
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Spacing */
+  /* Spacing
+     !! SIZE-SCALE COLLISION WARNING !!
+     These --spacing-{xs,sm,md,lg,xl,xxl} keys power ~700 gap-md / p-lg / mb-sm
+     utilities across the app, but in Tailwind v4 the spacing namespace also
+     shadows the named size scale. That makes max-w-xl resolve to 48px, max-w-lg
+     to 24px, max-w-md to 16px, max-w-sm to 8px and max-w-xs to 4px, which
+     collapses paragraphs into one-word columns. Defining --container-* does NOT
+     override it. Use explicit widths instead: max-w-[36rem], max-w-[28rem], etc.
+     (max-w-2xl and above are unaffected — no --spacing-2xl exists.) */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
@@ -86,4 +99,27 @@ body {
   background-color: var(--color-background);
   color: var(--color-on-background);
   font-family: var(--font-sans);
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+html {
+  scroll-behavior: smooth;
+  /* keep anchor targets clear of the sticky navbar */
+  scroll-padding-top: 4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-marquee,
+  .animate-marquee-slow { animation: none !important; }
+}
+
+/* Prevent long words from collapsing into single-word columns in narrow tracks */
+p, li, blockquote, figcaption {
+  overflow-wrap: break-word;
+  text-wrap: pretty;
 }

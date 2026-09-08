@@ -14,7 +14,7 @@ export default function generatingconceptskansoPage() {
 <p className="font-body-md text-body-md text-secondary status-text h-6 mb-xl" id="status-indicator">
                 Analyzing spatial geometry
             </p>
-<div className="w-full max-w-md h-[1px] bg-outline-variant rounded-full overflow-hidden">
+<div className="w-full max-w-[28rem] h-[1px] bg-outline-variant rounded-full overflow-hidden">
 <div className="progress-bar h-full bg-primary rounded-full" id="progress"></div>
 </div>
 </div>

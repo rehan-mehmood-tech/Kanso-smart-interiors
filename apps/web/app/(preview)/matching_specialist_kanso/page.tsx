@@ -21,7 +21,7 @@ export default function matchingspecialistkansoPage() {
 </div>
 </div>
 {/* Typography Context */}
-<div className="text-center mb-xl max-w-lg">
+<div className="text-center mb-xl max-w-[32rem]">
 <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-md tracking-tight">
                 Finding your local specialist...
             </h1>

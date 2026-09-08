@@ -15,8 +15,12 @@ const jakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "KANSO Interior Design Systems",
-  description: "Quiet Luxury Minimalist Design System",
+  title: "Kanso — AI-Powered Interior Design & Marketplace",
+  description:
+    "See your room reimagined before you spend a rupee. Upload four photos, choose an aesthetic, and get spatial AI renders with locked material specs and verified artisans.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({
