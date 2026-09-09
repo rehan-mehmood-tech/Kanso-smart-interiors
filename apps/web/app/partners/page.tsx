@@ -134,7 +134,7 @@ export default function PartnersPage() {
         </section>
 
         {/* Tier comparison */}
-        <section className="w-full border-t border-[#c4c7c7] bg-[#f4f0ea] py-20 sm:py-28">
+        <section id="pricing" className="w-full scroll-mt-20 border-t border-[#c4c7c7] bg-[#f4f0ea] py-20 sm:py-28">
           <div className="mx-auto w-full max-w-5xl px-6 sm:px-8">
             <div className="mx-auto mb-14 w-full max-w-2xl text-center">
               <span className="font-body text-xs tracking-[0.2em] text-[#1b1c19]/45 uppercase">

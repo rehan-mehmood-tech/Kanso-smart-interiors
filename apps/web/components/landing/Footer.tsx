@@ -27,8 +27,9 @@ const COLUMNS = [
   {
     heading: "Partners",
     links: [
-      { label: "Artisan Portal", href: "/pro/dashboard" },
-      { label: "Partner Profile", href: "/pro/profile" },
+      { label: "Become a Partner", href: "/partners" },
+      { label: "Vendor Portal Login", href: "/pro/login" },
+      { label: "Partner Pricing", href: "/partners#pricing" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
     ],

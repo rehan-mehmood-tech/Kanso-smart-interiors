@@ -3,18 +3,21 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ChevronDown } from 'lucide-react';
+import { LEAD_STATUSES, LEAD_STATUS_LABELS, type LeadStatus } from '@/lib/pro/leads';
 
 interface LeadDetailHeaderProps {
   leadId: string;
   leadName: string;
   roomType: string;
+  status: LeadStatus;
 }
 
-export function LeadDetailHeader({ leadId, leadName, roomType }: LeadDetailHeaderProps) {
-  const [status, setStatus] = useState('New');
+export function LeadDetailHeader({ leadId, leadName, roomType, status: initialStatus }: LeadDetailHeaderProps) {
+  const [status, setStatus] = useState<LeadStatus>(initialStatus);
   const [isOpen, setIsOpen] = useState(false);
 
-  const statuses = ['New', 'Contacted', 'In Review', 'Won', 'Archived'];
+  // PRD §15.10: these three statuses are the whole vocabulary.
+  const statuses = LEAD_STATUSES;
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
@@ -38,8 +41,8 @@ export function LeadDetailHeader({ leadId, leadName, roomType }: LeadDetailHeade
           className="flex items-center gap-3 bg-surface-container-lowest border border-outline-variant/50 px-4 py-2.5 rounded-lg text-primary font-label-sm text-sm min-w-[160px] justify-between hover:bg-surface-container-low transition-colors shadow-sm"
         >
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${status === 'New' ? 'bg-blue-500' : status === 'Won' ? 'bg-green-500' : status === 'Archived' ? 'bg-gray-400' : 'bg-yellow-500'}`}></div>
-            {status}
+            <div className={`w-2 h-2 rounded-full ${status === 'new' ? 'bg-blue-500' : status === 'completed' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+            {LEAD_STATUS_LABELS[status]}
           </div>
           <ChevronDown className="w-4 h-4 text-secondary" />
         </button>
@@ -52,7 +55,7 @@ export function LeadDetailHeader({ leadId, leadName, roomType }: LeadDetailHeade
                 onClick={() => { setStatus(s); setIsOpen(false); }}
                 className="w-full text-left px-4 py-3 font-label-sm text-xs hover:bg-[#F4F2ED] transition-colors text-primary border-b border-outline-variant/10 last:border-b-0"
               >
-                {s}
+                {LEAD_STATUS_LABELS[s]}
               </button>
             ))}
           </div>

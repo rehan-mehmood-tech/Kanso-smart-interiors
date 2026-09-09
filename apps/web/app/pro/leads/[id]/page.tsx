@@ -1,32 +1,24 @@
 import React from 'react';
+import { notFound } from 'next/navigation';
 import { LeadDetailHeader } from '@/components/pro/leads/LeadDetailHeader';
 import { CustomerContactCard } from '@/components/pro/leads/CustomerContactCard';
 import { SelectedConceptViewer } from '@/components/pro/leads/SelectedConceptViewer';
 import { WallCaptureGallery } from '@/components/pro/leads/WallCaptureGallery';
 import { MaterialSpecAccordion } from '@/components/pro/leads/MaterialSpecAccordion';
 import { ProNotesForm } from '@/components/pro/leads/ProNotesForm';
-import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteHeader } from '@/components/layout/SiteHeader';
+import { getVendorAccess } from '@/lib/pro/access';
+import { getVendorLead } from '@/lib/pro/mock-leads';
 
-// Mock Data
-const MOCK_LEAD = {
-  id: 'lead-1',
-  name: 'Sarah Jenkins',
-  roomType: 'Living Room & Kitchen',
-  style: 'Warm Minimalist',
-  contact: {
-    name: 'Sarah Jenkins',
-    phone: '+92 300 1234567',
-    email: 'sarah.jenkins@example.com',
-    location: 'Gulberg III, Lahore',
-    schedule: 'Preferred: Mornings (9am - 12pm)',
-    notes: 'Access via service elevator. Please bring physical samples for the oak flooring if possible.'
-  },
+// Project context that is not gated: a vendor needs the brief to decide
+// whether to pursue the lead at all. Only identity is behind the paywall.
+const PROJECT_CONTEXT = {
   conceptImage: '/assets/images/rooms/interior-wide-1.jpg',
   wallPhotos: [
     { id: 'w1', label: 'Wall A (Front)', url: '/assets/images/rooms/interior-wide-1.jpg' },
-    { id: 'w2', label: 'Wall B (Right)', url: '/assets/images/rooms/interior-wide-1.jpg' },
-    { id: 'w3', label: 'Wall C (Back)', url: '/assets/images/rooms/interior-wide-1.jpg' },
-    { id: 'w4', label: 'Wall D (Left)', url: '/assets/images/rooms/interior-wide-1.jpg' }
+    { id: 'w2', label: 'Wall B (Right)', url: '/assets/images/rooms/interior-wide-2.jpg' },
+    { id: 'w3', label: 'Wall C (Back)', url: '/assets/images/rooms/interior-wide-4.jpg' },
+    { id: 'w4', label: 'Wall D (Left)', url: '/assets/images/rooms/interior-wide-6.jpg' },
   ],
   specs: [
     {
@@ -35,8 +27,8 @@ const MOCK_LEAD = {
         'Warm Bone White (#FBF9F4) base walls',
         'Matte Charcoal (#1B1C19) accent framing',
         'Diffused perimeter cove lighting (3000K)',
-        'Directional spotlighting on key architectural features'
-      ]
+        'Directional spotlighting on key architectural features',
+      ],
     },
     {
       category: 'Key Furniture & Materials',
@@ -44,8 +36,8 @@ const MOCK_LEAD = {
         'Low-profile modular sofa in textured Linen Bouclé',
         'Monolithic coffee table in Honed Travertine',
         'Fluted White Oak built-in joinery',
-        'Matte Black steel window mullions'
-      ]
+        'Matte Black steel window mullions',
+      ],
     },
     {
       category: 'Estimated Scope & Footprint',
@@ -53,51 +45,59 @@ const MOCK_LEAD = {
         'Room Footprint: Approx. 450 sq. ft.',
         'Sourcing Timeline: 6-8 weeks for bespoke items',
         'Contractor Requirement: Light structural (paint & lighting)',
-        'Project Tier: Full Furnishing'
-      ]
-    }
-  ]
+        'Project Tier: Full Furnishing',
+      ],
+    },
+  ],
 };
 
 interface ProLeadDetailPageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ access?: string }>;
 }
 
-export default async function ProLeadDetailPage({ params }: ProLeadDetailPageProps) {
+export default async function ProLeadDetailPage({ params, searchParams }: ProLeadDetailPageProps) {
   const { id } = await params;
+  const { access } = await searchParams;
 
-  // In a real app, fetch data based on `id`. Using mock for now.
-  const lead = MOCK_LEAD;
+  // Gate resolved on the server. An unpaid vendor's response never contains
+  // the contact values at all.
+  const vendorAccess = await getVendorAccess(access);
+  const lead = getVendorLead(id, vendorAccess.hasPaidAccess);
+
+  if (!lead) notFound();
 
   return (
     <div className="min-h-screen bg-[#FBF9F4] text-[#1B1C19] font-body-md flex flex-col relative overflow-hidden">
-      
-      {/* Top Navbar */}
       <SiteHeader position="fixed" />
 
-      {/* Main Content Area */}
       <main className="flex-1 flex flex-col w-full pt-24 pb-20 px-4 md:px-8 max-w-[1400px] mx-auto">
-        <LeadDetailHeader 
-          leadId={id} 
-          leadName={lead.name} 
-          roomType={lead.roomType} 
+        <LeadDetailHeader
+          leadId={lead.id}
+          leadName={lead.customerName}
+          roomType={lead.roomType}
+          status={lead.status}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
-          {/* Left Column (Main Content) */}
           <div className="lg:col-span-8 flex flex-col gap-6 md:gap-8">
-            <SelectedConceptViewer 
-              imageUrl={lead.conceptImage} 
-              style={lead.style} 
-              roomType={lead.roomType} 
+            <SelectedConceptViewer
+              imageUrl={PROJECT_CONTEXT.conceptImage}
+              style={lead.styleSlug.replace(/_/g, ' ')}
+              roomType={lead.roomType}
             />
-            <WallCaptureGallery photos={lead.wallPhotos} />
-            <MaterialSpecAccordion specs={lead.specs} />
+            <WallCaptureGallery photos={PROJECT_CONTEXT.wallPhotos} />
+            <MaterialSpecAccordion specs={PROJECT_CONTEXT.specs} />
           </div>
 
-          {/* Right Column (Sidebar) */}
           <div className="lg:col-span-4 flex flex-col gap-6 md:gap-8 sticky top-28">
-            <CustomerContactCard info={lead.contact} />
+            <CustomerContactCard
+              info={{
+                name: lead.customerName,
+                schedule: 'Preferred: Mornings (9am - 12pm)',
+              }}
+              lead={lead}
+            />
             <ProNotesForm />
           </div>
         </div>
