@@ -62,11 +62,17 @@ def create_app() -> FastAPI:
     )
 
     app.add_middleware(RequestContextMiddleware)
+    # Browser access rules.
+    #
+    # allow_credentials=True means the browser will send session cookies, and
+    # the spec forbids pairing that with a wildcard origin -- so the allowlist
+    # is explicit and preview deployments are matched by an anchored regex.
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.cors_origins,
+        allow_origins=settings.allowed_origins(),
+        allow_origin_regex=settings.cors_origin_regex,
         allow_credentials=True,
-        allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+        allow_methods=["*"],
         allow_headers=["*"],
         expose_headers=["X-Request-ID"],
     )

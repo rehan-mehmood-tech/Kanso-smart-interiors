@@ -10,10 +10,10 @@ AI providers are configured.
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class MissingCredentialError(RuntimeError):
@@ -41,9 +41,20 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
 
     # --- CORS: the Next.js origins allowed to call this API ---
-    cors_origins: list[str] = Field(
+    #
+    # NoDecode stops pydantic-settings from JSON-decoding this before the
+    # validator runs. Without it a plain comma-separated value -- which is what
+    # a Render dashboard variable holds -- raises a JSONDecodeError at import
+    # time and the service never boots.
+    cors_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"]
     )
+    #: The production Vercel domain, injected by the deployment environment.
+    next_public_site_url: str | None = None
+    #: Vercel generates a new hostname per preview deployment, so previews are
+    #: matched by pattern rather than listed. Anchored at both ends so that
+    #: something like "evil-vercel.app.attacker.com" cannot match.
+    cors_origin_regex: str = r"^https://[a-z0-9-]+\.vercel\.app$"
 
     # --- Supabase (Postgres + Auth + Storage) ---
     supabase_url: str | None = None
@@ -67,14 +78,33 @@ class Settings(BaseSettings):
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _split_origins(cls, value: object) -> object:
-        """Accept CORS_ORIGINS as JSON or as a plain comma-separated string."""
-        if isinstance(value, str) and not value.strip().startswith("["):
-            return [origin.strip() for origin in value.split(",") if origin.strip()]
+        """Accept CORS_ORIGINS as JSON or as a plain comma-separated string.
+
+        Render and Vercel dashboards store variables as plain strings, so the
+        comma-separated form is the one that actually turns up in production.
+        """
+        if isinstance(value, str):
+            text = value.strip()
+            if text.startswith("["):
+                import json
+
+                return json.loads(text)
+            return [origin.strip() for origin in text.split(",") if origin.strip()]
         return value
 
     @property
     def is_production(self) -> bool:
         return self.environment == "production"
+
+    def allowed_origins(self) -> list[str]:
+        """Explicit origin allowlist: the configured origins plus the
+        production site URL, de-duplicated and order-preserved."""
+        origins = list(self.cors_origins)
+        if self.next_public_site_url:
+            site = self.next_public_site_url.rstrip("/")
+            if site not in origins:
+                origins.append(site)
+        return origins
 
     def require_supabase(self) -> tuple[str, str]:
         """Return (url, service_role_key) or explain what is missing."""

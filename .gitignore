@@ -1,0 +1,27 @@
+# Dependencies — restored by `npm install` / `pip install`, never committed.
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Build output
+.next/
+out/
+build/
+dist/
+
+# Environment — templates are tracked, real values never are.
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Platform
+.vercel/
+.render/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.log

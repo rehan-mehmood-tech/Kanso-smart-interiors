@@ -1,0 +1,68 @@
+# Render blueprint for the Kanso FastAPI backend.
+#
+# The repository is a npm workspaces monorepo, so both commands cd into
+# apps/api. Render runs them from the repo root, and `rootDir` is deliberately
+# not used: it would also scope the build context, and the health check path
+# below is served from the app package inside apps/api.
+#
+# Secrets (sync: false) are set in the Render dashboard, never committed.
+
+services:
+  - type: web
+    name: kanso-api
+    runtime: python
+    plan: free
+    region: singapore
+    # Closest region to the Pakistani user base; move it if that changes.
+    branch: main
+    buildCommand: cd apps/api && pip install -r requirements.txt
+    startCommand: cd apps/api && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.4"
+
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: INFO
+
+      # Origins allowed to call this API. The Vercel production domain; preview
+      # deployments are matched by regex in app/main.py instead, because their
+      # hostnames are generated per deployment.
+      - key: CORS_ORIGINS
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+
+      # --- Supabase ---
+      # SERVICE_ROLE bypasses row-level security. Server-side only, never
+      # exposed to the browser.
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      # --- AI providers ---
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_VISION_MODEL
+        value: gemini-2.0-flash
+      - key: REPLICATE_API_TOKEN
+        sync: false
+      - key: FLUX_MODEL
+        value: black-forest-labs/flux-1.1-pro
+      - key: GROQ_API_KEY
+        sync: false
+
+      # --- Generation limits ---
+      - key: DESIGNS_PER_GENERATION
+        value: "5"
+      - key: GENERATION_TIMEOUT_SECONDS
+        value: "180"
