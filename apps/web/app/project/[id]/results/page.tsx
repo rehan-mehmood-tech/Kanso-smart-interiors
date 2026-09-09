@@ -13,21 +13,21 @@ const MOCK_CONCEPTS: DesignConcept[] = [
     id: 'concept-1',
     title: 'Concept A: The Serene Retreat',
     description: 'A highly realistic, wide-angle interior emphasizing Warm Minimalism. Soft natural light floods the space, highlighting natural textures and high-quality minimalist furniture. Designed for contemplation and calm.',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
+    image: '/assets/images/rooms/interior-wide-1.jpg',
     features: ['Low-profile seating', 'Diffuse lighting', 'Organic shapes']
   },
   {
     id: 'concept-2',
     title: 'Concept B: Urban Zen',
     description: 'A darker, more introspective take using deep charcoals and raw stone elements to anchor the space. Monolithic coffee tables and moody architectural lighting set a curated, high-end tone.',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
+    image: '/assets/images/rooms/interior-wide-1.jpg',
     features: ['Dark accents', 'Monolithic stone', 'Directional lighting']
   },
   {
     id: 'concept-3',
     title: 'Concept C: Raw Elements',
     description: 'Pushing the minimalist boundary with geometric light play. Expansive minimalist layouts utilizing textured white bouclé fabric and pale travertine.',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
+    image: '/assets/images/rooms/interior-wide-1.jpg',
     features: ['Bouclé fabric', 'Travertine', 'High contrast']
   }
 ];

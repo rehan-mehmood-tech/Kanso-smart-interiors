@@ -17,7 +17,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Ayesha Raza",
     role: "Homeowner, Lahore",
     avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
+      "/assets/images/artisans/ayesha-raza.jpg",
   },
   {
     quote:
@@ -25,7 +25,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Daniyal Khan",
     role: "Homeowner, Karachi",
     avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+      "/assets/images/artisans/daniyal-khan.jpg",
   },
   {
     quote:
@@ -33,7 +33,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Imran Sethi",
     role: "Master Joiner, 18 years",
     avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+      "/assets/images/artisans/imran-sethi.jpg",
   },
   {
     quote:
@@ -41,7 +41,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Faisal Mahmood",
     role: "Electrical Contractor",
     avatar:
-      "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=200&q=80",
+      "/assets/images/artisans/faisal-mahmood.jpg",
   },
   {
     quote:
@@ -49,7 +49,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Sana Iqbal",
     role: "Homeowner, Islamabad",
     avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "/assets/images/artisans/sana-iqbal.jpg",
   },
   {
     quote:
@@ -57,7 +57,7 @@ const TESTIMONIALS: Testimonial[] = [
     name: "Yousuf Ali",
     role: "Finishing Specialist",
     avatar:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
+      "/assets/images/artisans/yousuf-ali.jpg",
   },
 ];
 

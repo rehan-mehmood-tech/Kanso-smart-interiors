@@ -9,8 +9,8 @@ import { GenerationProgressBar } from '@/components/generating/GenerationProgres
 import { useAutoRedirect } from '@/components/generating/useAutoRedirect';
 
 // Using the exact placeholder images from the Stitch HTML export
-const BG_EMPTY = 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85';
-const BG_FINISHED = 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85';
+const BG_EMPTY = '/assets/images/rooms/interior-wide-1.jpg';
+const BG_FINISHED = '/assets/images/rooms/interior-wide-1.jpg';
 
 export default function GeneratingPage() {
   const params = useParams();

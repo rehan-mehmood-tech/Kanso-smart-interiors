@@ -13,7 +13,7 @@ const AESTHETICS = [
     description:
       "Scandinavian function meets Japanese restraint. Low profiles, pale timber, and deliberate empty space.",
     image:
-      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80",
+      "/assets/images/styles/japandi.jpg",
     palette: ["#D4CFC7", "#8C8276", "#2D2A26"],
   },
   {
@@ -21,7 +21,7 @@ const AESTHETICS = [
     description:
       "Uncluttered rooms kept from feeling cold by natural texture, soft neutrals, and diffused light.",
     image:
-      "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&w=900&q=80",
+      "/assets/images/styles/warm-minimalist.jpg",
     palette: ["#FBF9F4", "#EAE8E3", "#9D9589"],
   },
   {
@@ -29,7 +29,7 @@ const AESTHETICS = [
     description:
       "Understated elegance built from bespoke materials, muted palettes, and detailing you notice slowly.",
     image:
-      "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&w=900&q=80",
+      "/assets/images/styles/quiet-luxury.jpg",
     palette: ["#4A4A4A", "#E6E2DA", "#1B1C19"],
   },
   {
@@ -37,7 +37,7 @@ const AESTHETICS = [
     description:
       "Flowing forms and raw natural elements that bring the outdoors into a considered interior.",
     image:
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80",
+      "/assets/images/styles/modern-organic.jpg",
     palette: ["#B8A792", "#7A8B76", "#3E362E"],
   },
 ];

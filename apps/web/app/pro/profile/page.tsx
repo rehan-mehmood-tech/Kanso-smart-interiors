@@ -17,7 +17,7 @@ const MOCK_PROFILE = {
   location: 'Milan, IT / Global Remote',
   website: 'rossistudio.co',
   email: 'hello@rossistudio.co',
-  avatarUrl: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85',
+  avatarUrl: '/assets/images/rooms/interior-wide-2.jpg',
   isVerified: true,
   bio: {
     about: "Elena specializes in crafting environments that embody 'Quiet Luxury'—spaces that speak through material integrity and spatial harmony rather than overt decoration. With over a decade of experience in residential and boutique commercial design, her approach is deeply tactile and intentionally reductive, drawing inspiration from natural light and pure architectural forms.",
@@ -29,20 +29,20 @@ const MOCK_PROFILE = {
       id: 'p1',
       title: 'Villa Lyskamm',
       category: 'Residential Renovation',
-      imageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=85',
+      imageUrl: '/assets/images/rooms/interior-wide-4.jpg',
       isFeatured: true
     },
     {
       id: 'p2',
       title: 'Materiality Study',
       category: 'Concept / Detail',
-      imageUrl: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85'
+      imageUrl: '/assets/images/rooms/interior-wide-2.jpg'
     },
     {
       id: 'p3',
       title: 'Oak House',
       category: 'Interior Architecture',
-      imageUrl: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85'
+      imageUrl: '/assets/images/rooms/interior-wide-2.jpg'
     }
   ],
   services: [

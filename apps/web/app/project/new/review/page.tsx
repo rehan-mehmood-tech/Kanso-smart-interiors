@@ -18,10 +18,10 @@ export default function ReviewProjectPage() {
 
   // Fallback photos for the mock presentation
   const mockPhotos = [
-    'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
-    'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
-    'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=85',
-    'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85'
+    '/assets/images/rooms/interior-wide-1.jpg',
+    '/assets/images/rooms/interior-wide-1.jpg',
+    '/assets/images/rooms/interior-wide-4.jpg',
+    '/assets/images/rooms/interior-wide-2.jpg'
   ];
 
   useEffect(() => {

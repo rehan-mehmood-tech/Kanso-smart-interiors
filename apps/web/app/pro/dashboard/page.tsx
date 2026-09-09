@@ -19,7 +19,7 @@ export default function ProDashboardPage() {
         <div className="flex items-center gap-4 px-2 py-4 border-b border-[#EAE8E3] mb-4">
           <div className="relative w-10 h-10 rounded-full bg-[#E4E2DD] overflow-hidden shrink-0 flex items-center justify-center font-display-xl text-lg border border-[#C4C7C7]">
             <Image 
-              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85" 
+              src="/assets/images/rooms/interior-wide-1.jpg" 
               alt="Elena Rossi" 
               fill
               sizes="40px"

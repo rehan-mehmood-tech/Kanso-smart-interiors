@@ -10,7 +10,7 @@ import { SecondaryNavActions } from '@/components/selected/SecondaryNavActions';
 import { SiteHeader } from "@/components/layout/SiteHeader";
 
 // Mock Data representing the chosen concept
-const SELECTED_IMAGE = 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85';
+const SELECTED_IMAGE = '/assets/images/rooms/interior-wide-1.jpg';
 
 const SPEC_DATA: SpecItem[] = [
   {
