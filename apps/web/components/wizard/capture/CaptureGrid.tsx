@@ -17,6 +17,16 @@ const INITIAL_STATE: WallCaptureState[] = [
 export function CaptureGrid({ onCompletionChange }: CaptureGridProps) {
   const [walls, setWalls] = useState<WallCaptureState[]>(INITIAL_STATE);
 
+  const allCompleted = walls.every(wall => wall.file !== null);
+
+  // Reporting completion from inside the setWalls updater called the parent's
+  // setState while CaptureGrid was rendering. Derive it from state instead and
+  // notify after commit.
+  useEffect(() => {
+    onCompletionChange(allCompleted);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allCompleted]);
+
   useEffect(() => {
     // Cleanup object URLs to avoid memory leaks
     return () => {
@@ -40,10 +50,7 @@ export function CaptureGrid({ onCompletionChange }: CaptureGridProps) {
         }
         return wall;
       });
-      
-      const allCompleted = next.every(w => w.file !== null);
-      onCompletionChange(allCompleted);
-      
+
       return next;
     });
   };
@@ -59,8 +66,7 @@ export function CaptureGrid({ onCompletionChange }: CaptureGridProps) {
         }
         return wall;
       });
-      
-      onCompletionChange(false);
+
       return next;
     });
   };
