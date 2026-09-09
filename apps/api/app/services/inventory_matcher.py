@@ -29,6 +29,88 @@ CATEGORY_PRIORITY: tuple[str, ...] = ("furniture", "lighting", "finish", "fixtur
 #: Beyond this the prompt stops steering the image and starts diluting it.
 MAX_ITEMS = 6
 
+#: Cap on the spatial reading inside the prompt.
+#:
+#: The provider truncates the whole semantic prompt at a fixed length (see
+#: services/image_generator.py) by cutting the END. Gemini's room description
+#: is the one part whose length is not under our control, so it is bounded
+#: here -- otherwise a chatty analysis would push the room-type reinforcement
+#: and the composition line past the cut, dropping exactly the instructions
+#: that stop the model rendering the wrong kind of room.
+MAX_SPATIAL_CHARS = 320
+
+
+#: The furniture that defines each room type, and must be present whatever the
+#: local catalogue happens to stock.
+#:
+#: This exists because of a real failure: a *bedroom* project rendered a sofa
+#: and no bed. The cause was the instruction below to furnish using ONLY the
+#: matched vendor pieces -- Rossi's catalogue has a sideboard, a coffee table
+#: and a lounge chair but no bed, so the prompt literally forbade the one
+#: piece that makes a bedroom a bedroom, and the model produced a sitting room.
+#:
+#: So the anchor leads the prompt and is never optional. Vendor stock is
+#: additive on top of it, not a replacement for it.
+ROOM_ANCHORS: dict[str, str] = {
+    "bedroom": (
+        "A fully furnished master bedroom featuring a prominent modern bed with "
+        "headboard, pillows, duvet, nightstands, and cohesive interior lighting"
+    ),
+    "home_office": (
+        "A fully furnished home office featuring a substantial desk, an ergonomic "
+        "task chair, wall-mounted shelving, and a laptop workstation with focused "
+        "task lighting"
+    ),
+    "living_room": (
+        "A fully furnished living room featuring a large sofa, a coffee table, a "
+        "media and TV unit, and accent chairs arranged around a clear seating axis"
+    ),
+    "dining_room": (
+        "A fully furnished dining room featuring a full-size dining table with a "
+        "matching set of dining chairs and a pendant light centred above the table"
+    ),
+    "kids_room": (
+        "A fully furnished children's bedroom featuring a single bed with bedding, "
+        "low accessible storage, a small study desk and soft, warm lighting"
+    ),
+}
+
+#: Used when the room type is unknown or free text ("Other" in the wizard).
+#: Still names furniture, so an unrecognised room never renders as an empty
+#: shell -- the failure mode this whole table exists to prevent.
+GENERIC_ANCHOR = (
+    "A fully furnished room with a clear primary seating or resting piece, a "
+    "surface for everyday use, storage, and cohesive interior lighting"
+)
+
+
+def room_anchor(room_type: str | None) -> str:
+    """The mandatory core furniture clause for a room type.
+
+    `office` is accepted alongside `home_office` because the wizard's id and
+    everyday shorthand differ, and a near-miss here would silently drop the
+    anchor -- exactly the case this guards.
+    """
+    if not room_type:
+        return GENERIC_ANCHOR
+    key = room_type.strip().lower().replace(" ", "_").replace("-", "_")
+    aliases = {
+        "office": "home_office",
+        "study": "home_office",
+        "master_bedroom": "bedroom",
+        "guest_bedroom": "bedroom",
+        "lounge": "living_room",
+        "drawing_room": "living_room",
+        "sitting_room": "living_room",
+        "tv_lounge": "living_room",
+        "kids_bedroom": "kids_room",
+        "children_room": "kids_room",
+        "nursery": "kids_room",
+        "dining": "dining_room",
+    }
+    key = aliases.get(key, key)
+    return ROOM_ANCHORS.get(key, GENERIC_ANCHOR)
+
 
 @dataclass
 class MatchedProduct:
@@ -246,55 +328,61 @@ def build_render_prompt(
 ) -> str:
     """Assemble the render prompt.
 
-    Order is the whole trick here, and it was learned the hard way. Leading
-    with a long spatial description and appending the furniture produced
-    consistently EMPTY rooms: the model spent its attention reproducing the
-    geometry it was told to preserve, and treated the furniture list as
-    trailing detail. Both concepts of a test run came back as bare shells.
+    Order is the whole trick here, and it was learned twice.
 
-    So the furnished scene leads. The room is introduced as "fully furnished
-    with X, Y and Z", which is the subject of the photograph, and the spatial
-    reading follows as supporting context. Same information, and the
-    difference in output is the difference between an empty room and a room
-    someone could live in.
+    First: leading with a long spatial description and appending the furniture
+    produced consistently EMPTY rooms. The model spent its attention
+    reproducing the geometry it was told to preserve and treated the furniture
+    as trailing detail. So the furnished scene leads and the spatial reading
+    follows as supporting context.
+
+    Second: leading with the vendor stock produced MISCATEGORISED rooms -- a
+    bedroom rendered as a sitting room, because the catalogue had no bed and
+    the prompt said to use only the matched pieces. So the room's own anchor
+    furniture now leads, is mandatory, and vendor stock is layered on top of
+    it. The room type decides what the space *is*; the catalogue decides what
+    can be bought in it.
     """
     room = (room_type or "living room").replace("_", " ")
     style = (style_slug or "warm minimalist").replace("_", " ")
+    anchor = room_anchor(room_type)
 
     parts: list[str] = []
 
+    # 1. What this room IS. Always present, never conditional on inventory, and
+    # stated first so a truncated prompt still keeps it.
+    parts.append(f"{anchor}, in a {style} style.")
+    parts.append(
+        f"This is a {room}: fully furnished and styled, never an empty or "
+        "unfurnished space, and never a different kind of room."
+    )
+
+    # 2. What can actually be bought in it.
     if selection.products:
         items = ", ".join(p.describe() for p in selection.products)
+        parts.append(f"It also contains these exact pieces: {items}.")
         parts.append(
-            f"Photorealistic interior photograph of a fully furnished {style} "
-            f"{room}, furnished with {items}."
-        )
-        parts.append(
-            "Every one of those pieces must be clearly visible and arranged "
-            "naturally in the space, rendered faithfully to its stated "
-            "material, colour and size. Furnish the room using ONLY these "
-            "pieces plus plain soft furnishings such as cushions and plants. "
-            "Do not invent additional furniture and do not substitute "
-            "different designs: every item shown must be one the customer can "
-            "actually buy from the local vendor."
+            "Show each of those clearly, true to its stated material, colour "
+            "and size. Add nothing else beyond the core furniture above and "
+            "soft furnishings such as cushions, bedding, rugs and plants: "
+            "every purchasable item shown must be one the customer can buy "
+            "from the local vendor."
         )
         if selection.total_price_minor:
-            parts.append(
-                f"Total specified furnishing value approximately PKR "
-                f"{selection.total_price_pkr:,}."
-            )
+            parts.append(f"Furnishing value approximately PKR {selection.total_price_pkr:,}.")
     else:
         parts.append(
-            f"Photorealistic interior photograph of a fully furnished {style} "
-            f"{room}, with seating, a low table, soft lighting and a rug, in "
-            "natural materials and a restrained palette."
+            "Furnish it completely in natural materials and a restrained "
+            "palette, with soft lighting and textiles."
         )
 
+    # 3. The customer's actual room, as read from their four photos.
     if spatial_fragment:
-        parts.append(
-            f"The room itself is a {spatial_fragment}. Keep this geometry, "
-            "window placement and proportions."
-        )
+        spatial = spatial_fragment.strip()
+        if len(spatial) > MAX_SPATIAL_CHARS:
+            # Cut on a clause boundary so the fragment does not end mid-phrase.
+            spatial = spatial[:MAX_SPATIAL_CHARS].rsplit(",", 1)[0]
+        parts.append(f"Room: {spatial}. Keep this geometry and proportions.")
 
     # Composition intent stays here because it describes the shot of THIS
     # room. Rendering-quality modifiers do not: they are provider-specific and

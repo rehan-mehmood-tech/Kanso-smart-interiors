@@ -188,7 +188,12 @@ export default function ResultsPage() {
         )}
       </main>
 
-      {!isLoading && !error && concepts.length > 0 && <ActionFloatingBar projectId={projectId} />}
+      {!isLoading && !error && concepts.length > 0 && (
+        <ActionFloatingBar
+          projectId={projectId}
+          designId={concepts[Math.min(activeIndex, concepts.length - 1)]?.id}
+        />
+      )}
     </div>
   );
 }

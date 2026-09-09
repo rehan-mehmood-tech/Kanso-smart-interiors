@@ -31,6 +31,12 @@ class ConsultationRequest(BaseModel):
     full_address: str | None = None
     #: Optional link to the design project this request came from.
     project_id: UUID | None = None
+    #: How the customer wants the consultation to happen.
+    preferred_mode: Literal["in-person", "video"] | None = None
+    #: Rough window rather than a booked time: the specialist confirms.
+    preferred_time_slot: Literal["Morning", "Afternoon", "Evening"] | None = None
+    #: Access instructions, constraints, anything said in the form's own words.
+    notes: str | None = Field(default=None, max_length=2000)
 
     @field_validator("phone")
     @classmethod
@@ -115,6 +121,9 @@ async def create_consultation(payload: ConsultationRequest) -> ConsultationRespo
         style_slug=style_slug,
         project_id=payload.project_id,
         business_id=match["id"] if match else None,
+        preferred_mode=payload.preferred_mode,
+        preferred_time_slot=payload.preferred_time_slot,
+        notes=payload.notes,
     )
 
     if match:

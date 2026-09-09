@@ -1,14 +1,17 @@
 import React from 'react';
-import Image from 'next/image';
+import { Clock, Store } from 'lucide-react';
 
 export interface BookingSuccessSummary {
   projectId: string;
   roomType: string;
   style: string;
-  contactWindow: string;
   location: string;
   partnerName: string;
   partnerRole: string;
+  /** False while the lead is queued for manual matching. */
+  hasPartner: boolean;
+  /** The backend's own words about what happens next. */
+  message: string | null;
 }
 
 interface BookingSummaryCardProps {
@@ -21,7 +24,7 @@ export function BookingSummaryCard({ summary }: BookingSummaryCardProps) {
       <h3 className="font-label-sm text-xs text-secondary uppercase tracking-widest mb-6 border-b border-outline-variant/50 pb-4">
         Request Details
       </h3>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-6">
           <div>
@@ -37,22 +40,37 @@ export function BookingSummaryCard({ summary }: BookingSummaryCardProps) {
             </div>
           </div>
           <div>
-            <p className="font-label-sm text-[10px] text-secondary mb-1 uppercase tracking-wider">Location & Contact</p>
-            <p className="font-body-md text-primary font-medium">{summary.location} • {summary.contactWindow}</p>
+            <p className="font-label-sm text-[10px] text-secondary mb-1 uppercase tracking-wider">Location</p>
+            <p className="font-body-md text-primary font-medium">{summary.location}</p>
           </div>
         </div>
 
         <div className="bg-surface-container-low rounded-xl p-6 border border-surface-container flex flex-col sm:flex-row items-center sm:items-start gap-4 h-fit text-center sm:text-left">
-          <div className="w-16 h-16 rounded-full bg-surface-variant overflow-hidden shrink-0 border border-outline-variant/30 shadow-sm">
-            <Image src="/assets/images/artisans/partner-avatar.jpg" alt={summary.partnerName} width={64} height={64} className="w-full h-full object-cover" />
+          {/* A mark, not a photograph. The assigned partner is a real local
+              business and we have no portrait of them; a stock avatar here
+              would be presenting a stranger's face as the person coming. */}
+          <div className="w-16 h-16 rounded-full bg-surface-variant shrink-0 border border-outline-variant/30 shadow-sm flex items-center justify-center">
+            {summary.hasPartner ? (
+              <Store className="w-7 h-7 text-secondary" />
+            ) : (
+              <Clock className="w-7 h-7 text-secondary" />
+            )}
           </div>
           <div>
-            <p className="font-label-sm text-[10px] text-secondary uppercase tracking-widest mb-1 mt-2 sm:mt-0">Assigned Partner</p>
+            <p className="font-label-sm text-[10px] text-secondary uppercase tracking-widest mb-1 mt-2 sm:mt-0">
+              {summary.hasPartner ? 'Assigned Partner' : 'Matching In Progress'}
+            </p>
             <p className="font-body-md text-primary font-semibold">{summary.partnerName}</p>
             <p className="font-body-md text-sm text-secondary mt-0.5">{summary.partnerRole}</p>
           </div>
         </div>
       </div>
+
+      {summary.message && (
+        <p className="font-body-md text-sm text-secondary mt-6 pt-4 border-t border-outline-variant/50">
+          {summary.message}
+        </p>
+      )}
     </div>
   );
 }

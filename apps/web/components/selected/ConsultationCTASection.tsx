@@ -6,9 +6,11 @@ import { useRouter } from 'next/navigation';
 
 interface ConsultationCTASectionProps {
   projectId: string;
+  /** Chosen concept, carried on so the booking page shows the same image. */
+  designId?: string;
 }
 
-export function ConsultationCTASection({ projectId }: ConsultationCTASectionProps) {
+export function ConsultationCTASection({ projectId, designId }: ConsultationCTASectionProps) {
   const router = useRouter();
 
   return (
@@ -20,7 +22,11 @@ export function ConsultationCTASection({ projectId }: ConsultationCTASectionProp
       </p>
       
       <button 
-        onClick={() => router.push(`/project/${projectId}/consultation`)}
+        onClick={() =>
+          router.push(
+            `/project/${projectId}/consultation${designId ? `?design=${encodeURIComponent(designId)}` : ''}`,
+          )
+        }
         className="bg-primary text-on-primary font-label-sm text-label-sm rounded-lg px-8 py-4 hover:bg-surface-tint transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-0.5 w-full md:w-auto"
       >
         Request Specialist Consultation

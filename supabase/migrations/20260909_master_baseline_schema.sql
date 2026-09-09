@@ -290,6 +290,11 @@ create table if not exists consultation_leads (
   full_address  text,
   room_type     text,
   style_slug    text,
+  -- What the customer asked for in the booking form. Nullable: a lead
+  -- captured outside the wizard has no preferences attached.
+  preferred_mode      text check (preferred_mode is null or preferred_mode in ('in-person', 'video')),
+  preferred_time_slot text check (preferred_time_slot is null or preferred_time_slot in ('Morning', 'Afternoon', 'Evening')),
+  notes               text,
   status        lead_status not null default 'new',
   business_id   uuid references businesses(id) on delete set null,
   -- Links the lead back to the design project it came from. Nullable: a lead

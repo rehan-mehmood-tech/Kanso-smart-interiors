@@ -267,6 +267,9 @@ def create_lead(
     style_slug: str | None,
     project_id: UUID | None,
     business_id: str | None,
+    preferred_mode: str | None = None,
+    preferred_time_slot: str | None = None,
+    notes: str | None = None,
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "customer_name": customer_name,
@@ -280,8 +283,49 @@ def create_lead(
         "business_id": business_id,
         "project_id": str(project_id) if project_id else None,
     }
-    result = get_supabase().table(LEADS).insert(payload).execute()
+
+    # What the customer asked for in the booking form: how they want to be
+    # seen, when, and anything the specialist needs to know before arriving.
+    optional = {
+        "preferred_mode": preferred_mode,
+        "preferred_time_slot": preferred_time_slot,
+        "notes": notes,
+    }
+    payload.update({k: v for k, v in optional.items() if v is not None})
+
+    try:
+        result = get_supabase().table(LEADS).insert(payload).execute()
+    except Exception as exc:  # noqa: BLE001
+        # These three columns arrived after the baseline schema. Against a
+        # database where the migration has not been applied yet, PostgREST
+        # rejects the whole insert for an unknown column -- which would lose a
+        # real customer's request over an optional preference. Drop them and
+        # keep the lead.
+        if not _is_unknown_column(exc, optional):
+            raise
+        logger.warning(
+            "Lead preference columns missing; storing the lead without them. "
+            "Apply supabase/migrations/20260910_lead_consultation_preferences.sql. (%s)",
+            exc,
+        )
+        for key in optional:
+            payload.pop(key, None)
+        result = get_supabase().table(LEADS).insert(payload).execute()
+
     return result.data[0]
+
+
+def _is_unknown_column(exc: Exception, columns: dict[str, Any]) -> bool:
+    """Whether this error is PostgREST rejecting one of `columns` as unknown.
+
+    Matched on the column name as well as the schema-cache wording, so an
+    unrelated failure is never mistaken for a missing migration and silently
+    retried.
+    """
+    message = str(exc).lower()
+    if "pgrst204" not in message and "schema cache" not in message and "column" not in message:
+        return False
+    return any(name in message for name in columns)
 
 
 def find_lead_for_project(project_id: UUID) -> dict[str, Any] | None:

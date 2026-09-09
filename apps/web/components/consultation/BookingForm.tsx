@@ -2,10 +2,13 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowRight } from 'lucide-react';
+import { AlertTriangle, ArrowRight } from 'lucide-react';
+import { submitConsultation } from '@/lib/api/projects';
+import { ApiError } from '@/lib/api/client';
 
 export interface BookingFormData {
   fullName: string;
+  dialCode: string;
   phone: string;
   location: string;
   mode: string;
@@ -15,6 +18,8 @@ export interface BookingFormData {
 
 interface BookingFormProps {
   projectId: string;
+  /** The project's own city, used to prefill the location field. */
+  defaultCity?: string | null;
 }
 
 const FIELD_CLASS =
@@ -31,15 +36,41 @@ const toggleClass = (active: boolean) =>
 const MODES = [
   { value: 'in-person', label: 'In-Person On-Site' },
   { value: 'video', label: 'Video Call' },
+] as const;
+
+const TIME_SLOTS = ['Morning', 'Afternoon', 'Evening'] as const;
+
+/** Pakistan first: this is a PKR product serving Pakistani cities. */
+const DIAL_CODES = [
+  { value: '+92', label: '+92 (PK)' },
+  { value: '+971', label: '+971 (UAE)' },
+  { value: '+44', label: '+44 (UK)' },
+  { value: '+1', label: '+1 (US)' },
 ];
 
-const TIME_SLOTS = ['Morning', 'Afternoon', 'Evening'];
+/**
+ * Split "Gulberg, Lahore" into an area and a city.
+ *
+ * The form asks for both in one field, but the lead stores them separately:
+ * `city` is what vendor matching runs on, and a lead whose city is the whole
+ * string never matches anyone.
+ */
+function splitLocation(value: string): { city: string; fullAddress: string } {
+  const trimmed = value.trim();
+  const parts = trimmed.split(',').map((part) => part.trim()).filter(Boolean);
+  // The city is conventionally written last: "Gulberg, Lahore".
+  const city = parts.length > 1 ? parts[parts.length - 1] : trimmed;
+  return { city, fullAddress: trimmed };
+}
 
-export function BookingForm({ projectId }: BookingFormProps) {
+export function BookingForm({ projectId, defaultCity }: BookingFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [touchedLocation, setTouchedLocation] = useState(false);
   const [formData, setFormData] = useState<BookingFormData>({
     fullName: '',
+    dialCode: '+92',
     phone: '',
     location: '',
     mode: '',
@@ -47,16 +78,53 @@ export function BookingForm({ projectId }: BookingFormProps) {
     notes: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Prefilled from the project until the customer types their own. Derived
+  // rather than copied into state by an effect, which would fight their edits.
+  const location = touchedLocation ? formData.location : formData.location || (defaultCity ?? '');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     setIsSubmitting(true);
-    // Simulate network request
-    setTimeout(() => {
-      router.push(`/project/${projectId}/matching`);
-    }, 1200);
+    setError(null);
+
+    const { city, fullAddress } = splitLocation(location);
+
+    try {
+      const result = await submitConsultation({
+        customer_name: formData.fullName.trim(),
+        // The dialling code is part of the number: a vendor cannot call
+        // "3001234567". It used to be an unbound <select>, so whatever the
+        // customer chose was discarded.
+        phone: `${formData.dialCode} ${formData.phone.trim()}`.trim(),
+        city,
+        full_address: fullAddress,
+        project_id: projectId,
+        preferred_mode: (formData.mode || undefined) as 'in-person' | 'video' | undefined,
+        preferred_time_slot: (formData.timeSlot || undefined) as
+          | 'Morning'
+          | 'Afternoon'
+          | 'Evening'
+          | undefined,
+        notes: formData.notes.trim() || undefined,
+      });
+
+      // The lead id travels to the confirmation, which reads the real
+      // assignment back rather than naming an invented specialist.
+      router.push(`/project/${projectId}/matching?lead=${encodeURIComponent(result.lead_id)}`);
+    } catch (caught) {
+      setError(
+        caught instanceof ApiError
+          ? caught.message
+          : 'We could not submit your request. Please check your connection and try again.',
+      );
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    if (e.target.name === 'location') setTouchedLocation(true);
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -84,18 +152,20 @@ export function BookingForm({ projectId }: BookingFormProps) {
               <div className="flex gap-3">
                 <select
                   aria-label="Country dialling code"
+                  name="dialCode"
+                  value={formData.dialCode}
+                  onChange={handleChange}
                   className={`${FIELD_CLASS} w-24 shrink-0 cursor-pointer`}
                 >
-                  <option value="+1">+1 (US)</option>
-                  <option value="+44">+44 (UK)</option>
-                  <option value="+92">+92 (PK)</option>
-                  <option value="+971">+971 (UAE)</option>
+                  {DIAL_CODES.map(({ value, label }) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
                 </select>
                 <input
                   className={`${FIELD_CLASS} flex-1 min-w-0`}
                   id="phone"
                   name="phone"
-                  placeholder="(555) 123-4567"
+                  placeholder="300 1234567"
                   required
                   type="tel"
                   value={formData.phone}
@@ -114,7 +184,7 @@ export function BookingForm({ projectId }: BookingFormProps) {
               placeholder="e.g., Gulberg, Lahore"
               required
               type="text"
-              value={formData.location}
+              value={location}
               onChange={handleChange}
             />
           </div>
@@ -173,14 +243,28 @@ export function BookingForm({ projectId }: BookingFormProps) {
           </div>
         </div>
 
+        {error && (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-xl border border-error/40 bg-error/5 p-4"
+          >
+            <AlertTriangle className="w-5 h-5 text-error shrink-0 mt-0.5" />
+            <p className="text-body-md font-body-md text-primary">{error}</p>
+          </div>
+        )}
+
         <div className="pt-4">
           <button
             type="submit"
             disabled={isSubmitting}
             className={`h-12 w-full bg-[#1b1c19] text-[#fbf9f4] px-6 rounded-lg font-label-sm text-label-sm flex justify-between items-center group transition-all duration-300 ${isSubmitting ? 'opacity-80 cursor-wait' : 'hover:bg-surface-tint shadow-sm hover:shadow-md'}`}
           >
-            <span>{isSubmitting ? 'Processing...' : 'Confirm Specialist Match'}</span>
-            {!isSubmitting && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
+            <span>{isSubmitting ? 'Submitting your request...' : 'Confirm Specialist Match'}</span>
+            {isSubmitting ? (
+              <div className="w-5 h-5 border-2 border-[#fbf9f4] border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            )}
           </button>
         </div>
       </form>

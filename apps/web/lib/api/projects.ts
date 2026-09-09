@@ -196,6 +196,12 @@ export interface ConsultationInput {
   city?: string;
   full_address?: string;
   project_id?: string;
+  /** How the customer wants the consultation to happen. */
+  preferred_mode?: "in-person" | "video";
+  /** Rough window rather than a booked time; the specialist confirms. */
+  preferred_time_slot?: "Morning" | "Afternoon" | "Evening";
+  /** Access instructions and constraints, in the customer's own words. */
+  notes?: string;
 }
 
 /** POST /api/v1/consultations */

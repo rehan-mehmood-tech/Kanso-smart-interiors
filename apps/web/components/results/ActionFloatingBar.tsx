@@ -6,19 +6,22 @@ import { useRouter } from 'next/navigation';
 
 interface ActionFloatingBarProps {
   projectId: string;
+  /** The concept currently on screen. Carried forward as the selection. */
+  designId?: string;
 }
 
-export function ActionFloatingBar({ projectId }: ActionFloatingBarProps) {
+export function ActionFloatingBar({ projectId, designId }: ActionFloatingBarProps) {
   const router = useRouter();
   const [saved, setSaved] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
 
   const handleSelect = () => {
     setIsSelecting(true);
-    setTimeout(() => {
-      // Mock navigation to final state or project dash
-      router.push(`/project/${projectId}/selected`);
-    }, 600);
+    // Which concept was chosen travels in the URL, so the pages after this one
+    // show that concept rather than guessing. Without it they fell back to a
+    // stock asset keyed off the project id.
+    const query = designId ? `?design=${encodeURIComponent(designId)}` : '';
+    router.push(`/project/${projectId}/selected${query}`);
   };
 
   return (
