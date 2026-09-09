@@ -787,7 +787,33 @@ values
    'Oak Counter Stool', 'furniture', 2400000,
    '{"w_mm":380,"h_mm":650,"d_mm":380}'::jsonb, 'European Oak', '#B79A72',
    '{"/assets/images/products/stool-oak.jpg"}',
-   '{"scandinavian","minimal","japandi"}', false)
+   '{"scandinavian","minimal","japandi"}', false),
+
+  -- Rossi Interiors, in stock and spread across categories, so the inventory
+  -- matcher has something to furnish a whole room with rather than one piece.
+  ('00000000-0000-4000-c000-000000000005', '00000000-0000-4000-b000-000000000001',
+   'Travertine Coffee Table', 'furniture', 4500000,
+   '{"w_mm":1200,"h_mm":330,"d_mm":700}'::jsonb, 'Honed Travertine', '#D8CFC0',
+   '{"/assets/images/products/stool-oak.jpg"}',
+   '{"japandi","warm_neutral","minimal","modern"}', true),
+
+  ('00000000-0000-4000-c000-000000000006', '00000000-0000-4000-b000-000000000001',
+   'Washi Paper Floor Lamp', 'lighting', 2200000,
+   '{"w_mm":400,"h_mm":1500,"d_mm":400}'::jsonb, 'Washi Paper and Ash', '#F2EDE3',
+   '{"/assets/images/products/pendant-white-dome.jpg"}',
+   '{"japandi","minimal","scandinavian"}', true),
+
+  ('00000000-0000-4000-c000-000000000007', '00000000-0000-4000-b000-000000000001',
+   'Low Oak Lounge Chair', 'furniture', 6800000,
+   '{"w_mm":720,"h_mm":680,"d_mm":800}'::jsonb, 'White Oak and Boucle', '#E4DED2',
+   '{"/assets/images/products/armchair-ochre.jpg"}',
+   '{"japandi","warm_neutral","modern"}', true),
+
+  ('00000000-0000-4000-c000-000000000008', '00000000-0000-4000-b000-000000000001',
+   'Handloom Wool Rug', 'finish', 3500000,
+   '{"w_mm":2400,"h_mm":12,"d_mm":1700}'::jsonb, 'Undyed Wool', '#CFC5B7',
+   '{"/assets/images/products/sofa-grey-tufted.jpg"}',
+   '{"japandi","warm_neutral","scandinavian","modern"}', true)
 on conflict (id) do nothing;
 
 -- --- A worked customer project ----------------------------------------------

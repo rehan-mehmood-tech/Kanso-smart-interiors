@@ -31,6 +31,39 @@ HUGGINGFACE_URL = "https://router.huggingface.co/hf-inference/models/{model}"
 DEFAULT_WIDTH = 1024
 DEFAULT_HEIGHT = 768
 
+#: Rendering modifiers appended to every prompt.
+#:
+#: These are about how the image is rendered, not what is in it, which is why
+#: they live with the provider rather than in the prompt builder. Free models
+#: respond strongly to them: without the quality tokens the same prompt comes
+#: back soft and underlit.
+QUALITY_MODIFIERS = (
+    "photorealistic 8k interior design render, professional lighting, "
+    "architectural digest style, highly detailed textures, crisp focus, "
+    "sharp depth of field, realistic global illumination, physically based "
+    "materials, ultra detailed, award-winning interior photography"
+)
+
+#: What the renderer must not produce. Pollinations and FLUX both respond to
+#: an inline negative clause.
+NEGATIVE_MODIFIERS = (
+    "no people, no text, no watermark, no logo, not blurry, not distorted, "
+    "no warped geometry, no duplicated furniture"
+)
+
+#: Room left for the semantic half of the prompt. The modifiers are appended
+#: AFTER this cut, so a long room description can never truncate them away --
+#: which would silently drop exactly the tokens that lift the quality.
+MAX_SEMANTIC_CHARS = 1500
+
+
+def compose_prompt(prompt: str) -> str:
+    """Semantic prompt plus rendering modifiers, in that order."""
+    semantic = prompt.strip()
+    if len(semantic) > MAX_SEMANTIC_CHARS:
+        semantic = semantic[:MAX_SEMANTIC_CHARS].rsplit(" ", 1)[0] + "."
+    return f"{semantic} {QUALITY_MODIFIERS}. {NEGATIVE_MODIFIERS}."
+
 
 class GenerationError(RuntimeError):
     """No provider could produce an image."""
@@ -52,7 +85,7 @@ async def _pollinations(
     client: httpx.AsyncClient, prompt: str, *, seed: int, width: int, height: int, timeout: int
 ) -> bytes:
     """Primary engine. Free, unauthenticated, rate-limited but reliable."""
-    url = POLLINATIONS_URL.format(prompt=quote(prompt[:1800], safe=""))
+    url = POLLINATIONS_URL.format(prompt=quote(compose_prompt(prompt), safe=""))
     response = await client.get(
         url,
         params={
@@ -61,6 +94,9 @@ async def _pollinations(
             "nologo": "true",
             "seed": seed,
             "model": "flux",
+            # Pollinations expands the prompt internally when enhance is on,
+            # which visibly helps interiors.
+            "enhance": "true",
         },
         timeout=timeout,
         follow_redirects=True,
@@ -84,7 +120,7 @@ async def _huggingface(
         HUGGINGFACE_URL.format(model=settings.huggingface_image_model),
         headers={"Authorization": f"Bearer {settings.huggingface_api_token}"},
         json={
-            "inputs": prompt[:1800],
+            "inputs": compose_prompt(prompt),
             "parameters": {"width": width, "height": height, "seed": seed},
         },
         timeout=timeout,

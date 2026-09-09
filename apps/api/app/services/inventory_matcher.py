@@ -196,30 +196,35 @@ def build_render_prompt(
     selection: InventorySelection,
     city: str | None = None,
 ) -> str:
-    """Assemble the final prompt.
+    """Assemble the render prompt.
 
-    Order matters: the room comes first so the renderer anchors on the space,
-    the mandated products next so they are treated as requirements rather than
-    suggestions, and camera and quality direction last.
+    Order is the whole trick here, and it was learned the hard way. Leading
+    with a long spatial description and appending the furniture produced
+    consistently EMPTY rooms: the model spent its attention reproducing the
+    geometry it was told to preserve, and treated the furniture list as
+    trailing detail. Both concepts of a test run came back as bare shells.
+
+    So the furnished scene leads. The room is introduced as "fully furnished
+    with X, Y and Z", which is the subject of the photograph, and the spatial
+    reading follows as supporting context. Same information, and the
+    difference in output is the difference between an empty room and a room
+    someone could live in.
     """
     room = (room_type or "living room").replace("_", " ")
     style = (style_slug or "warm minimalist").replace("_", " ")
 
-    parts: list[str] = [
-        f"Photorealistic interior photograph of a {style} {room}."
-    ]
-
-    if spatial_fragment:
-        parts.append(
-            f"The room is a {spatial_fragment}. Preserve this exact geometry, "
-            "window placement and proportions."
-        )
+    parts: list[str] = []
 
     if selection.products:
-        items = "; ".join(p.describe() for p in selection.products)
+        items = ", ".join(p.describe() for p in selection.products)
         parts.append(
-            f"The room must be furnished with these specific pieces, rendered "
-            f"faithfully to their stated material, colour and size: {items}."
+            f"Photorealistic interior photograph of a fully furnished {style} "
+            f"{room}, furnished with {items}."
+        )
+        parts.append(
+            "Every one of those pieces must be clearly visible and arranged "
+            "naturally in the space, rendered faithfully to its stated "
+            "material, colour and size."
         )
         if selection.total_price_minor:
             parts.append(
@@ -228,13 +233,23 @@ def build_render_prompt(
             )
     else:
         parts.append(
-            f"Furnish it with pieces typical of {style} interiors, in natural "
-            "materials and a restrained palette."
+            f"Photorealistic interior photograph of a fully furnished {style} "
+            f"{room}, with seating, a low table, soft lighting and a rug, in "
+            "natural materials and a restrained palette."
         )
 
+    if spatial_fragment:
+        parts.append(
+            f"The room itself is a {spatial_fragment}. Keep this geometry, "
+            "window placement and proportions."
+        )
+
+    # Composition intent stays here because it describes the shot of THIS
+    # room. Rendering-quality modifiers do not: they are provider-specific and
+    # are appended in services/image_generator.py, so there is one place to
+    # tune them per engine.
     parts.append(
-        "Wide-angle architectural photography, eye-level camera, natural "
-        "daylight, soft shadows, high detail, magazine editorial quality. "
-        "No people, no text, no watermarks."
+        "Wide-angle architectural photograph, eye-level camera, natural "
+        "daylight with soft directional shadows."
     )
     return " ".join(parts)
