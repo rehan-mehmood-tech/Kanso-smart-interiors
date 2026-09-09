@@ -9,6 +9,7 @@ import {
   Package,
   CalendarDays,
   UserRound,
+  CreditCard,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -25,6 +26,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Inventory & Catalog', href: '/pro/inventory', icon: Package },
   { label: 'Schedule', href: '/pro/schedule', icon: CalendarDays },
   { label: 'Profile', href: '/pro/profile', icon: UserRound },
+  { label: 'Billing & Subscriptions', href: '/pro/settings/billing', icon: CreditCard },
 ];
 
 export function ProSidebar() {

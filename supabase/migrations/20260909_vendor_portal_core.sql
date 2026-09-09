@@ -135,6 +135,10 @@ create unique index business_subscriptions_business_idx
 --
 -- `past_due` deliberately does NOT grant access: a failed card closes the gate
 -- at the next request rather than at the end of the period.
+--
+-- `canceled` DOES still grant access until current_period_end, because the
+-- vendor has already paid for the remainder of the month. Cancelling is a
+-- request not to renew, not a forfeit of the period in hand.
 create or replace function business_has_paid_access(b_id uuid)
 returns boolean
 language sql
@@ -147,13 +151,16 @@ as $$
     from business_subscriptions s
     where s.business_id = b_id
       and s.tier <> 'free'
-      and s.status in ('trialing', 'active')
+      and (
+        s.status in ('trialing', 'active')
+        or (s.status = 'canceled' and s.current_period_end is not null)
+      )
       and (s.current_period_end is null or s.current_period_end > now())
   );
 $$;
 
 comment on function business_has_paid_access(uuid) is
-  'True when the business holds a trialing or active paid subscription that has not lapsed.';
+  'True when the business holds a paid subscription that has not lapsed: trialing, active, or canceled-but-still-within-the-paid-period.';
 
 -- Businesses the current auth user belongs to. Used by every policy below.
 create or replace function current_user_business_ids()
