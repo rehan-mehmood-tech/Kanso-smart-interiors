@@ -14,6 +14,7 @@ from uuid import UUID
 from fastapi import APIRouter, File, Form, UploadFile, status
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.core.config import get_settings
 from app.core.errors import ApiError, NotFoundError
 from app.db import projects_repo as repo
 from app.schemas.enums import ProjectStatus, WallAngle
@@ -183,7 +184,7 @@ async def get_project(project_id: UUID) -> ProjectOut:
                 id=d["id"],
                 generation_id=d["generation_id"],
                 render_url=d["render_url"],
-                signed_url=signed_url(d["render_url"], bucket=None),
+                signed_url=signed_url(d["render_url"], bucket=get_settings().generated_designs_bucket),
                 mapped_products=_coerce_products(d.get("mapped_products")),
                 overall_score=float(d["overall_score"]) if d.get("overall_score") is not None else None,
             )

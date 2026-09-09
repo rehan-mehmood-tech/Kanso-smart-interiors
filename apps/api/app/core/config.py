@@ -69,9 +69,18 @@ class Settings(BaseSettings):
     room_photos_bucket: str = "room-photos"
     generated_designs_bucket: str = "generated-designs"
 
-    # --- AI providers: Gemini reads the walls, Flux renders the concepts ---
+    # --- AI providers ---
+    # Gemini reads the four wall photos into a structured spatial brief.
     gemini_api_key: str | None = None
-    gemini_vision_model: str = "gemini-2.0-flash"
+    #: 1.5 and 2.5 are retired for new keys; 3.6-flash is the current vision
+    #: model this project's key can reach.
+    gemini_vision_model: str = "gemini-3.6-flash"
+
+    #: Which engine renders the concepts. See services/image_generator.py.
+    image_generator_provider: str = "pollinations"
+    huggingface_api_token: str | None = None
+    huggingface_image_model: str = "black-forest-labs/FLUX.1-schnell"
+
     replicate_api_token: str | None = None
     flux_model: str = "black-forest-labs/flux-1.1-pro"
 
@@ -133,6 +142,8 @@ class Settings(BaseSettings):
         return {
             "supabase": bool(self.supabase_url and self.supabase_service_role_key),
             "gemini": bool(self.gemini_api_key),
+            "image_generator": True,  # pollinations needs no credential
+            "huggingface": bool(self.huggingface_api_token),
             "replicate": bool(self.replicate_api_token),
         }
 
