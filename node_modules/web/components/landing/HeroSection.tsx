@@ -14,9 +14,9 @@ const SLIDES = [
   {
     id: "japandi",
     label: "Japandi",
-    src: "https://videos.pexels.com/video-files/3773486/3773486-hd_1920_1080_30fps.mp4",
+    src: "/assets/videos/hero-japandi.mp4",
     poster:
-      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=80",
+      "/assets/images/hero/poster-japandi.jpg",
     hook: "From Fragmented 2D Blueprints to Price-Locked 4-Wall Spatial Reality",
     homeowner:
       "Eliminate visual guesswork, material budget overrun, and contractor ambiguity before buying a single item.",
@@ -26,9 +26,9 @@ const SLIDES = [
   {
     id: "minimalist",
     label: "Warm Minimalist",
-    src: "https://videos.pexels.com/video-files/7578552/7578552-hd_1920_1080_30fps.mp4",
+    src: "/assets/videos/hero-warm-minimalist.mp4",
     poster:
-      "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=1600&q=80",
+      "/assets/images/hero/poster-warm-minimalist.jpg",
     hook: "Stop Paying Full Price for a Room You Have Only Ever Imagined",
     homeowner:
       "See your own walls, your own light, and your own proportions resolved into a finished concept before a single order is placed.",
@@ -38,9 +38,9 @@ const SLIDES = [
   {
     id: "luxury",
     label: "Quiet Luxury",
-    src: "https://videos.pexels.com/video-files/3444434/3444434-hd_1920_1080_30fps.mp4",
+    src: "/assets/videos/hero-quiet-luxury.mp4",
     poster:
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80",
+      "/assets/images/hero/poster-quiet-luxury.jpg",
     hook: "Every Finish Named, Sourced and Costed Before the First Tool Is Lifted",
     homeowner:
       "Walk into a supplier knowing the exact material, quantity and price, so the room you fell in love with is the room you can actually afford.",
@@ -50,9 +50,9 @@ const SLIDES = [
   {
     id: "organic",
     label: "Modern Organic",
-    src: "https://videos.pexels.com/video-files/3773489/3773489-hd_1920_1080_30fps.mp4",
+    src: "/assets/videos/hero-modern-organic.mp4",
     poster:
-      "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?auto=format&fit=crop&w=1600&q=80",
+      "/assets/images/hero/poster-modern-organic.jpg",
     hook: "Where Spatial Imagination Finally Hands Off Cleanly to Execution",
     homeowner:
       "Four wall photos become architectural-grade concepts that preserve your geometry, your doors and your windows, not a stock catalogue interior.",
@@ -62,9 +62,9 @@ const SLIDES = [
   {
     id: "editorial",
     label: "Editorial Neutral",
-    src: "https://videos.pexels.com/video-files/7578550/7578550-hd_1920_1080_30fps.mp4",
+    src: "/assets/videos/hero-editorial-neutral.mp4",
     poster:
-      "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1600&q=80",
+      "/assets/images/hero/poster-editorial-neutral.jpg",
     hook: "Price-Locked Transparency From the First Render to the Final Invoice",
     homeowner:
       "No arbitrary change orders, no mystery markup, and no five-month overrun on a six-week project.",

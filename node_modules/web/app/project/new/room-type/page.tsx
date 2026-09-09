@@ -11,27 +11,32 @@ const ROOM_OPTIONS = [
   {
     id: 'living_room',
     title: 'Living Room',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85'
+    // Japandi living room — warm wood coffee table, cream sofa, natural light
+    image: '/assets/images/rooms/living-room.jpg'
   },
   {
     id: 'bedroom',
     title: 'Bedroom',
-    image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85'
+    // Minimalist bedroom — warm wood headboard, neutral linens
+    image: '/assets/images/rooms/bedroom.jpg'
   },
   {
     id: 'dining_room',
     title: 'Dining Room',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85'
+    // Scandinavian dining set with ambient pendant lighting
+    image: '/assets/images/rooms/dining-room.jpg'
   },
   {
     id: 'home_office',
     title: 'Home Office',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85'
+    // Clean minimalist workspace — solid desk, daylight from window
+    image: '/assets/images/rooms/home-office.jpg'
   },
   {
     id: 'kids_room',
     title: 'Kids Room',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85'
+    // Modern kids bedroom — organised wooden furniture, soft palette
+    image: '/assets/images/rooms/kids-room.jpg'
   },
   {
     id: 'other',

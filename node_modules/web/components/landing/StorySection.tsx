@@ -47,7 +47,7 @@ const CHAPTERS: Chapter[] = [
     ],
     pull: "You are not buying furniture. You are buying a guess, and paying full price for it.",
     image:
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+      "/assets/images/story/chapter-1-guesswork.jpg",
     imageAlt: "An unfinished room mid-renovation with materials still undecided",
     cards: [
       {
@@ -80,7 +80,7 @@ const CHAPTERS: Chapter[] = [
     ],
     pull: "A render you cannot cost is a wish. A render with a locked spec is a plan.",
     image:
-      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80",
+      "/assets/images/story/chapter-2-specification.jpg",
     imageAlt: "A resolved, warmly lit living room in a considered material palette",
     cards: [
       {
@@ -114,7 +114,7 @@ const CHAPTERS: Chapter[] = [
     ],
     pull: "Give a good tradesperson an unambiguous brief and the argument disappears.",
     image:
-      "https://images.unsplash.com/photo-1601058268499-e52658b8bb88?auto=format&fit=crop&w=1200&q=80",
+      "/assets/images/story/chapter-3-trades.jpg",
     imageAlt: "A carpenter cutting timber to a specified length in the workshop",
     cards: [
       {

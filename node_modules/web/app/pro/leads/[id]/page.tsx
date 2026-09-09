@@ -21,12 +21,12 @@ const MOCK_LEAD = {
     schedule: 'Preferred: Mornings (9am - 12pm)',
     notes: 'Access via service elevator. Please bring physical samples for the oak flooring if possible.'
   },
-  conceptImage: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85',
+  conceptImage: '/assets/images/rooms/interior-wide-1.jpg',
   wallPhotos: [
-    { id: 'w1', label: 'Wall A (Front)', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85' },
-    { id: 'w2', label: 'Wall B (Right)', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85' },
-    { id: 'w3', label: 'Wall C (Back)', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85' },
-    { id: 'w4', label: 'Wall D (Left)', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85' }
+    { id: 'w1', label: 'Wall A (Front)', url: '/assets/images/rooms/interior-wide-1.jpg' },
+    { id: 'w2', label: 'Wall B (Right)', url: '/assets/images/rooms/interior-wide-1.jpg' },
+    { id: 'w3', label: 'Wall C (Back)', url: '/assets/images/rooms/interior-wide-1.jpg' },
+    { id: 'w4', label: 'Wall D (Left)', url: '/assets/images/rooms/interior-wide-1.jpg' }
   ],
   specs: [
     {

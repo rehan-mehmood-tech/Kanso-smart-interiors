@@ -17,7 +17,7 @@ export function AuthLayout({
   children,
   title,
   description,
-  imageUrl = "https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=2400&q=90",
+  imageUrl = "/assets/images/auth/login-bg.jpg",
   imageAlt = "A warm, minimal living room in a considered material palette",
   quote = "Transforming imagination into scope-locked reality.",
 }: AuthLayoutProps) {

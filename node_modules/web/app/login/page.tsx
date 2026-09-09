@@ -6,7 +6,7 @@ export default function LoginPage() {
     <AuthLayout
       title="Welcome back."
       description="Sign in to continue designing your space."
-      imageUrl="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=2400&q=90"
+      imageUrl="/assets/images/auth/login-bg.jpg"
       imageAlt="A warm minimal living room with layered neutral textures"
       quote="Transforming imagination into scope-locked reality."
     >
