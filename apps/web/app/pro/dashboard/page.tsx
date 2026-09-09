@@ -4,8 +4,18 @@ import { ProHeader } from '@/components/pro/dashboard/ProHeader';
 import { ProStatsOverview } from '@/components/pro/dashboard/ProStatsOverview';
 import { LeadTable } from '@/components/pro/dashboard/LeadTable';
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { getVendorAccess } from '@/lib/pro/access';
+import { getVendorLeads } from '@/lib/pro/mock-leads';
 
-export default function ProDashboardPage() {
+interface ProDashboardPageProps {
+  searchParams: Promise<{ access?: string }>;
+}
+
+export default async function ProDashboardPage({ searchParams }: ProDashboardPageProps) {
+  const { access } = await searchParams;
+  const vendorAccess = await getVendorAccess(access);
+  const leads = getVendorLeads(vendorAccess.hasPaidAccess);
+
   return (
     <div className="min-h-screen bg-[#FBF9F4] text-[#1B1C19] font-body-md">
       <SiteHeader position="fixed" />
@@ -73,7 +83,7 @@ export default function ProDashboardPage() {
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 flex-1 items-start">
             {/* Left Col (Takes up more space) */}
             <div className="xl:col-span-2 flex flex-col">
-              <LeadTable />
+              <LeadTable leads={leads} />
             </div>
 
             {/* Right Col (Schedule) */}

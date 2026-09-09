@@ -38,8 +38,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // No credentials configured means no session can be verified. Fail closed.
+  // No credentials configured means no session can be verified.
+  //
+  // In a local dev server with no Supabase project we let the request through
+  // so the portal stays demoable while the backend is being built. This is
+  // deliberately narrow: it requires BOTH a development build AND the absence
+  // of Supabase config, so a deployed build can never take this path -- there,
+  // an unconfigured project fails closed.
   if (!isSupabaseConfigured) {
+    if (process.env.NODE_ENV === "development") {
+      const response = NextResponse.next({ request });
+      response.headers.set("x-kanso-vendor-preview", "unauthenticated-dev");
+      return response;
+    }
     return redirectToLogin(request);
   }
 

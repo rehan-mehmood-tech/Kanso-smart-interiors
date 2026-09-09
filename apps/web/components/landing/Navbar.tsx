@@ -49,6 +49,9 @@ export function Navbar() {
           </>
         }
       >
+        <Link href="/partners" className={`hidden lg:block ${linkClass}`}>
+          For Store Owners
+        </Link>
         <Link href="/login" className={`hidden lg:block ${linkClass}`}>
           Log In
         </Link>
@@ -147,6 +150,14 @@ export function Navbar() {
               className="flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-[#c4c7c7] px-5 py-3 font-body text-sm font-medium text-[#1b1c19] transition-colors hover:bg-[#fbf9f4]"
             >
               Log In
+            </Link>
+            <Link
+              href="/partners"
+              tabIndex={open ? 0 : -1}
+              onClick={() => setOpen(false)}
+              className="flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-[#c4c7c7] px-5 py-3 font-body text-sm font-medium text-[#1b1c19] transition-colors hover:bg-[#fbf9f4]"
+            >
+              Register as a Store Owner
             </Link>
           </div>
         </aside>
