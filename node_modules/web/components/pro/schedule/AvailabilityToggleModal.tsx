@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { X, Clock, ToggleLeft, ToggleRight } from 'lucide-react';
+import { X, ToggleLeft, ToggleRight } from 'lucide-react';
 
 interface AvailabilityToggleModalProps {
   isOpen: boolean;
