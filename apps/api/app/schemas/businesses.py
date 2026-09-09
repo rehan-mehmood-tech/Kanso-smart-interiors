@@ -1,97 +1,64 @@
-"""Pydantic models for `businesses` (PRD §15.3 + 20260909_vendor_portal_core.sql).
+"""Pydantic models for `businesses`.
 
-`kind` and `trade` come from the vendor-portal migration and decide what the
-account can do: a solo tradesman gets one seat, a shop gets a crew and a
-product catalogue.
+`is_active` and `is_banned` are separate booleans, matching the schema:
+disabling is reversible housekeeping, a ban is a sanction. `bookable` folds
+both -- plus verification -- into the single question lead routing asks.
 """
 
 from __future__ import annotations
 
 from datetime import datetime
-from enum import StrEnum
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, Field
 
-
-class BusinessKind(StrEnum):
-    """`business_kind` enum."""
-
-    SOLO_TRADESMAN = "solo_tradesman"
-    SHOP_WITH_CREW = "shop_with_crew"
-
-
-class TradeCategory(StrEnum):
-    """`trade_category` enum."""
-
-    FURNITURE_STORE = "furniture_store"
-    CARPENTER = "carpenter"
-    PLUMBER = "plumber"
-    ELECTRICIAN = "electrician"
-    PAINTER = "painter"
-    JOINER = "joiner"
-    LIGHTING = "lighting"
-    FLOORING = "flooring"
-    OTHER = "other"
-
-
-class BusinessStatus(StrEnum):
-    """`businesses.status`. `banned` is added by the moderation migration and
-    is distinct from `disabled`: a ban is a sanction and carries an audit log
-    entry, disabling is administrative housekeeping."""
-
-    ACTIVE = "active"
-    DISABLED = "disabled"
-    BANNED = "banned"
+from app.schemas.enums import BusinessKind
 
 
 class BusinessBase(BaseModel):
     model_config = ConfigDict(from_attributes=True, extra="ignore")
 
     name: str = Field(min_length=1, max_length=200)
-    contact_name: str | None = Field(default=None, max_length=200)
-    email: EmailStr
-    phone: str | None = Field(default=None, max_length=40)
-    location: str | None = Field(default=None, max_length=200)
     kind: BusinessKind = BusinessKind.SOLO_TRADESMAN
-    trade: TradeCategory = TradeCategory.OTHER
-    #: Cities or neighbourhoods this business will travel to.
-    service_areas: list[str] = Field(default_factory=list)
+    #: Free text in the database, e.g. carpenter, plumber, furniture_store.
+    trade: str | None = Field(default=None, max_length=60)
+    phone: str | None = Field(default=None, max_length=40)
+    city: str | None = Field(default="Lahore", max_length=120)
+    address: str | None = None
 
 
 class BusinessCreate(BusinessBase):
-    owner_id: UUID
+    #: Nullable: an admin can register a partner before they claim an account.
+    owner_id: UUID | None = None
 
 
 class BusinessUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str | None = Field(default=None, min_length=1, max_length=200)
-    contact_name: str | None = None
-    email: EmailStr | None = None
-    phone: str | None = None
-    location: str | None = None
     kind: BusinessKind | None = None
-    trade: TradeCategory | None = None
-    service_areas: list[str] | None = None
+    trade: str | None = None
+    phone: str | None = None
+    city: str | None = None
+    address: str | None = None
+    is_active: bool | None = None
 
 
 class Business(BusinessBase):
     id: UUID
-    #: `businesses.owner_profile_id` in SQL.
-    owner_id: UUID
-    status: BusinessStatus = BusinessStatus.ACTIVE
-    #: Null until an admin verifies the business. Unverified businesses never
-    #: receive leads, regardless of what they have paid.
+    owner_id: UUID | None = None
+    is_active: bool = True
+    is_banned: bool = False
     verified_at: datetime | None = None
     created_at: datetime
     updated_at: datetime | None = None
 
     @property
-    def is_active(self) -> bool:
-        """Convenience for callers that only care whether the account is live."""
-        return self.status is BusinessStatus.ACTIVE
-
-    @property
     def is_verified(self) -> bool:
         return self.verified_at is not None
+
+    @property
+    def bookable(self) -> bool:
+        """Whether this business may receive leads. Mirrors the SQL partial
+        index `businesses_bookable_idx`."""
+        return self.is_active and not self.is_banned and self.is_verified

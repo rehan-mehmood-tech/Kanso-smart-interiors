@@ -10,7 +10,6 @@ from __future__ import annotations
 from fastapi import APIRouter, File, Form, Path, UploadFile
 
 from app.core.errors import NotImplementedYetError
-from app.schemas.enums import RoomType
 
 # Role guards (app.api.deps.require_customer) attach per route as each slice
 # is built, alongside the ownership checks the PRD requires.
@@ -20,7 +19,9 @@ _TODO = "Not built yet -- lands with the projects/generation slice."
 
 
 @router.post("/projects", summary="Create a room project")
-async def create_project(room_type: RoomType, room_type_other_label: str | None = None):
+# room_type is free text in the schema, not an enum: the wizard offers a
+# fixed list but "Other" accepts anything the customer types.
+async def create_project(room_type: str, room_type_other_label: str | None = None):
     raise NotImplementedYetError(_TODO)
 
 

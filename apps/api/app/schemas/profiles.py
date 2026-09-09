@@ -1,8 +1,7 @@
-"""Pydantic models for `profiles` (PRD §15.1).
+"""Pydantic models for `profiles`.
 
 One profile per `auth.users` row. `role` is the authorisation source of truth
-and is only ever read from here server-side, never trusted from a request
-(PRD §19).
+and is only ever read from here server-side, never trusted from a request.
 """
 
 from __future__ import annotations
@@ -12,7 +11,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from app.schemas.enums import AccountStatus, UserRole
+from app.schemas.enums import UserRole
 
 
 class ProfileBase(BaseModel):
@@ -38,10 +37,11 @@ class ProfileUpdate(BaseModel):
 
 
 class Profile(ProfileBase):
-    """A profile row as returned to the API."""
-
     id: UUID
     role: UserRole = UserRole.CUSTOMER
-    status: AccountStatus = AccountStatus.ACTIVE
     created_at: datetime
     updated_at: datetime | None = None
+
+    @property
+    def is_admin(self) -> bool:
+        return self.role is UserRole.ADMIN
