@@ -68,6 +68,18 @@ const ASSET_MAP = {
   [U('1594026112284-02bb6f3352fe', 'w=900&q=80')]: 'images/styles/quiet-luxury.jpg',
   [U('1560448204-e02f11c3d0e2', 'w=900&q=80')]: 'images/styles/modern-organic.jpg',
 
+  // --- Style wizard catalogue (/project/new/style) ---
+  // NB: japandi here is deliberately a different file from the landing page's
+  // styles/japandi.jpg, so no photo appears on two screens.
+  [U('1600566753086-00f18fb6b3ea', 'w=900&q=80')]: 'images/styles/modern.jpg',
+  [U('1519710164239-da123dc03ef4', 'w=900&q=80')]: 'images/styles/minimal.jpg',
+  [U('1600585152220-90363fe7e115', 'w=900&q=80')]: 'images/styles/scandinavian.jpg',
+  [U('1513694203232-719a280e022f', 'w=900&q=80')]: 'images/styles/grey.jpg',
+  [U('1616627561950-9f746e330187', 'w=900&q=80')]: 'images/styles/warm-neutral.jpg',
+  [U('1497366811353-6870744d04b2', 'w=900&q=80')]: 'images/styles/industrial.jpg',
+  [U('1598928506311-c55ded91a20c', 'w=900&q=80')]: 'images/styles/luxury.jpg',
+  [U('1611892440504-42a792e24d32', 'w=900&q=80')]: 'images/styles/japandi-wabi-sabi.jpg',
+
   // --- Room type wizard ---
   [U('1618221195710-dd6b41faaea6', 'w=800&q=80')]: 'images/rooms/living-room.jpg',
   [U('1522771739844-6a9f6d5f14af', 'w=800&q=80')]: 'images/rooms/bedroom.jpg',

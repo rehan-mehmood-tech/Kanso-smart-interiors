@@ -13,7 +13,7 @@ const STYLE_OPTIONS = [
     id: 'modern',
     title: 'Modern',
     description: 'Clean lines, neutral palette, and functional elegance.',
-    image: '/assets/images/rooms/interior-wide-1.jpg',
+    image: '/assets/images/styles/modern.jpg',
     palettes: ['#E6E2DC', '#C8C6C5', '#30312E', '#1C1B1B'],
     materials: ['Black Metal', 'Concrete']
   },
@@ -21,7 +21,7 @@ const STYLE_OPTIONS = [
     id: 'minimal',
     title: 'Minimal',
     description: 'Intentional simplicity emphasizing space and light.',
-    image: '/assets/images/rooms/interior-wide-2.jpg',
+    image: '/assets/images/styles/minimal.jpg',
     palettes: ['#FFFFFF', '#F5F3EE', '#DCDAD5', '#1B1C19'],
     materials: ['Light Oak', 'Plaster']
   },
@@ -29,7 +29,7 @@ const STYLE_OPTIONS = [
     id: 'scandinavian',
     title: 'Scandinavian',
     description: 'Hygge comfort blended with bright, functional design.',
-    image: '/assets/images/rooms/interior-wide-4.jpg',
+    image: '/assets/images/styles/scandinavian.jpg',
     palettes: ['#FBF9F4', '#EAE8E3', '#8B8376', '#4D463B'],
     materials: ['Pale Wood', 'Wool']
   },
@@ -37,7 +37,7 @@ const STYLE_OPTIONS = [
     id: 'grey',
     title: 'Grey',
     description: 'Sophisticated monochromatic layers for a calm atmosphere.',
-    image: '/assets/images/rooms/interior-wide-1.jpg',
+    image: '/assets/images/styles/grey.jpg',
     palettes: ['#E4E2DD', '#C4C7C7', '#747878', '#444748'],
     materials: ['Velvet', 'Brushed Steel']
   },
@@ -45,7 +45,7 @@ const STYLE_OPTIONS = [
     id: 'warm_neutral',
     title: 'Warm Neutral',
     description: 'Earthy, inviting tones providing grounded tranquility.',
-    image: '/assets/images/rooms/interior-wide-2.jpg',
+    image: '/assets/images/styles/warm-neutral.jpg',
     palettes: ['#ECE1D2', '#CFC5B7', '#8B8376', '#201B12'],
     materials: ['Linen', 'Terracotta']
   },
@@ -53,7 +53,7 @@ const STYLE_OPTIONS = [
     id: 'industrial',
     title: 'Industrial',
     description: 'Raw materials, exposed elements, and urban edge.',
-    image: '/assets/images/rooms/interior-wide-2.jpg',
+    image: '/assets/images/styles/industrial.jpg',
     palettes: ['#858383', '#5F5E5E', '#30312E', '#1C1C18'],
     materials: ['Exposed Brick', 'Raw Timber']
   },
@@ -61,7 +61,7 @@ const STYLE_OPTIONS = [
     id: 'luxury',
     title: 'Luxury',
     description: 'Premium materials, bespoke finishes, and refined details.',
-    image: '/assets/images/rooms/interior-wide-1.jpg',
+    image: '/assets/images/styles/luxury.jpg',
     palettes: ['#FFFFFF', '#DCDAD5', '#1B1C19', '#000000'],
     materials: ['Marble', 'Brass']
   },
@@ -69,7 +69,7 @@ const STYLE_OPTIONS = [
     id: 'japandi',
     title: 'Japandi',
     description: 'Wabi-sabi simplicity meets Nordic warmth.',
-    image: '/assets/images/rooms/interior-wide-1.jpg',
+    image: '/assets/images/styles/japandi-wabi-sabi.jpg',
     palettes: ['#F5F3EE', '#E4E2DD', '#CFC5B7', '#4D463B'],
     materials: ['Travertine', 'White Oak']
   }
