@@ -7,27 +7,28 @@ import { ConceptCarousel, DesignConcept } from '@/components/results/ConceptCaro
 import { MaterialPaletteBar, MaterialItem } from '@/components/results/MaterialPaletteBar';
 import { ActionFloatingBar } from '@/components/results/ActionFloatingBar';
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { AI_DESIGN_CONCEPTS } from '@/lib/constants/assets';
 
 const MOCK_CONCEPTS: DesignConcept[] = [
   {
     id: 'concept-1',
     title: 'Concept A: The Serene Retreat',
     description: 'A highly realistic, wide-angle interior emphasizing Warm Minimalism. Soft natural light floods the space, highlighting natural textures and high-quality minimalist furniture. Designed for contemplation and calm.',
-    image: '/assets/images/rooms/interior-wide-1.jpg',
+    image: AI_DESIGN_CONCEPTS[0],
     features: ['Low-profile seating', 'Diffuse lighting', 'Organic shapes']
   },
   {
     id: 'concept-2',
     title: 'Concept B: Urban Zen',
     description: 'A darker, more introspective take using deep charcoals and raw stone elements to anchor the space. Monolithic coffee tables and moody architectural lighting set a curated, high-end tone.',
-    image: '/assets/images/rooms/interior-wide-1.jpg',
+    image: AI_DESIGN_CONCEPTS[1],
     features: ['Dark accents', 'Monolithic stone', 'Directional lighting']
   },
   {
     id: 'concept-3',
     title: 'Concept C: Raw Elements',
     description: 'Pushing the minimalist boundary with geometric light play. Expansive minimalist layouts utilizing textured white bouclé fabric and pale travertine.',
-    image: '/assets/images/rooms/interior-wide-1.jpg',
+    image: AI_DESIGN_CONCEPTS[2],
     features: ['Bouclé fabric', 'Travertine', 'High contrast']
   }
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { AI_DESIGN_CONCEPTS } from '@/lib/constants/assets';
 import { useParams, useRouter } from 'next/navigation';
 import { MatchingLayout } from '@/components/matching/MatchingLayout';
 import { RadarPulseGraphic } from '@/components/matching/RadarPulseGraphic';
@@ -8,7 +9,7 @@ import { MatchingStatusTicker } from '@/components/matching/MatchingStatusTicker
 import { useMatchingTimeoutRedirect } from '@/components/matching/useMatchingTimeoutRedirect';
 import { MapPin, Palette, Ruler } from 'lucide-react';
 
-const BG_IMAGE = '/assets/images/rooms/interior-wide-2.jpg';
+const BG_IMAGE = AI_DESIGN_CONCEPTS[3];
 
 export default function MatchingPage() {
   const params = useParams();

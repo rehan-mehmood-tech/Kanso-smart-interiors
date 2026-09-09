@@ -9,17 +9,18 @@ import { ProNotesForm } from '@/components/pro/leads/ProNotesForm';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { getVendorAccess } from '@/lib/pro/access';
 import { getVendorLead } from '@/lib/pro/mock-leads';
+import { AI_DESIGN_CONCEPTS, getRoomWallSet } from '@/lib/constants/assets';
 
 // Project context that is not gated: a vendor needs the brief to decide
 // whether to pursue the lead at all. Only identity is behind the paywall.
 const PROJECT_CONTEXT = {
-  conceptImage: '/assets/images/rooms/interior-wide-1.jpg',
-  wallPhotos: [
-    { id: 'w1', label: 'Wall A (Front)', url: '/assets/images/rooms/interior-wide-1.jpg' },
-    { id: 'w2', label: 'Wall B (Right)', url: '/assets/images/rooms/interior-wide-2.jpg' },
-    { id: 'w3', label: 'Wall C (Back)', url: '/assets/images/rooms/interior-wide-4.jpg' },
-    { id: 'w4', label: 'Wall D (Left)', url: '/assets/images/rooms/interior-wide-6.jpg' },
-  ],
+  conceptImage: AI_DESIGN_CONCEPTS[2],
+  // Four angles of one room; getRoomWallSet guarantees four different photos.
+  wallPhotos: getRoomWallSet('lead-sample').map((url, i) => ({
+    id: `w${i + 1}`,
+    label: ['Wall A (Front)', 'Wall B (Right)', 'Wall C (Back)', 'Wall D (Left)'][i],
+    url,
+  })),
   specs: [
     {
       category: 'Color Palette & Lighting',

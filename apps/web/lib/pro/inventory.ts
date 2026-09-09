@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { CATALOG_PRODUCTS } from "@/lib/constants/assets";
 import { isStyleTag, type StyleTag } from "./styles";
 import {
   PRODUCT_CATEGORY_IDS,
@@ -52,64 +53,103 @@ function seedProducts(): BusinessProduct[] {
     createdAt: nowIso(),
     updatedAt: nowIso(),
   };
-  return [
+
+  // Twelve items, each with its own photograph from CATALOG_PRODUCTS. The
+  // index is positional and never 0-defaulted, so no two rows can collide.
+  const items: Array<
+    Omit<BusinessProduct, keyof typeof base | "imagePaths"> & { imagePaths?: never }
+  > = [
     {
-      ...base,
-      id: "prod-1",
-      name: "Fluted Oak Sideboard",
-      category: "furniture" as ProductCategory,
+      id: "prod-1", name: "Fluted Oak Sideboard", category: "furniture",
       description: "Solid white oak carcass with fluted door fronts and brass pulls.",
-      priceMinor: 8_500_000,
-      dimensions: { w_mm: 1800, h_mm: 750, d_mm: 450 },
-      material: "White Oak",
-      colourHex: "#C9B79C",
-      imagePaths: ["/assets/images/styles/japandi.jpg"],
-      inStock: true,
-      styleTags: ["japandi", "warm_neutral", "minimal"] as StyleTag[],
+      priceMinor: 8_500_000, dimensions: { w_mm: 1800, h_mm: 750, d_mm: 450 },
+      material: "White Oak", colourHex: "#C9B79C", inStock: true,
+      styleTags: ["japandi", "warm_neutral", "minimal"],
     },
     {
-      ...base,
-      id: "prod-2",
-      name: "Linen Bouclé Modular Sofa",
-      category: "furniture" as ProductCategory,
+      id: "prod-2", name: "Linen Bouclé Modular Sofa", category: "furniture",
       description: "Three-seat low-profile modular sofa in textured bouclé.",
-      priceMinor: 21_000_000,
-      dimensions: { w_mm: 2400, h_mm: 680, d_mm: 950 },
-      material: "Linen Bouclé",
-      colourHex: "#EAE8E3",
-      imagePaths: ["/assets/images/styles/warm-neutral.jpg"],
-      inStock: true,
-      styleTags: ["warm_neutral", "minimal", "scandinavian"] as StyleTag[],
+      priceMinor: 21_000_000, dimensions: { w_mm: 2400, h_mm: 680, d_mm: 950 },
+      material: "Linen Bouclé", colourHex: "#EAE8E3", inStock: true,
+      styleTags: ["warm_neutral", "minimal", "scandinavian"],
     },
     {
-      ...base,
-      id: "prod-3",
-      name: "Blackened Steel Pendant",
-      category: "lighting" as ProductCategory,
+      id: "prod-3", name: "Blackened Steel Pendant", category: "lighting",
       description: "Hand-finished steel dome pendant, 3000K warm dimmable.",
-      priceMinor: 1_850_000,
-      dimensions: { w_mm: 320, h_mm: 280, d_mm: 320 },
-      material: "Blackened Steel",
-      colourHex: "#1B1C19",
-      imagePaths: ["/assets/images/styles/industrial.jpg"],
-      inStock: false,
-      styleTags: ["industrial", "modern", "grey"] as StyleTag[],
+      priceMinor: 1_850_000, dimensions: { w_mm: 320, h_mm: 280, d_mm: 320 },
+      material: "Blackened Steel", colourHex: "#1B1C19", inStock: false,
+      styleTags: ["industrial", "modern", "grey"],
     },
     {
-      ...base,
-      id: "prod-4",
-      name: "Honed Travertine Slab",
-      category: "finish" as ProductCategory,
+      id: "prod-4", name: "Honed Travertine Slab", category: "finish",
       description: "Unfilled honed travertine, supplied per square metre.",
-      priceMinor: 4_200_000,
-      dimensions: { w_mm: 1200, h_mm: 20, d_mm: 600 },
-      material: "Travertine",
-      colourHex: "#D8CFC0",
-      imagePaths: ["/assets/images/styles/luxury.jpg"],
-      inStock: true,
-      styleTags: ["luxury", "minimal", "warm_neutral"] as StyleTag[],
+      priceMinor: 4_200_000, dimensions: { w_mm: 1200, h_mm: 20, d_mm: 600 },
+      material: "Travertine", colourHex: "#D8CFC0", inStock: true,
+      styleTags: ["luxury", "minimal", "warm_neutral"],
     },
-  ];
+    {
+      id: "prod-5", name: "Emerald Velvet Two-Seater", category: "furniture",
+      description: "Compact velvet sofa on solid beech legs.",
+      priceMinor: 14_500_000, dimensions: { w_mm: 1650, h_mm: 720, d_mm: 830 },
+      material: "Cotton Velvet", colourHex: "#2F5D50", inStock: true,
+      styleTags: ["luxury", "modern"],
+    },
+    {
+      id: "prod-6", name: "Ochre Wingback Armchair", category: "furniture",
+      description: "High-back occasional chair in brushed wool.",
+      priceMinor: 6_900_000, dimensions: { w_mm: 780, h_mm: 1020, d_mm: 850 },
+      material: "Wool Blend", colourHex: "#C98B2E", inStock: true,
+      styleTags: ["warm_neutral", "scandinavian"],
+    },
+    {
+      id: "prod-7", name: "Oak Counter Stool", category: "furniture",
+      description: "Solid oak stool with a hand-shaped seat, 650mm height.",
+      priceMinor: 2_400_000, dimensions: { w_mm: 380, h_mm: 650, d_mm: 380 },
+      material: "European Oak", colourHex: "#B79A72", inStock: true,
+      styleTags: ["scandinavian", "minimal", "japandi"],
+    },
+    {
+      id: "prod-8", name: "Cream Tufted Accent Chair", category: "furniture",
+      description: "Button-tufted occasional chair on turned legs.",
+      priceMinor: 5_600_000, dimensions: { w_mm: 700, h_mm: 780, d_mm: 720 },
+      material: "Cotton Weave", colourHex: "#EFE7DA", inStock: false,
+      styleTags: ["luxury", "warm_neutral"],
+    },
+    {
+      id: "prod-9", name: "Brass Pendant Cluster", category: "lighting",
+      description: "Five-piece spun brass cluster on adjustable drops.",
+      priceMinor: 9_800_000, dimensions: { w_mm: 900, h_mm: 1400, d_mm: 900 },
+      material: "Spun Brass", colourHex: "#B08D57", inStock: true,
+      styleTags: ["luxury", "modern", "industrial"],
+    },
+    {
+      id: "prod-10", name: "White Dome Pendant", category: "lighting",
+      description: "Powder-coated steel dome, single drop.",
+      priceMinor: 1_200_000, dimensions: { w_mm: 400, h_mm: 300, d_mm: 400 },
+      material: "Powder-coated Steel", colourHex: "#F5F3EE", inStock: true,
+      styleTags: ["minimal", "scandinavian"],
+    },
+    {
+      id: "prod-11", name: "Matte Basin & Tapware Set", category: "fixture",
+      description: "Pedestal basin with matching mixer in a matte finish.",
+      priceMinor: 7_300_000, dimensions: { w_mm: 550, h_mm: 850, d_mm: 430 },
+      material: "Vitreous China", colourHex: "#FBF9F4", inStock: true,
+      styleTags: ["minimal", "modern"],
+    },
+    {
+      id: "prod-12", name: "Kitchen Fittings Package", category: "fixture",
+      description: "Sink, mixer and rail set for a single-run kitchen.",
+      priceMinor: 11_500_000, dimensions: { w_mm: 860, h_mm: 200, d_mm: 500 },
+      material: "Stainless Steel", colourHex: "#C4C7C7", inStock: true,
+      styleTags: ["modern", "industrial", "grey"],
+    },
+  ] as never;
+
+  return items.map((item, i) => ({
+    ...base,
+    ...item,
+    imagePaths: [CATALOG_PRODUCTS[i]],
+  })) as BusinessProduct[];
 }
 
 // -----------------------------------------------------------------------------

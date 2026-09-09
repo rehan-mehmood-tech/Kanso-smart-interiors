@@ -35,6 +35,10 @@ const DIRS = [
   'images/hero',
   'images/story',
   'images/auth',
+  'images/walls',
+  'images/concepts',
+  'images/products',
+  'images/portfolios',
 ];
 
 /** Source trees scanned for external asset URLs. */
@@ -57,13 +61,13 @@ const ASSET_MAP = {
 
   // --- Hero video posters (first paint before the clip decodes) ---
   [U('1616486338812-3dadae4b4ace', 'w=1600&q=80')]: 'images/hero/poster-japandi.jpg',
-  [U('1615874959474-d609969a20ed', 'w=1600&q=80')]: 'images/hero/poster-warm-minimalist.jpg',
-  [U('1600210492486-724fe5c67fb0', 'w=1600&q=80')]: 'images/hero/poster-quiet-luxury.jpg',
+  [U('1616486029423-aaa4789e8c9a', 'w=1600&q=80')]: 'images/hero/poster-warm-minimalist.jpg',
+  [U('1616594039964-ae9021a400a0', 'w=1600&q=80')]: 'images/hero/poster-quiet-luxury.jpg',
   [U('1567767292278-a4f21aa2d36e', 'w=1600&q=80')]: 'images/hero/poster-modern-organic.jpg',
   [U('1583847268964-b28dc8f51f92', 'w=1600&q=80')]: 'images/hero/poster-editorial-neutral.jpg',
 
   // --- Curated aesthetics cards ---
-  [U('1618221195710-dd6b41faaea6', 'w=900&q=80')]: 'images/styles/japandi.jpg',
+  [U('1616137466211-f939a420be84', 'w=900&q=80')]: 'images/styles/japandi.jpg',
   [U('1600607686527-6fb886090705', 'w=900&q=80')]: 'images/styles/warm-minimalist.jpg',
   [U('1594026112284-02bb6f3352fe', 'w=900&q=80')]: 'images/styles/quiet-luxury.jpg',
   [U('1560448204-e02f11c3d0e2', 'w=900&q=80')]: 'images/styles/modern-organic.jpg',
@@ -90,12 +94,12 @@ const ASSET_MAP = {
   // --- Dashboard / project / pro placeholders ---
   [U('1600210492486-724fe5c67fb0', 'w=800&q=80')]: 'images/rooms/living-room-retreat.jpg',
   [U('1600607687920-4e2a09cf159d', 'w=800&q=80')]: 'images/rooms/master-bedroom.jpg',
-  [U('1600607687920-4e2a09cf159d', 'w=1800&q=85')]: 'images/rooms/interior-wide-1.jpg',
-  [U('1600210492486-724fe5c67fb0', 'w=1800&q=85')]: 'images/rooms/interior-wide-2.jpg',
-  [U('1600210492486-724fe5c67fb0', 'w=1800&q=80')]: 'images/rooms/interior-wide-3.jpg',
-  [U('1618221195710-dd6b41faaea6', 'w=1800&q=85')]: 'images/rooms/interior-wide-4.jpg',
-  [U('1600607687920-4e2a09cf159d', 'w=1200&q=80')]: 'images/rooms/interior-wide-5.jpg',
-  [U('1600210492486-724fe5c67fb0', 'w=1200&q=80')]: 'images/rooms/interior-wide-6.jpg',
+  [U('1611048267451-e6ed903d4a38', 'w=1800&q=85')]: 'images/rooms/interior-wide-1.jpg',
+  [U('1611048268330-53de574cae3b', 'w=1800&q=85')]: 'images/rooms/interior-wide-2.jpg',
+  [U('1615529162924-f8605388461d', 'w=1800&q=80')]: 'images/rooms/interior-wide-3.jpg',
+  [U('1615873968403-89e068629265', 'w=1800&q=85')]: 'images/rooms/interior-wide-4.jpg',
+  [U('1615874694520-474822394e73', 'w=1200&q=80')]: 'images/rooms/interior-wide-5.jpg',
+  [U('1616046229478-9901c5536a45', 'w=1200&q=80')]: 'images/rooms/interior-wide-6.jpg',
 
   // --- Story section chapters ---
   [U('1522708323590-d24dbb6b0267', 'w=1200&q=80')]: 'images/story/chapter-1-guesswork.jpg',
@@ -110,6 +114,60 @@ const ASSET_MAP = {
   [U('1534528741775-53994a69daeb', 'w=200&q=80')]: 'images/artisans/sana-iqbal.jpg',
   [U('1506794778202-cad84cf45f1d', 'w=200&q=80')]: 'images/artisans/yousuf-ali.jpg',
   [U('1573496359142-b8d87734a5a2', 'w=150&q=80')]: 'images/artisans/partner-avatar.jpg',
+
+
+  // --- Unique-asset registry (lib/constants/assets.ts) ---
+  // Every entry below is a distinct photo; no id repeats anywhere in this map.
+  // Room wall captures
+  [U('1484154218962-a197022b5858', 'w=1200&q=80')]: 'images/walls/wall-01.jpg',
+  [U('1493809842364-78817add7ffb', 'w=1200&q=80')]: 'images/walls/wall-02.jpg',
+  [U('1502005097973-6a7082348e28', 'w=1200&q=80')]: 'images/walls/wall-03.jpg',
+  [U('1505693416388-ac5ce068fe85', 'w=1200&q=80')]: 'images/walls/wall-04.jpg',
+  [U('1507089947368-19c1da9775ae', 'w=1200&q=80')]: 'images/walls/wall-05.jpg',
+  [U('1513161455079-7dc1de15ef3e', 'w=1200&q=80')]: 'images/walls/wall-06.jpg',
+  [U('1519974719765-e6559eac2575', 'w=1200&q=80')]: 'images/walls/wall-07.jpg',
+  [U('1522337660859-02fbefca4702', 'w=1200&q=80')]: 'images/walls/wall-08.jpg',
+  [U('1522771930-78848d9293e8', 'w=1200&q=80')]: 'images/walls/wall-09.jpg',
+  [U('1524230572899-a752b3835840', 'w=1200&q=80')]: 'images/walls/wall-10.jpg',
+  [U('1524758631624-e2822e304c36', 'w=1200&q=80')]: 'images/walls/wall-11.jpg',
+  [U('1526057565006-20beab8dd2ed', 'w=1200&q=80')]: 'images/walls/wall-12.jpg',
+  // AI design concepts
+  [U('1531973576160-7125cd663d86', 'w=1400&q=82')]: 'images/concepts/concept-01.jpg',
+  [U('1533779283484-8ad4940aa3a8', 'w=1400&q=82')]: 'images/concepts/concept-02.jpg',
+  [U('1540638349517-3abd5afc5847', 'w=1400&q=82')]: 'images/concepts/concept-03.jpg',
+  [U('1549187774-b4e9b0445b41', 'w=1400&q=82')]: 'images/concepts/concept-04.jpg',
+  [U('1551298370-9d3d53740c72', 'w=1400&q=82')]: 'images/concepts/concept-05.jpg',
+  [U('1554995207-c18c203602cb', 'w=1400&q=82')]: 'images/concepts/concept-06.jpg',
+  [U('1556228453-efd6c1ff04f6', 'w=1400&q=82')]: 'images/concepts/concept-07.jpg',
+  [U('1556911220-bff31c812dba', 'w=1400&q=82')]: 'images/concepts/concept-08.jpg',
+  [U('1558211583-d26f610c1eb1', 'w=1400&q=82')]: 'images/concepts/concept-09.jpg',
+  [U('1560185007-5f0bb1866cab', 'w=1400&q=82')]: 'images/concepts/concept-10.jpg',
+  [U('1567016376408-0226e4d0c1ea', 'w=1400&q=82')]: 'images/concepts/concept-11.jpg',
+  [U('1567225557594-88d73e55f2cb', 'w=1400&q=82')]: 'images/concepts/concept-12.jpg',
+  // Catalogue products
+  [U('1555041469-a586c61ea9bc', 'w=900&q=80')]: 'images/products/sofa-green-velvet.jpg',
+  [U('1493663284031-b7e3aefcae8e', 'w=900&q=80')]: 'images/products/sofa-grey-tufted.jpg',
+  [U('1567016432779-094069958ea5', 'w=900&q=80')]: 'images/products/sofa-terracotta-detail.jpg',
+  [U('1550226891-ef816aed4a98', 'w=900&q=80')]: 'images/products/armchair-ochre.jpg',
+  [U('1503602642458-232111445657', 'w=900&q=80')]: 'images/products/stool-oak.jpg',
+  [U('1595428774223-ef52624120d2', 'w=900&q=80')]: 'images/products/cabinet-oak-wall.jpg',
+  [U('1540932239986-30128078f3c5', 'w=900&q=80')]: 'images/products/pendant-brass-cluster.jpg',
+  [U('1513506003901-1e6a229e2d15', 'w=900&q=80')]: 'images/products/pendant-white-dome.jpg',
+  [U('1533090161767-e6ffed986c88', 'w=900&q=80')]: 'images/products/desk-lamp-and-clock.jpg',
+  [U('1567538096630-e0c55bd6374c', 'w=900&q=80')]: 'images/products/chair-cream-tufted.jpg',
+  [U('1552321554-5fefe8c9ef14', 'w=900&q=80')]: 'images/products/bathroom-fittings.jpg',
+  [U('1556909212-d5b604d0c90d', 'w=900&q=80')]: 'images/products/kitchen-fittings.jpg',
+  // Vendor portfolios
+  [U('1571508601891-ca5e7a713859', 'w=1200&q=80')]: 'images/portfolios/portfolio-01.jpg',
+  [U('1573883431205-98b5f10aaedb', 'w=1200&q=80')]: 'images/portfolios/portfolio-02.jpg',
+  [U('1583845112203-29329902332e', 'w=1200&q=80')]: 'images/portfolios/portfolio-03.jpg',
+  [U('1584132967334-10e028bd69f7', 'w=1200&q=80')]: 'images/portfolios/portfolio-04.jpg',
+  [U('1596178065887-1198b6148b2b', 'w=1200&q=80')]: 'images/portfolios/portfolio-05.jpg',
+  [U('1598300042247-d088f8ab3a91', 'w=1200&q=80')]: 'images/portfolios/portfolio-06.jpg',
+  [U('1598928636135-d146006ff4be', 'w=1200&q=80')]: 'images/portfolios/portfolio-07.jpg',
+  [U('1600494603989-9650cf6ddd3d', 'w=1200&q=80')]: 'images/portfolios/portfolio-08.jpg',
+  [U('1600585154084-4e5fe7c39198', 'w=1200&q=80')]: 'images/portfolios/portfolio-09.jpg',
+  [U('1606744837616-56c9a5c6a6eb', 'w=1200&q=80')]: 'images/portfolios/portfolio-10.jpg',
 
   // --- Auth split-screen backgrounds ---
   [U('1631679706909-1844bbd07221', 'w=2400&q=90')]: 'images/auth/login-bg.jpg',

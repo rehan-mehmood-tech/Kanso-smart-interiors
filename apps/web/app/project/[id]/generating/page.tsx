@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { AI_DESIGN_CONCEPTS, ROOM_ORIGINAL_WALLS } from '@/lib/constants/assets';
 import { useParams } from 'next/navigation';
 import { GeneratingLayout } from '@/components/generating/GeneratingLayout';
 import { PulseIndicator } from '@/components/generating/PulseIndicator';
@@ -9,8 +10,9 @@ import { GenerationProgressBar } from '@/components/generating/GenerationProgres
 import { useAutoRedirect } from '@/components/generating/useAutoRedirect';
 
 // Using the exact placeholder images from the Stitch HTML export
-const BG_EMPTY = '/assets/images/rooms/interior-wide-1.jpg';
-const BG_FINISHED = '/assets/images/rooms/interior-wide-1.jpg';
+// Before and after must be visibly different images, or the reveal is a no-op.
+const BG_EMPTY = ROOM_ORIGINAL_WALLS[0];
+const BG_FINISHED = AI_DESIGN_CONCEPTS[1];
 
 export default function GeneratingPage() {
   const params = useParams();

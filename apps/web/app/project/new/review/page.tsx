@@ -9,6 +9,7 @@ import { StyleSummaryCard } from '@/components/wizard/review/StyleSummaryCard';
 import { GenerationDisclaimer } from '@/components/wizard/review/GenerationDisclaimer';
 import { WizardFooter } from '@/components/wizard/WizardFooter';
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { getRoomWallSet } from '@/lib/constants/assets';
 
 export default function ReviewProjectPage() {
   const router = useRouter();
@@ -17,12 +18,7 @@ export default function ReviewProjectPage() {
   const [styleName, setStyleName] = useState('Modern Grey');
 
   // Fallback photos for the mock presentation
-  const mockPhotos = [
-    '/assets/images/rooms/interior-wide-1.jpg',
-    '/assets/images/rooms/interior-wide-1.jpg',
-    '/assets/images/rooms/interior-wide-4.jpg',
-    '/assets/images/rooms/interior-wide-2.jpg'
-  ];
+  const mockPhotos = getRoomWallSet('review-sample');
 
   useEffect(() => {
     // Read selections from URL if available

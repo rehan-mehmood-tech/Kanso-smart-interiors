@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { getUniqueAsset } from '@/lib/constants/assets';
 import { useParams, useRouter } from 'next/navigation';
 import { ConfirmationBanner } from '@/components/selected/ConfirmationBanner';
 import { DesignSpecSheet, SpecItem } from '@/components/selected/DesignSpecSheet';
@@ -10,7 +11,7 @@ import { SecondaryNavActions } from '@/components/selected/SecondaryNavActions';
 import { SiteHeader } from "@/components/layout/SiteHeader";
 
 // Mock Data representing the chosen concept
-const SELECTED_IMAGE = '/assets/images/rooms/interior-wide-1.jpg';
+
 
 const SPEC_DATA: SpecItem[] = [
   {
@@ -46,6 +47,8 @@ export default function ProjectSelectedPage() {
   const router = useRouter();
   const params = useParams();
   const projectId = params.id as string;
+  // Keyed to the project, so two projects never show the same concept.
+  const selectedImage = getUniqueAsset('concepts', projectId);
 
   return (
     <div className="min-h-screen flex flex-col font-body-md text-on-surface bg-[#F4F2ED]">
@@ -54,7 +57,7 @@ export default function ProjectSelectedPage() {
 
       {/* Main Content */}
       <main className="flex-grow pt-24 pb-[80px] px-4 md:px-12 max-w-[1024px] mx-auto w-full flex flex-col">
-        <ConfirmationBanner imageUrl={SELECTED_IMAGE} />
+        <ConfirmationBanner imageUrl={selectedImage} />
 
         <div className="flex justify-end mb-4">
           <DownloadProposalButton />

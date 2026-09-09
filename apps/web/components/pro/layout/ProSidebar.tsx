@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { VENDOR_PORTFOLIOS } from '@/lib/constants/assets';
 import {
   LayoutDashboard,
   Package,
@@ -46,7 +47,7 @@ export function ProSidebar() {
       <div className="flex items-center gap-4 px-2 py-4 border-b border-[#EAE8E3] mb-4">
         <div className="relative w-10 h-10 rounded-full bg-[#E4E2DD] overflow-hidden shrink-0 border border-[#C4C7C7]">
           <Image
-            src="/assets/images/rooms/interior-wide-1.jpg"
+            src={VENDOR_PORTFOLIOS[0]}
             alt=""
             fill
             sizes="40px"
