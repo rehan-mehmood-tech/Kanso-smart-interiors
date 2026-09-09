@@ -3,7 +3,7 @@
  *
  * No Supabase project exists yet, so every consumer has to cope with the
  * credentials being absent. `isSupabaseConfigured` lets the UI say so plainly
- * instead of throwing an opaque runtime error, and lets middleware fail closed.
+ * instead of throwing an opaque runtime error, and lets the proxy fail closed.
  */
 
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";

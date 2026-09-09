@@ -6,11 +6,13 @@
 -- paid-access gate that decides whether a business may see a lead's contact
 -- details.
 --
--- PREREQUISITE: this migration ALTERs `businesses` and `consultation_leads`
--- and references `profiles`, `room_projects` and `styles`. Those tables come
--- from the PRD baseline schema (§15), which has NOT been written yet — this
--- file will fail on a fresh project until that baseline migration exists and
--- runs first.
+-- PREREQUISITE: this migration ALTERs `businesses` and `consultation_leads`,
+-- and references `profiles` and `room_projects`. Those four tables come from
+-- the PRD baseline schema (§15), which has NOT been written yet — this file
+-- will fail on a fresh project until that baseline migration exists and runs
+-- first. Every column it reads is defined in the PRD; the only columns it adds
+-- to baseline tables are businesses.verified_at, consultation_leads.city and
+-- consultation_leads.customer_email, none of which the PRD already defines.
 -- =============================================================================
 
 begin;
@@ -162,6 +164,35 @@ $$;
 comment on function business_has_paid_access(uuid) is
   'True when the business holds a paid subscription that has not lapsed: trialing, active, or canceled-but-still-within-the-paid-period.';
 
+-- Whether the current user owns a given business.
+--
+-- SECURITY DEFINER matters here: a policy on business_members that queries
+-- business_members inline re-enters its own policy, and Postgres raises
+-- "infinite recursion detected in policy for relation". Resolving ownership
+-- inside a definer function runs the lookup with RLS bypassed, so the policy
+-- evaluates once.
+create or replace function is_business_owner(b_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from business_members m
+    where m.business_id = b_id
+      and m.profile_id = auth.uid()
+      and m.role = 'owner'
+  )
+  or exists (
+    select 1
+    from businesses b
+    where b.id = b_id
+      and b.owner_profile_id = auth.uid()
+  );
+$$;
+
 -- Businesses the current auth user belongs to. Used by every policy below.
 create or replace function current_user_business_ids()
 returns setof uuid
@@ -212,16 +243,15 @@ create policy business_members_read on business_members
   for select using (business_id in (select current_user_business_ids()));
 
 -- Only an owner manages seats.
+--
+-- Bootstrap note: the FIRST owner row cannot be inserted through this policy,
+-- because no owner exists yet to authorise it. Registration creates that row
+-- with the service-role key, which bypasses RLS. The `businesses.owner_profile_id`
+-- arm of is_business_owner() then lets that owner add the rest of the crew.
 create policy business_members_write on business_members
-  for all using (
-    exists (
-      select 1 from business_members m
-      join profiles p on p.id = m.profile_id
-      where m.business_id = business_members.business_id
-        and p.id = auth.uid()
-        and m.role = 'owner'
-    )
-  );
+  for all
+  using (is_business_owner(business_members.business_id))
+  with check (is_business_owner(business_members.business_id));
 
 -- Inventory: a business reads and writes only its own products.
 create policy business_products_owner on business_products

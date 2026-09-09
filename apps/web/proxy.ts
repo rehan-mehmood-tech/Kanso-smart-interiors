@@ -10,10 +10,13 @@ import {
 /**
  * Route protection for the vendor portal.
  *
+ * Next 16 file convention: this was `middleware.ts` and is now `proxy.ts`
+ * exporting `proxy` -- same request-interception behaviour, new name.
+ *
  * Every /pro/* route requires a session; /pro/login is the only exception.
  * The check fails CLOSED — if Supabase is unreachable or unconfigured we
  * cannot prove the visitor is signed in, so we redirect rather than let them
- * through. Before this middleware existed, /pro/dashboard was readable by
+ * through. Before this existed, /pro/dashboard was readable by
  * anyone with the URL, contact details included.
  */
 
@@ -28,7 +31,7 @@ function redirectToLogin(request: NextRequest) {
   return NextResponse.redirect(url);
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isProRoute = pathname === PROTECTED_PREFIX || pathname.startsWith(`${PROTECTED_PREFIX}/`);
