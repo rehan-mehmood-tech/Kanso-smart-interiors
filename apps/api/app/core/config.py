@@ -88,6 +88,20 @@ class Settings(BaseSettings):
     designs_per_generation: int = 5
     generation_timeout_seconds: int = 180
 
+    # --- Trial gating ---
+    #
+    # Both checks are fully implemented; these flags decide whether they are
+    # enforced. They default to False so a fresh checkout can exercise the
+    # pipeline, and must be flipped to True before launch -- the gate is only
+    # protection if it is switched on.
+    enable_card_gating: bool = False
+    enable_daily_quota_limit: bool = False
+
+    #: Rooms (projects) a customer may generate for in a rolling 24 hours.
+    daily_room_limit: int = 3
+    #: Individual renders a customer may produce in a rolling 24 hours.
+    daily_render_limit: int = 12
+
     @field_validator("cors_origins", mode="before")
     @classmethod
     def _split_origins(cls, value: object) -> object:

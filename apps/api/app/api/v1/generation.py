@@ -23,6 +23,7 @@ from app.db.supabase import get_supabase
 from app.schemas.enums import GenerationStatus, ProjectStatus
 from app.services.gemini import analyse_room
 from app.services.image_generator import GenerationError, generate_image
+from app.services.gating import check_card_on_file, check_daily_quota
 from app.services.inventory_matcher import build_render_prompt, select_inventory
 from app.services.storage import signed_url
 
@@ -73,6 +74,10 @@ class GenerateResponse(BaseModel):
     prompt: str
     #: What Gemini read from the walls, and whether it succeeded.
     spatial_analysis: dict[str, Any] = Field(default_factory=dict)
+    #: Outcome of the card and quota checks, including whether each was
+    #: enforced or merely observed. Present even when both are bypassed, so a
+    #: client can show remaining quota without a second request.
+    gating: dict[str, Any] = Field(default_factory=dict)
     detail: str | None = None
 
 
@@ -119,6 +124,21 @@ async def generate_designs(project_id: UUID, payload: GenerateRequest | None = N
         raise ConflictError(
             "This project already has concepts. Pass force=true to generate again.",
         )
+
+    # --- Trial gating. Both checks always run; the flags decide whether their
+    # verdict is enforced, so the logic is exercised long before it is relied on.
+    customer_id = UUID(project["customer_id"]) if project.get("customer_id") else None
+    card = check_card_on_file(customer_id)
+    if card.blocks:
+        raise ApiError(card.reason, code="payment_required", status_code=status.HTTP_402_PAYMENT_REQUIRED)
+
+    quota = check_daily_quota(customer_id, project_id)
+    if quota.blocks:
+        raise ApiError(
+            quota.reason, code="quota_exceeded", status_code=status.HTTP_429_TOO_MANY_REQUESTS
+        )
+
+    gating_report = {"card": card.to_dict(), "quota": quota.to_dict()}
 
     # The partial unique index on design_generations allows one active run per
     # project, so a concurrent request fails here rather than double-billing a
@@ -254,6 +274,7 @@ async def generate_designs(project_id: UUID, payload: GenerateRequest | None = N
             ],
             prompt=prompt,
             spatial_analysis=analysis.to_dict(),
+            gating=gating_report,
             detail=("; ".join(failures)[:300] or None),
         )
 

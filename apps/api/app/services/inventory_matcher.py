@@ -68,6 +68,10 @@ class InventorySelection:
     #: can tell "nothing in budget" from "no inventory at all".
     budget_applied: bool = False
     considered: int = 0
+    #: How many verified, paid vendors were eligible at all.
+    vendors_available: int = 0
+    #: True when no product matched the style and the style filter was relaxed.
+    style_widened: bool = False
 
     @property
     def product_ids(self) -> list[str]:
@@ -92,6 +96,45 @@ def _row_to_product(row: dict[str, Any]) -> MatchedProduct:
     )
 
 
+def _bookable_paid_business_ids() -> list[str]:
+    """Businesses whose stock may be specified in a concept.
+
+    Three conditions, all of them load-bearing:
+
+      active + not banned  a suspended vendor cannot fulfil an order
+      verified             an unvetted vendor should not be recommended
+      paid access          business_has_paid_access() -- the same predicate
+                           the lead paywall uses, so a vendor whose stock is
+                           advertised is a vendor who can actually receive the
+                           resulting lead
+
+    That last one is the point of "no unpurchasable furniture": specifying a
+    product from a vendor who cannot see the customer's contact details would
+    render a shopping list nobody can act on.
+    """
+    client = get_supabase()
+    rows = (
+        client.table("businesses")
+        .select("id,name")
+        .eq("is_active", True)
+        .eq("is_banned", False)
+        .not_.is_("verified_at", "null")
+        .execute()
+        .data
+        or []
+    )
+
+    allowed: list[str] = []
+    for business in rows:
+        try:
+            result = client.rpc("business_has_paid_access", {"b_id": business["id"]}).execute()
+            if result.data is True:
+                allowed.append(business["id"])
+        except Exception as exc:  # noqa: BLE001 - a failed check is not a pass
+            logger.warning("Paid-access check failed for %s: %s", business["id"], exc)
+    return allowed
+
+
 def select_inventory(
     *,
     style_slug: str | None,
@@ -101,47 +144,50 @@ def select_inventory(
 ) -> InventorySelection:
     """Choose catalogue items to specify in the render.
 
-    Only active, in-stock products from live vendors are eligible -- a concept
-    that specifies something nobody can sell is worse than a generic one.
+    Eligibility is strict: active and in stock, from a vendor that is active,
+    not banned, verified AND holds paid access. A concept that specifies
+    something nobody can sell -- or that comes from a vendor who cannot act on
+    the lead -- is worse than a generic one.
 
     Style is matched with the array-overlap operator, which is what the GIN
-    index on style_tags exists for. If nothing matches the style we widen to
-    any in-stock item rather than returning nothing: a render with real local
-    furniture in a loosely related style still beats an invented one.
+    index on style_tags exists for. If nothing matches the style we widen the
+    STYLE filter only; the vendor eligibility rule is never relaxed.
 
-    Budget is treated as a ceiling on the specified set, filled by category
-    priority so a room gets a sofa before it gets a third lamp.
+    Budget is a ceiling on the specified set, filled by category priority so a
+    room gets a sofa before it gets a third lamp.
     """
     client = get_supabase()
 
-    query = (
-        client.table(PRODUCTS)
-        .select("id,business_id,name,category,price_minor,material,color_hex,dimensions,style_tags")
-        .eq("is_active", True)
-        .eq("in_stock", True)
-    )
-    if style_slug:
-        # PostgREST `overlaps` -> the SQL && operator, served by the GIN index.
-        query = query.overlaps("style_tags", [style_slug])
+    business_ids = _bookable_paid_business_ids()
+    if not business_ids:
+        logger.info("No verified, paid vendors: nothing may be specified.")
+        return InventorySelection(considered=0, vendors_available=0)
 
-    rows = query.limit(60).execute().data or []
+    columns = "id,business_id,name,category,price_minor,material,color_hex,dimensions,style_tags"
 
-    if not rows and style_slug:
-        logger.info("No products tagged %s; widening to any in-stock item.", style_slug)
-        rows = (
+    def _query(with_style: bool):
+        q = (
             client.table(PRODUCTS)
-            .select("id,business_id,name,category,price_minor,material,color_hex,dimensions,style_tags")
+            .select(columns)
             .eq("is_active", True)
             .eq("in_stock", True)
-            .limit(60)
-            .execute()
-            .data
-            or []
+            .in_("business_id", business_ids)
         )
+        if with_style and style_slug:
+            # PostgREST `overlaps` -> the SQL && operator, served by the GIN index.
+            q = q.overlaps("style_tags", [style_slug])
+        return q.limit(60).execute().data or []
+
+    rows = _query(with_style=True)
+    style_widened = False
+    if not rows and style_slug:
+        logger.info("No %s products from paid vendors; widening style only.", style_slug)
+        rows = _query(with_style=False)
+        style_widened = True
 
     considered = len(rows)
     if not rows:
-        return InventorySelection(considered=0)
+        return InventorySelection(considered=0, vendors_available=len(business_ids))
 
     candidates = [_row_to_product(r) for r in rows]
 
@@ -185,6 +231,8 @@ def select_inventory(
         total_price_minor=running,
         budget_applied=budget_applied,
         considered=considered,
+        vendors_available=len(business_ids),
+        style_widened=style_widened,
     )
 
 
@@ -224,7 +272,11 @@ def build_render_prompt(
         parts.append(
             "Every one of those pieces must be clearly visible and arranged "
             "naturally in the space, rendered faithfully to its stated "
-            "material, colour and size."
+            "material, colour and size. Furnish the room using ONLY these "
+            "pieces plus plain soft furnishings such as cushions and plants. "
+            "Do not invent additional furniture and do not substitute "
+            "different designs: every item shown must be one the customer can "
+            "actually buy from the local vendor."
         )
         if selection.total_price_minor:
             parts.append(

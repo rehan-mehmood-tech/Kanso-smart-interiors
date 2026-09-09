@@ -16,9 +16,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import API_VERSION
-from app.api.router import api_router
 from app.api.v1.router import v1_router
-from app.api.routes import health
+from app.api import health
 from app.core.config import get_settings
 from app.core.errors import register_exception_handlers
 from app.core.logging import RequestContextMiddleware, configure_logging
@@ -94,11 +93,9 @@ def create_app() -> FastAPI:
 
     # /health sits at the root so uptime checks do not depend on the API prefix.
     app.include_router(health.router)
-    # Real, database-backed endpoints.
+    # The only application surface. Everything here is database-backed; there
+    # are no 501 placeholders left to mistake for working endpoints.
     app.include_router(v1_router, prefix=f"{settings.api_v1_prefix}/v1")
-    # Legacy stub surface: the PRD route list, still returning 501 where the
-    # implementation has not landed yet.
-    app.include_router(api_router, prefix=settings.api_v1_prefix)
 
     return app
 
