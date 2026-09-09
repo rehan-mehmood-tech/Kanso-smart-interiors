@@ -9,11 +9,12 @@ project stuck in `generating` with nothing to show.
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from typing import Any
 from uuid import UUID
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, BackgroundTasks, Response, status
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.core.config import get_settings
@@ -42,6 +43,11 @@ class GenerateRequest(BaseModel):
     count: int = Field(default=2, ge=1, le=4)
     #: Re-run even if the project has already generated.
     force: bool = False
+    #: Block until the renders are done and return them in this response.
+    #:
+    #: False by default because the run outlives what a proxy will hold open.
+    #: Direct callers with no proxy in between (tests, scripts) can set it.
+    wait: bool = False
 
 
 class MappedProductOut(BaseModel):
@@ -86,16 +92,197 @@ def _set_generation(generation_id: str, **fields: Any) -> dict[str, Any]:
     return result.data[0] if result.data else {}
 
 
+async def _execute_pipeline(
+    *,
+    project: dict[str, Any],
+    project_id: UUID,
+    generation_id: str,
+    count: int,
+    photos: list[dict[str, Any]],
+    gating_report: dict[str, Any],
+) -> GenerateResponse:
+    """Analyse the walls, build the prompt, render, and record the outcome.
+
+    Split out of the endpoint so the same code serves both the polled path and
+    the blocking one. Every exit updates `design_generations`, so the run's
+    state is readable from the database whether or not anyone is still holding
+    the HTTP request that started it.
+    """
+    try:
+        # --- 1. Spatial analysis. Best-effort: a weaker prompt beats no render.
+        urls = [u for u in (signed_url(p["image_url"]) for p in photos) if u]
+        analysis = await analyse_room(urls)
+        if not analysis.ok:
+            logger.warning("Spatial analysis degraded: %s", analysis.detail)
+
+        # --- 2. Inventory-aware prompt.
+        selection = select_inventory(
+            style_slug=project.get("style_slug"),
+            budget_pkr=project.get("budget_pkr"),
+            city=project.get("city"),
+        )
+        prompt = build_render_prompt(
+            room_type=project.get("room_type"),
+            style_slug=project.get("style_slug"),
+            spatial_fragment=analysis.to_prompt_fragment(),
+            selection=selection,
+            city=project.get("city"),
+        )
+        logger.info("Prompt for %s (%d chars, %d products)", project_id, len(prompt), len(selection.products))
+
+        # --- 3. Render.
+        concepts: list[ConceptOut] = []
+        failures: list[str] = []
+        for index in range(count):
+            try:
+                image = await generate_image(prompt, project_id=str(project_id), index=index)
+            except GenerationError as exc:
+                failures.append(str(exc))
+                continue
+
+            # Higher score for the first concept: it uses the base seed, which
+            # is the composition the prompt was tuned for.
+            score = round(92.0 - index * 4.5, 2)
+            row = (
+                get_supabase()
+                .table(DESIGNS)
+                .insert(
+                    {
+                        "generation_id": generation_id,
+                        "render_url": image.storage_path,
+                        "mapped_products": selection.product_ids,
+                        "overall_score": score,
+                    }
+                )
+                .execute()
+                .data[0]
+            )
+            concepts.append(
+                ConceptOut(
+                    id=row["id"],
+                    render_url=image.storage_path,
+                    signed_url=signed_url(
+                        image.storage_path, bucket=get_settings().generated_designs_bucket
+                    ),
+                    provider=image.provider,
+                    seed=image.seed,
+                    overall_score=score,
+                    mapped_products=[UUID(p) for p in selection.product_ids],
+                )
+            )
+
+        if not concepts:
+            detail = "; ".join(failures) or "No provider produced an image."
+            _set_generation(
+                generation_id,
+                status=GenerationStatus.FAILED.value,
+                error_detail=detail[:500],
+            )
+            repo.set_project_status(project_id, ProjectStatus.PHOTOS_UPLOADED)
+            raise ApiError(
+                f"Image generation failed. {detail}",
+                code="generation_failed",
+                status_code=status.HTTP_502_BAD_GATEWAY,
+            )
+
+        # Partial when some renders failed: the customer sees what worked
+        # rather than losing the whole run to one flaky call.
+        final = GenerationStatus.SUCCEEDED if len(concepts) == count else GenerationStatus.PARTIAL
+        _set_generation(
+            generation_id,
+            status=final.value,
+            error_detail=("; ".join(failures)[:500] or None),
+        )
+        repo.set_project_status(project_id, ProjectStatus.GENERATED)
+
+        return GenerateResponse(
+            generation_id=generation_id,
+            project_id=project_id,
+            status=final,
+            project_status=ProjectStatus.GENERATED,
+            engine_used="gemini_flux",
+            concepts=concepts,
+            products=[
+                MappedProductOut(
+                    id=p.id,
+                    name=p.name,
+                    category=p.category,
+                    price_pkr=p.price_pkr,
+                    material=p.material,
+                    color_hex=p.color_hex,
+                )
+                for p in selection.products
+            ],
+            prompt=prompt,
+            spatial_analysis=analysis.to_dict(),
+            gating=gating_report,
+            detail=("; ".join(failures)[:300] or None),
+        )
+
+    except ApiError:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("Generation %s failed", generation_id)
+        _set_generation(
+            generation_id, status=GenerationStatus.FAILED.value, error_detail=str(exc)[:500]
+        )
+        repo.set_project_status(project_id, ProjectStatus.PHOTOS_UPLOADED)
+        raise ApiError(
+            "The generation pipeline failed unexpectedly.",
+            code="generation_failed",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ) from exc
+
+
+def _run_detached(**kwargs: Any) -> None:
+    """Background wrapper, deliberately synchronous.
+
+    Starlette runs a `def` background task in a worker thread, where this
+    starts its own event loop. That matters: the pipeline mixes long awaits
+    (Gemini, the render provider) with the *synchronous* Supabase client, so
+    running it on the API's own loop blocked request handling for tens of
+    seconds and interleaved two coroutines over one pooled HTTP connection --
+    which surfaced as reads failing with "connection forcibly closed" while a
+    generation was in flight. On its own thread it cannot do either.
+
+    Nothing is listening for the result, so an exception escaping here would
+    only reach the log. `_execute_pipeline` has already written the failure to
+    `design_generations` by the time it raises, and that is where the client
+    reads the outcome from.
+    """
+    try:
+        asyncio.run(_execute_pipeline(**kwargs))
+    except ApiError as exc:
+        logger.warning("Background generation ended: %s", exc)
+    except Exception:  # noqa: BLE001
+        logger.exception("Background generation crashed")
+
+
 @router.post(
     "/{project_id}/generate",
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_202_ACCEPTED,
     summary="Generate design concepts for a project",
 )
-async def generate_designs(project_id: UUID, payload: GenerateRequest | None = None) -> GenerateResponse:
+async def generate_designs(
+    project_id: UUID,
+    background: BackgroundTasks,
+    response: Response,
+    payload: GenerateRequest | None = None,
+) -> GenerateResponse:
     """Run the pipeline: analyse the walls, build an inventory-aware prompt, render.
 
     Requires all four photos. The project must be at `photos_uploaded` or
     later; a project still in `draft` has nothing to analyse.
+
+    The run takes one to two minutes, which is longer than an HTTP request
+    should be held open: a proxy hop in front of this service (the Next dev
+    server, and Vercel's rewrite in production) drops the socket well before
+    the renders finish, which left the run orphaned mid-flight. So by default
+    this validates, records the run, and returns 202 immediately -- the client
+    polls `GET /projects/{id}` and sees `designs` appear.
+
+    `wait=true` keeps the old blocking behaviour for scripts and tests, which
+    call the service directly and have no proxy in between.
     """
     body = payload or GenerateRequest()
 
@@ -165,129 +352,28 @@ async def generate_designs(project_id: UUID, payload: GenerateRequest | None = N
     generation_id = generation["id"]
     repo.set_project_status(project_id, ProjectStatus.GENERATING)
 
-    try:
-        # --- 1. Spatial analysis. Best-effort: a weaker prompt beats no render.
-        urls = [u for u in (signed_url(p["image_url"]) for p in photos) if u]
-        analysis = await analyse_room(urls)
-        if not analysis.ok:
-            logger.warning("Spatial analysis degraded: %s", analysis.detail)
+    kwargs: dict[str, Any] = {
+        "project": project,
+        "project_id": project_id,
+        "generation_id": generation_id,
+        "count": body.count,
+        "photos": photos,
+        "gating_report": gating_report,
+    }
 
-        # --- 2. Inventory-aware prompt.
-        selection = select_inventory(
-            style_slug=project.get("style_slug"),
-            budget_pkr=project.get("budget_pkr"),
-            city=project.get("city"),
-        )
-        prompt = build_render_prompt(
-            room_type=project.get("room_type"),
-            style_slug=project.get("style_slug"),
-            spatial_fragment=analysis.to_prompt_fragment(),
-            selection=selection,
-            city=project.get("city"),
-        )
-        logger.info("Prompt for %s (%d chars, %d products)", project_id, len(prompt), len(selection.products))
+    if body.wait:
+        result = await _execute_pipeline(**kwargs)
+        response.status_code = status.HTTP_201_CREATED
+        return result
 
-        # --- 3. Render.
-        concepts: list[ConceptOut] = []
-        failures: list[str] = []
-        for index in range(body.count):
-            try:
-                image = await generate_image(prompt, project_id=str(project_id), index=index)
-            except GenerationError as exc:
-                failures.append(str(exc))
-                continue
-
-            # Higher score for the first concept: it uses the base seed, which
-            # is the composition the prompt was tuned for.
-            score = round(92.0 - index * 4.5, 2)
-            row = (
-                get_supabase()
-                .table(DESIGNS)
-                .insert(
-                    {
-                        "generation_id": generation_id,
-                        "render_url": image.storage_path,
-                        "mapped_products": selection.product_ids,
-                        "overall_score": score,
-                    }
-                )
-                .execute()
-                .data[0]
-            )
-            concepts.append(
-                ConceptOut(
-                    id=row["id"],
-                    render_url=image.storage_path,
-                    signed_url=signed_url(
-                        image.storage_path, bucket=get_settings().generated_designs_bucket
-                    ),
-                    provider=image.provider,
-                    seed=image.seed,
-                    overall_score=score,
-                    mapped_products=[UUID(p) for p in selection.product_ids],
-                )
-            )
-
-        if not concepts:
-            detail = "; ".join(failures) or "No provider produced an image."
-            _set_generation(
-                generation_id,
-                status=GenerationStatus.FAILED.value,
-                error_detail=detail[:500],
-            )
-            repo.set_project_status(project_id, ProjectStatus.PHOTOS_UPLOADED)
-            raise ApiError(
-                f"Image generation failed. {detail}",
-                code="generation_failed",
-                status_code=status.HTTP_502_BAD_GATEWAY,
-            )
-
-        # Partial when some renders failed: the customer sees what worked
-        # rather than losing the whole run to one flaky call.
-        final = (
-            GenerationStatus.SUCCEEDED if len(concepts) == body.count else GenerationStatus.PARTIAL
-        )
-        _set_generation(
-            generation_id,
-            status=final.value,
-            error_detail=("; ".join(failures)[:500] or None),
-        )
-        repo.set_project_status(project_id, ProjectStatus.GENERATED)
-
-        return GenerateResponse(
-            generation_id=generation_id,
-            project_id=project_id,
-            status=final,
-            project_status=ProjectStatus.GENERATED,
-            engine_used="gemini_flux",
-            concepts=concepts,
-            products=[
-                MappedProductOut(
-                    id=p.id,
-                    name=p.name,
-                    category=p.category,
-                    price_pkr=p.price_pkr,
-                    material=p.material,
-                    color_hex=p.color_hex,
-                )
-                for p in selection.products
-            ],
-            prompt=prompt,
-            spatial_analysis=analysis.to_dict(),
-            gating=gating_report,
-            detail=("; ".join(failures)[:300] or None),
-        )
-
-    except ApiError:
-        raise
-    except Exception as exc:  # noqa: BLE001
-        logger.exception("Generation %s failed", generation_id)
-        _set_generation(
-            generation_id, status=GenerationStatus.FAILED.value, error_detail=str(exc)[:500]
-        )
-        repo.set_project_status(project_id, ProjectStatus.PHOTOS_UPLOADED)
-        raise ApiError(
-            "The generation pipeline failed unexpectedly.",
-            code="generation_failed",
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        ) from exc
+    background.add_task(_run_detached, **kwargs)
+    return GenerateResponse(
+        generation_id=generation_id,
+        project_id=project_id,
+        status=GenerationStatus.PROCESSING,
+        project_status=ProjectStatus.GENERATING,
+        engine_used="gemini_flux",
+        prompt="",
+        gating=gating_report,
+        detail="Generation started. Poll GET /api/v1/projects/{id} until designs appear.",
+    )

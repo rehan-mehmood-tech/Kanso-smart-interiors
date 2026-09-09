@@ -4,90 +4,30 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { WizardProgressBar } from '@/components/wizard/WizardProgressBar';
 import { StyleGrid } from '@/components/wizard/style/StyleGrid';
-import { BudgetScopeSelector, BudgetTier } from '@/components/wizard/style/BudgetScopeSelector';
+import { BudgetScopeSelector } from '@/components/wizard/style/BudgetScopeSelector';
 import { WizardFooter } from '@/components/wizard/WizardFooter';
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { BUDGET_TIERS, STYLE_OPTIONS } from '@/lib/project/catalog';
+import { setBudgetTier, setStyle, useWizard } from '@/lib/project/session';
 
-const STYLE_OPTIONS = [
-  {
-    id: 'modern',
-    title: 'Modern',
-    description: 'Clean lines, neutral palette, and functional elegance.',
-    image: '/assets/images/styles/modern.jpg',
-    palettes: ['#E6E2DC', '#C8C6C5', '#30312E', '#1C1B1B'],
-    materials: ['Black Metal', 'Concrete']
-  },
-  {
-    id: 'minimal',
-    title: 'Minimal',
-    description: 'Intentional simplicity emphasizing space and light.',
-    image: '/assets/images/styles/minimal.jpg',
-    palettes: ['#FFFFFF', '#F5F3EE', '#DCDAD5', '#1B1C19'],
-    materials: ['Light Oak', 'Plaster']
-  },
-  {
-    id: 'scandinavian',
-    title: 'Scandinavian',
-    description: 'Hygge comfort blended with bright, functional design.',
-    image: '/assets/images/styles/scandinavian.jpg',
-    palettes: ['#FBF9F4', '#EAE8E3', '#8B8376', '#4D463B'],
-    materials: ['Pale Wood', 'Wool']
-  },
-  {
-    id: 'grey',
-    title: 'Grey',
-    description: 'Sophisticated monochromatic layers for a calm atmosphere.',
-    image: '/assets/images/styles/grey.jpg',
-    palettes: ['#E4E2DD', '#C4C7C7', '#747878', '#444748'],
-    materials: ['Velvet', 'Brushed Steel']
-  },
-  {
-    id: 'warm_neutral',
-    title: 'Warm Neutral',
-    description: 'Earthy, inviting tones providing grounded tranquility.',
-    image: '/assets/images/styles/warm-neutral.jpg',
-    palettes: ['#ECE1D2', '#CFC5B7', '#8B8376', '#201B12'],
-    materials: ['Linen', 'Terracotta']
-  },
-  {
-    id: 'industrial',
-    title: 'Industrial',
-    description: 'Raw materials, exposed elements, and urban edge.',
-    image: '/assets/images/styles/industrial.jpg',
-    palettes: ['#858383', '#5F5E5E', '#30312E', '#1C1C18'],
-    materials: ['Exposed Brick', 'Raw Timber']
-  },
-  {
-    id: 'luxury',
-    title: 'Luxury',
-    description: 'Premium materials, bespoke finishes, and refined details.',
-    image: '/assets/images/styles/luxury.jpg',
-    palettes: ['#FFFFFF', '#DCDAD5', '#1B1C19', '#000000'],
-    materials: ['Marble', 'Brass']
-  },
-  {
-    id: 'japandi',
-    title: 'Japandi',
-    description: 'Wabi-sabi simplicity meets Nordic warmth.',
-    image: '/assets/images/styles/japandi-wabi-sabi.jpg',
-    palettes: ['#F5F3EE', '#E4E2DD', '#CFC5B7', '#4D463B'],
-    materials: ['Travertine', 'White Oak']
-  }
-];
-
-const BUDGET_TIERS: BudgetTier[] = [
-  { id: 'refresh', label: 'Light Refresh', description: 'Decor, styling, and minor updates.' },
-  { id: 'full', label: 'Full Furnishing', description: 'Complete new furniture and layout.' },
-  { id: 'overhaul', label: 'Architectural Overhaul', description: 'Renovation, flooring, and hard finishes.' }
-];
 
 export default function ChooseStylePage() {
   const router = useRouter();
-  const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
-  const [selectedBudget, setSelectedBudget] = useState<string | null>(null);
+  // Derived from the store with a local override, so returning to this step
+  // shows what was already chosen. See the room-type step for why this is not
+  // seeded into useState.
+  const wizard = useWizard();
+  const [pickedStyle, setPickedStyle] = useState<string | null>(null);
+  const [pickedBudget, setPickedBudget] = useState<string | null>(null);
+
+  const selectedStyle = pickedStyle ?? wizard.styleId;
+  const selectedBudget = pickedBudget ?? wizard.budgetTierId;
 
   const handleContinue = () => {
     if (selectedStyle && selectedBudget) {
+      setStyle(selectedStyle);
+      setBudgetTier(selectedBudget);
+
       // Create new search params, preserving any existing ones (like ?room=living_room)
       const params = new URLSearchParams(window.location.search);
       params.set('style', selectedStyle);
@@ -112,13 +52,13 @@ export default function ChooseStylePage() {
         <StyleGrid 
           options={STYLE_OPTIONS}
           selectedId={selectedStyle}
-          onSelect={setSelectedStyle}
+          onSelect={setPickedStyle}
         />
 
         <BudgetScopeSelector 
           tiers={BUDGET_TIERS}
           selectedId={selectedBudget}
-          onSelect={setSelectedBudget}
+          onSelect={setPickedBudget}
         />
       </main>
 

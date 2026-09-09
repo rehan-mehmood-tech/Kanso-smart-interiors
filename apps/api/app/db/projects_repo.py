@@ -24,6 +24,7 @@ GENERATIONS = "design_generations"
 DESIGNS = "generated_designs"
 LEADS = "consultation_leads"
 BUSINESSES = "businesses"
+PRODUCTS = "business_products"
 
 
 class NotFoundError(LookupError):
@@ -163,6 +164,32 @@ def list_designs_for_generations(generation_ids: list[str]) -> list[dict[str, An
         .select("*")
         .in_("generation_id", generation_ids)
         .order("overall_score", desc=True)
+        .execute()
+    )
+    return result.data or []
+
+
+def list_products_by_ids(product_ids: list[str]) -> list[dict[str, Any]]:
+    """Resolve mapped product ids to catalogue rows, with the vendor's name.
+
+    `generated_designs.mapped_products` stores ids only, so a results page
+    reloaded later has nothing to render but UUIDs. This is what turns them
+    back into "this chair, from this vendor, at this price" without the client
+    needing a second round trip per product.
+
+    The embedded businesses join is a PostgREST resource embedding over the
+    business_id foreign key, so it stays one request however many ids arrive.
+    """
+    if not product_ids:
+        return []
+    result = (
+        get_supabase()
+        .table(PRODUCTS)
+        .select(
+            "id,business_id,name,category,price_minor,material,color_hex,"
+            "style_tags,businesses(name,city)"
+        )
+        .in_("id", product_ids)
         .execute()
     )
     return result.data or []

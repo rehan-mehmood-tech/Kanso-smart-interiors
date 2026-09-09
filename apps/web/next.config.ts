@@ -8,6 +8,26 @@ import type { NextConfig } from "next";
  */
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "") ?? "";
 
+/**
+ * Host that serves signed URLs for the private Storage buckets.
+ *
+ * The customer's own wall photos and their generated renders live in private
+ * buckets and are displayable only through a time-limited signed URL, so this
+ * host has to be allowed for next/image. It is derived from the Supabase URL
+ * rather than written out, so no project host is hardcoded and a project
+ * change needs no edit here.
+ *
+ * This is not a CDN dependency: the site's own imagery is local under
+ * /public/assets. This covers user-generated content only.
+ */
+const SUPABASE_HOST = (() => {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").hostname;
+  } catch {
+    return "";
+  }
+})();
+
 const nextConfig: NextConfig = {
   /**
    * Proxy /api/* to the Render service.
@@ -45,7 +65,17 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
-      }
+      },
+      // Signed URLs for wall photos and generated renders.
+      ...(SUPABASE_HOST
+        ? [
+            {
+              protocol: 'https' as const,
+              hostname: SUPABASE_HOST,
+              pathname: '/storage/v1/object/sign/**',
+            },
+          ]
+        : []),
     ],
   },
 };

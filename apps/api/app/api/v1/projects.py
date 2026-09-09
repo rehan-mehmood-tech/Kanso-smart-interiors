@@ -74,6 +74,23 @@ class DesignOut(BaseModel):
     overall_score: float | None = None
 
 
+class ProductOut(BaseModel):
+    """A catalogue item specified in one of the concepts.
+
+    Prices are whole rupees. The stored column is integer paisa, converted once
+    here so no float ever touches a money value.
+    """
+
+    id: UUID
+    name: str
+    category: str
+    price_pkr: int
+    material: str | None = None
+    color_hex: str | None = None
+    vendor_name: str | None = None
+    vendor_city: str | None = None
+
+
 class GenerationOut(BaseModel):
     id: UUID
     status: str
@@ -95,6 +112,10 @@ class ProjectOut(BaseModel):
     generations: list[GenerationOut] = Field(default_factory=list)
     #: Empty until a generation has produced concepts.
     designs: list[DesignOut] = Field(default_factory=list)
+    #: Every product referenced by any design above, resolved to name, price
+    #: and vendor. Sent with the project so a results page reloaded days later
+    #: renders the shopping list without replaying the generation.
+    products: list[ProductOut] = Field(default_factory=list)
 
 
 # -----------------------------------------------------------------------------
@@ -133,6 +154,21 @@ def _coerce_products(value: Any) -> list[UUID]:
     return out
 
 
+def _product_out(row: dict[str, Any]) -> ProductOut:
+    vendor = row.get("businesses") or {}
+    return ProductOut(
+        id=row["id"],
+        name=row["name"],
+        category=row.get("category") or "other",
+        # Integer division: paisa -> rupees, never a float.
+        price_pkr=int(row.get("price_minor") or 0) // 100,
+        material=row.get("material"),
+        color_hex=row.get("color_hex"),
+        vendor_name=vendor.get("name"),
+        vendor_city=vendor.get("city"),
+    )
+
+
 # -----------------------------------------------------------------------------
 # Endpoints
 # -----------------------------------------------------------------------------
@@ -166,6 +202,23 @@ async def get_project(project_id: UUID) -> ProjectOut:
     generations = repo.list_generations(project_id)
     designs = repo.list_designs_for_generations([g["id"] for g in generations])
 
+    design_products = [
+        DesignOut(
+            id=d["id"],
+            generation_id=d["generation_id"],
+            render_url=d["render_url"],
+            signed_url=signed_url(d["render_url"], bucket=get_settings().generated_designs_bucket),
+            mapped_products=_coerce_products(d.get("mapped_products")),
+            overall_score=float(d["overall_score"]) if d.get("overall_score") is not None else None,
+        )
+        for d in designs
+    ]
+
+    # De-duplicated across concepts: two designs usually specify the same
+    # pieces, and the client should not receive the same product twice.
+    product_ids = {str(pid) for d in design_products for pid in d.mapped_products}
+    products = [_product_out(r) for r in repo.list_products_by_ids(sorted(product_ids))]
+
     return ProjectOut(
         **project,
         photos=[_photo_out(p) for p in photos],
@@ -179,17 +232,8 @@ async def get_project(project_id: UUID) -> ProjectOut:
             )
             for g in generations
         ],
-        designs=[
-            DesignOut(
-                id=d["id"],
-                generation_id=d["generation_id"],
-                render_url=d["render_url"],
-                signed_url=signed_url(d["render_url"], bucket=get_settings().generated_designs_bucket),
-                mapped_products=_coerce_products(d.get("mapped_products")),
-                overall_score=float(d["overall_score"]) if d.get("overall_score") is not None else None,
-            )
-            for d in designs
-        ],
+        designs=design_products,
+        products=products,
     )
 
 

@@ -2,38 +2,87 @@
 
 import React, { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Sparkles } from 'lucide-react';
+import { AlertTriangle, Camera, Sparkles } from 'lucide-react';
 import { RoomSummaryCard } from '@/components/wizard/review/RoomSummaryCard';
 import { PhotosSummaryCard } from '@/components/wizard/review/PhotosSummaryCard';
 import { StyleSummaryCard } from '@/components/wizard/review/StyleSummaryCard';
 import { GenerationDisclaimer } from '@/components/wizard/review/GenerationDisclaimer';
 import { WizardFooter } from '@/components/wizard/WizardFooter';
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { getRoomWallSet } from '@/lib/constants/assets';
+import { budgetLabel, budgetToPkr, roomLabel, styleLabel } from '@/lib/project/catalog';
+import {
+  capturedPreviews,
+  hasAllWalls,
+  pendingUploads,
+  setProjectId,
+  useWizard,
+} from '@/lib/project/session';
+import { createProject, uploadWallPhoto } from '@/lib/api/projects';
+import { ApiError } from '@/lib/api/client';
 
 function ReviewContent() {
   const router = useRouter();
+  const wizard = useWizard();
   const [isGenerating, setIsGenerating] = useState(false);
-  // Derived from the URL rather than synced into state by an effect, which
-  // caused a cascading render on every mount.
+  const [progressNote, setProgressNote] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // The store is the source of truth. The query string is only a fallback for
+  // a step opened directly by URL, before any selection has been made here.
   const searchParams = useSearchParams();
-  const room = searchParams.get('room');
-  const style = searchParams.get('style');
-  const customRoom = searchParams.get('custom');
+  const roomId = wizard.roomId ?? searchParams.get('room');
+  const styleId = wizard.styleId ?? searchParams.get('style');
+  const budgetId = wizard.budgetTierId ?? searchParams.get('budget');
+  const customRoom = wizard.customRoom ?? searchParams.get('custom');
 
-  const roomType = room ? (room === 'other' && customRoom ? customRoom : room) : 'Living Room';
-  const styleName = style ?? 'Modern Grey';
+  const roomTitle = roomLabel(roomId, customRoom);
+  const styleTitle = styleLabel(styleId);
 
-  // Fallback photos for the mock presentation
-  const mockPhotos = getRoomWallSet('review-sample');
+  // The customer's own four wall photos, exactly as captured.
+  const photos = capturedPreviews(wizard);
+  const photosReady = hasAllWalls(wizard);
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
+    if (!photosReady) {
+      setError('Your four wall photos are needed before we can generate concepts.');
+      return;
+    }
+
     setIsGenerating(true);
-    // Simulate generation delay
-    setTimeout(() => {
-      // For now, redirecting to a sample project ID
-      router.push('/project/sample-project-id/generating');
-    }, 1500);
+    setError(null);
+
+    try {
+      // 1. Create the real project. Its UUID is what every later route uses --
+      //    there is no placeholder id anywhere in this flow.
+      setProgressNote('Creating your project...');
+      const project = await createProject({
+        room_type: roomId ?? undefined,
+        style_slug: styleId ?? undefined,
+        budget_pkr: budgetToPkr(budgetId),
+      });
+      setProjectId(project.id);
+
+      // 2. Upload the four walls. Sequential rather than parallel: each upload
+      //    advances the project's status server-side, and four concurrent
+      //    writes to the same row race each other.
+      const uploads = pendingUploads(wizard);
+      for (let i = 0; i < uploads.length; i += 1) {
+        const { angle, file } = uploads[i];
+        setProgressNote(`Uploading wall ${i + 1} of ${uploads.length}...`);
+        await uploadWallPhoto(project.id, angle, file);
+      }
+
+      // 3. Hand off to the real project route.
+      router.push(`/project/${project.id}/generating`);
+    } catch (caught) {
+      const message =
+        caught instanceof ApiError
+          ? caught.message
+          : 'We could not reach the design service. Please try again.';
+      setError(message);
+      setIsGenerating(false);
+      setProgressNote(null);
+    }
   };
 
   return (
@@ -51,22 +100,68 @@ function ReviewContent() {
 
         {/* Review Summary Cards */}
         <div className="flex flex-col gap-6 mb-8">
-          <RoomSummaryCard roomType={roomType} />
-          <StyleSummaryCard styleName={styleName} />
-          <PhotosSummaryCard photos={mockPhotos} />
+          <RoomSummaryCard roomType={roomTitle} />
+          <StyleSummaryCard styleName={styleTitle} budgetName={budgetLabel(budgetId)} />
+          {photosReady ? (
+            <PhotosSummaryCard photos={photos} />
+          ) : (
+            <MissingPhotosCard
+              count={photos.length}
+              onCapture={() => router.push('/project/new/capture')}
+            />
+          )}
         </div>
+
+        {error && (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-xl border border-error/40 bg-error/5 p-4 mb-8"
+          >
+            <AlertTriangle className="w-5 h-5 text-error shrink-0 mt-0.5" />
+            <p className="text-body-md font-body-md text-primary">{error}</p>
+          </div>
+        )}
 
         <GenerationDisclaimer />
       </main>
 
-      <WizardFooter 
+      <WizardFooter
         onBack={() => router.push('/project/new/style' + window.location.search)}
         onContinue={handleGenerate}
-        canContinue={!isGenerating}
+        canContinue={!isGenerating && photosReady}
         isLoading={isGenerating}
-        ctaText="Generate Concepts"
+        ctaText={progressNote ?? 'Generate Concepts'}
         ctaIcon={<Sparkles className="w-4 h-4" />}
       />
+    </div>
+  );
+}
+
+/**
+ * Shown when the wall photos are gone.
+ *
+ * Files cannot be persisted across a full page reload, so a refreshed review
+ * step has the customer's selections but not their photos. Saying so and
+ * offering the way back is honest; generating from stock images would not be.
+ */
+function MissingPhotosCard({ count, onCapture }: { count: number; onCapture: () => void }) {
+  return (
+    <div className="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_8px_24px_rgba(0,0,0,0.04)] border border-outline-variant flex flex-col gap-4">
+      <h3 className="text-label-sm font-label-sm text-secondary uppercase tracking-wider">Uploaded Photos</h3>
+      <div className="flex items-start gap-3">
+        <Camera className="w-5 h-5 text-secondary shrink-0 mt-1" />
+        <p className="text-body-md font-body-md text-secondary">
+          {count > 0
+            ? `Only ${count} of 4 walls are captured. All four views are needed to read the room.`
+            : 'Your wall photos are no longer in this session. Please capture the four views again.'}
+        </p>
+      </div>
+      <button
+        onClick={onCapture}
+        className="w-fit text-label-sm font-label-sm text-primary underline hover:text-secondary transition-colors"
+      >
+        Capture photos
+      </button>
     </div>
   );
 }

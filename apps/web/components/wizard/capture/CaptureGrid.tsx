@@ -1,86 +1,68 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import type { WallAngle } from '@/lib/api/projects';
+import { clearWall, hasAllWalls, setWallFile, useWizard } from '@/lib/project/session';
 import { WallCaptureState, WallUploadSlot } from './WallUploadSlot';
 
 interface CaptureGridProps {
   onCompletionChange: (completed: boolean) => void;
 }
 
-const INITIAL_STATE: WallCaptureState[] = [
-  { id: 'wall1', label: 'Wall 1 of 4', file: null, previewUrl: null, rotation: 0 },
-  { id: 'wall2', label: 'Wall 2 of 4', file: null, previewUrl: null, rotation: 90 },
-  { id: 'wall3', label: 'Wall 3 of 4', file: null, previewUrl: null, rotation: 180 },
-  { id: 'wall4', label: 'Wall 4 of 4', file: null, previewUrl: null, rotation: 270 },
+/**
+ * How each wall is presented. The angle is what the backend stores, the label
+ * and rotation are only for the slot's placeholder icon.
+ */
+const WALL_PRESENTATION: { angle: WallAngle; label: string; rotation: number }[] = [
+  { angle: 'north', label: 'Wall 1 of 4', rotation: 0 },
+  { angle: 'east', label: 'Wall 2 of 4', rotation: 90 },
+  { angle: 'south', label: 'Wall 3 of 4', rotation: 180 },
+  { angle: 'west', label: 'Wall 4 of 4', rotation: 270 },
 ];
 
 export function CaptureGrid({ onCompletionChange }: CaptureGridProps) {
-  const [walls, setWalls] = useState<WallCaptureState[]>(INITIAL_STATE);
+  // Photos live in the wizard store, not in local state: the review step needs
+  // these exact files, and stepping back here must show what was already
+  // captured rather than four empty slots.
+  const wizard = useWizard();
+  const allCompleted = hasAllWalls(wizard);
 
-  const allCompleted = walls.every(wall => wall.file !== null);
-
-  // Reporting completion from inside the setWalls updater called the parent's
-  // setState while CaptureGrid was rendering. Derive it from state instead and
-  // notify after commit.
+  // Reporting completion from inside the state updater called the parent's
+  // setState while CaptureGrid was rendering. Derive it and notify after commit.
   useEffect(() => {
     onCompletionChange(allCompleted);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allCompleted]);
 
-  useEffect(() => {
-    // Cleanup object URLs to avoid memory leaks
-    return () => {
-      walls.forEach(wall => {
-        if (wall.previewUrl) {
-          URL.revokeObjectURL(wall.previewUrl);
-        }
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Object URLs are deliberately NOT revoked on unmount. They belong to the
+  // store, which outlives this component, and the review step renders the same
+  // URLs -- revoking here would blank the previews the moment we navigate.
+  // The store revokes them when a photo is replaced, cleared, or the wizard
+  // is reset.
 
-  const handleUpload = (id: string, file: File) => {
-    setWalls(prev => {
-      const next = prev.map(wall => {
-        if (wall.id === id) {
-          if (wall.previewUrl) {
-            URL.revokeObjectURL(wall.previewUrl);
-          }
-          return { ...wall, file, previewUrl: URL.createObjectURL(file) };
-        }
-        return wall;
-      });
-
-      return next;
-    });
-  };
-
-  const handleRemove = (id: string) => {
-    setWalls(prev => {
-      const next = prev.map(wall => {
-        if (wall.id === id) {
-          if (wall.previewUrl) {
-            URL.revokeObjectURL(wall.previewUrl);
-          }
-          return { ...wall, file: null, previewUrl: null };
-        }
-        return wall;
-      });
-
-      return next;
-    });
-  };
+  const handleUpload = (id: string, file: File) => setWallFile(id as WallAngle, file);
+  const handleRemove = (id: string) => clearWall(id as WallAngle);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl mx-auto mb-12">
-      {walls.map(wall => (
-        <WallUploadSlot 
-          key={wall.id}
-          state={wall}
-          onUpload={handleUpload}
-          onRemove={handleRemove}
-        />
-      ))}
+      {WALL_PRESENTATION.map(({ angle, label, rotation }) => {
+        const stored = wizard.walls.find((wall) => wall.angle === angle);
+        const slotState: WallCaptureState = {
+          id: angle,
+          label,
+          file: stored?.file ?? null,
+          previewUrl: stored?.previewUrl ?? null,
+          rotation,
+        };
+        return (
+          <WallUploadSlot
+            key={angle}
+            state={slotState}
+            onUpload={handleUpload}
+            onRemove={handleRemove}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -6,67 +6,43 @@ import { WizardProgressBar } from '@/components/wizard/WizardProgressBar';
 import { RoomTypeGrid } from '@/components/wizard/RoomTypeGrid';
 import { WizardFooter } from '@/components/wizard/WizardFooter';
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { ROOM_OPTIONS } from '@/lib/project/catalog';
+import { setRoom, useWizard } from '@/lib/project/session';
 
-const ROOM_OPTIONS = [
-  {
-    id: 'living_room',
-    title: 'Living Room',
-    // Japandi living room — warm wood coffee table, cream sofa, natural light
-    image: '/assets/images/rooms/living-room.jpg'
-  },
-  {
-    id: 'bedroom',
-    title: 'Bedroom',
-    // Minimalist bedroom — warm wood headboard, neutral linens
-    image: '/assets/images/rooms/bedroom.jpg'
-  },
-  {
-    id: 'dining_room',
-    title: 'Dining Room',
-    // Scandinavian dining set with ambient pendant lighting
-    image: '/assets/images/rooms/dining-room.jpg'
-  },
-  {
-    id: 'home_office',
-    title: 'Home Office',
-    // Clean minimalist workspace — solid desk, daylight from window
-    image: '/assets/images/rooms/home-office.jpg'
-  },
-  {
-    id: 'kids_room',
-    title: 'Kids Room',
-    // Modern kids bedroom — organised wooden furniture, soft palette
-    image: '/assets/images/rooms/kids-room.jpg'
-  },
-  {
-    id: 'other',
-    title: 'Other',
-    isCustom: true
-  }
-];
 
 export default function SelectRoomTypePage() {
   const router = useRouter();
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [customValue, setCustomValue] = useState<string>('');
+  // Selection is DERIVED from the store with a local override, not copied into
+  // state by an effect. A plain useState seed would miss the store's
+  // sessionStorage rehydration, which lands after the first render, so a
+  // reloaded step would forget the customer's choice.
+  const wizard = useWizard();
+  const [picked, setPicked] = useState<string | null>(null);
+  const [typed, setTyped] = useState<string | null>(null);
+
+  const selectedId = picked ?? wizard.roomId;
+  const customValue = typed ?? wizard.customRoom ?? '';
 
   const handleSelect = (id: string, customVal?: string) => {
-    setSelectedId(id);
+    setPicked(id);
     if (customVal !== undefined) {
-      setCustomValue(customVal);
+      setTyped(customVal);
     }
   };
 
   const handleContinue = () => {
     if (!selectedId) return;
-    
-    // Store in query param so next step can read it
+
+    // The store is what later steps read. The query string is kept so the URL
+    // stays shareable and a refreshed step can still recover the choice.
+    setRoom(selectedId, selectedId === 'other' ? customValue : undefined);
+
     const params = new URLSearchParams();
     params.set('room', selectedId);
     if (selectedId === 'other' && customValue) {
       params.set('custom', customValue);
     }
-    
+
     router.push(`/project/new/capture?${params.toString()}`);
   };
 

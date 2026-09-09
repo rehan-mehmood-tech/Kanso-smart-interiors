@@ -56,6 +56,19 @@ export interface DesignGeneration {
   error_detail: string | null;
 }
 
+/** A catalogue item specified in one or more concepts. */
+export interface MappedProduct {
+  id: string;
+  name: string;
+  category: string;
+  /** Whole rupees; the backend converts from integer paisa. */
+  price_pkr: number;
+  material: string | null;
+  color_hex: string | null;
+  vendor_name: string | null;
+  vendor_city: string | null;
+}
+
 export interface Project {
   id: string;
   customer_id: string | null;
@@ -70,6 +83,12 @@ export interface Project {
   generations: DesignGeneration[];
   /** Empty until a generation run has produced concepts. */
   designs: GeneratedDesign[];
+  /**
+   * Every product referenced by any design above, resolved to name, price and
+   * vendor. Arrives with the project so a results page opened later renders
+   * the shopping list without replaying the generation.
+   */
+  products: MappedProduct[];
 }
 
 export interface PhotoUploadResult {
