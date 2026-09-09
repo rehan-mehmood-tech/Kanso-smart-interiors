@@ -1,15 +1,12 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight, Check, ClipboardList, Ruler, ShieldCheck } from "lucide-react";
 import {
-  ArrowRight,
-  Check,
-  Hammer,
-  Store,
-  ClipboardList,
-  Ruler,
-  ShieldCheck,
-} from "lucide-react";
+  PAID_TIERS,
+  formatTierPricePkr,
+  formatTierPriceUsd,
+} from "@/lib/pro/tiers";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
@@ -18,45 +15,6 @@ export const metadata: Metadata = {
   description:
     "Receive scope-locked, pre-qualified interior leads with the render, the material schedule and the client's budget already agreed.",
 };
-
-const TIERS = [
-  {
-    name: "Solo Tradesman",
-    forWho: "Carpenters, plumbers, electricians, painters",
-    price: "Rs 1,200",
-    cadence: "per month",
-    icon: Hammer,
-    summary:
-      "One seat, one trade, and a lead feed filtered to the areas you actually travel to.",
-    features: [
-      "Single user seat",
-      "Local lead feed, filtered by service area",
-      "Full customer contact details on every lead",
-      "Four-wall captures and the approved render",
-      "Material schedule for the work you are quoting",
-      "Lead status tracking through to completion",
-    ],
-    featured: false,
-  },
-  {
-    name: "Shop + Crew",
-    forWho: "Furniture stores, joineries, fit-out contractors",
-    price: "Rs 4,800",
-    cadence: "per month",
-    icon: Store,
-    summary:
-      "Everything in Solo, plus the catalogue that puts your own stock inside the concepts customers approve.",
-    features: [
-      "Everything in Solo Tradesman",
-      "Up to 8 staff seats with owner controls",
-      "Full product inventory management",
-      "Priority AI mapping — your stock is specified in generated concepts",
-      "Catalogue performance reporting",
-      "Priority placement in the matching queue",
-    ],
-    featured: true,
-  },
-];
 
 const VALUE_PROPS = [
   {
@@ -150,7 +108,7 @@ export default function PartnersPage() {
             </div>
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              {TIERS.map((tier) => {
+              {PAID_TIERS.map((tier) => {
                 const Icon = tier.icon;
                 return (
                   <article
@@ -175,19 +133,19 @@ export default function PartnersPage() {
                         tier.featured ? "text-[#fbf9f4]/55" : "text-[#1b1c19]/45"
                       }`}
                     >
-                      {tier.forWho}
+                      {tier.audience}
                     </p>
 
                     <div className="mt-7 flex items-baseline gap-2">
                       <span className="font-serif text-3xl leading-none tabular-nums sm:text-4xl">
-                        {tier.price}
+                        {formatTierPricePkr(tier)}
                       </span>
                       <span
                         className={`font-body text-sm ${
                           tier.featured ? "text-[#fbf9f4]/55" : "text-[#1b1c19]/50"
                         }`}
                       >
-                        {tier.cadence}
+                        per month &middot; {formatTierPriceUsd(tier)}
                       </span>
                     </div>
 
@@ -219,16 +177,14 @@ export default function PartnersPage() {
                     </ul>
 
                     <Link
-                      href={`/partners/register?tier=${
-                        tier.name === "Solo Tradesman" ? "solo_tradesman" : "shop_crew"
-                      }`}
+                      href={`/partners/register?tier=${tier.id}`}
                       className={`group mt-10 inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-2xl px-6 py-3 font-body text-sm font-medium transition-colors duration-300 ${
                         tier.featured
                           ? "bg-[#fbf9f4] text-[#1b1c19] hover:bg-white"
                           : "bg-[#1b1c19] text-[#fbf9f4] hover:bg-black"
                       }`}
                     >
-                      Choose {tier.name}
+                      {tier.cta}
                       <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" />
                     </Link>
                   </article>

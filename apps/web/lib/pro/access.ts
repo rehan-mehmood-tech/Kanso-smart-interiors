@@ -2,6 +2,7 @@ import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { readSubscription, recordHasPaidAccess } from "./subscription-store";
 
 /**
  * Whether the signed-in business may see lead contact details.
@@ -31,23 +32,33 @@ const FREE_PREVIEW: VendorAccess = {
 };
 
 /**
- * Dev-only override so both gated states can be exercised before a Supabase
- * project exists. Never consulted once Supabase is configured, and never in a
- * production build.
+ * Access before a Supabase project exists.
+ *
+ * The local subscription store is the source of truth here, so activating a
+ * plan on the billing screen unmasks leads immediately -- the same single
+ * event that `business_has_paid_access()` represents in SQL.
+ *
+ * `?access=paid` remains as a dev-only shortcut for exercising the gated state
+ * without going through checkout. It never applies in a production build.
  */
-function previewOverride(override?: string): VendorAccess {
-  if (process.env.NODE_ENV === "production") return FREE_PREVIEW;
-  if (override === "paid") {
+function previewAccess(override?: string): VendorAccess {
+  if (process.env.NODE_ENV !== "production" && override === "paid") {
     return { hasPaidAccess: true, tier: "shop_crew", isPreview: true };
   }
-  return FREE_PREVIEW;
+
+  const record = readSubscription();
+  return {
+    hasPaidAccess: recordHasPaidAccess(record),
+    tier: record.tier,
+    isPreview: true,
+  };
 }
 
 export async function getVendorAccess(previewParam?: string): Promise<VendorAccess> {
-  if (!isSupabaseConfigured) return previewOverride(previewParam);
+  if (!isSupabaseConfigured) return previewAccess(previewParam);
 
   const supabase = await createClient();
-  if (!supabase) return previewOverride(previewParam);
+  if (!supabase) return previewAccess(previewParam);
 
   const {
     data: { user },
