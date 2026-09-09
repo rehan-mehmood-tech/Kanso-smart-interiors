@@ -1,2 +1,16 @@
-fastapi
-uvicorn
+# Kanso API runtime dependencies.
+# Install:  pip install -r requirements.txt
+
+fastapi==0.120.4
+uvicorn[standard]==0.38.0
+pydantic==2.12.4
+pydantic-settings==2.13.1
+python-multipart==0.0.20        # multipart wall-photo uploads
+httpx==0.28.1                   # outbound provider calls
+
+# --- Supabase (Postgres + Auth + Storage) ---
+supabase==2.31.0
+
+# --- AI providers: Gemini reads the walls, Flux renders the concepts ---
+google-genai==1.51.0
+replicate==1.0.7
