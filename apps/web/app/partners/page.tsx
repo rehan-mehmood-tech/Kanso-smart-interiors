@@ -2,11 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, ClipboardList, Ruler, ShieldCheck } from "lucide-react";
-import {
-  PAID_TIERS,
-  formatTierPricePkr,
-  formatTierPriceUsd,
-} from "@/lib/pro/tiers";
+import { PAID_TIERS, formatTierPricePkr } from "@/lib/pro/tiers";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
@@ -145,7 +141,7 @@ export default function PartnersPage() {
                           tier.featured ? "text-[#fbf9f4]/55" : "text-[#1b1c19]/50"
                         }`}
                       >
-                        per month &middot; {formatTierPriceUsd(tier)}
+                        per month
                       </span>
                     </div>
 
