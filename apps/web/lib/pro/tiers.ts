@@ -23,9 +23,8 @@ export type SubscriptionStatus =
 export interface Tier {
   id: TierId;
   name: string;
-  /** Whole rupees per month. Zero for the free tier. */
+  /** Whole rupees per month. Zero for the free tier. PKR is the only currency. */
   pricePkr: number;
-  priceUsd: number;
   seats: number;
   audience: string;
   summary: string;
@@ -40,7 +39,6 @@ export const TIERS: Record<TierId, Tier> = {
     id: "free",
     name: "Free Trial",
     pricePkr: 0,
-    priceUsd: 0,
     seats: 1,
     audience: "Evaluating Kanso",
     summary:
@@ -58,7 +56,6 @@ export const TIERS: Record<TierId, Tier> = {
     id: "solo_tradesman",
     name: "Solo Tradesman",
     pricePkr: 1999,
-    priceUsd: 9.99,
     seats: 1,
     audience: "Carpenters, plumbers, electricians, painters",
     summary:
@@ -78,7 +75,6 @@ export const TIERS: Record<TierId, Tier> = {
     id: "shop_crew",
     name: "Shop + Crew",
     pricePkr: 7999,
-    priceUsd: 29.99,
     seats: 5,
     audience: "Furniture showrooms, lighting outlets, design studios",
     summary:
@@ -119,8 +115,4 @@ export const PAID_STATUSES: SubscriptionStatus[] = ["trialing", "active"];
 
 export function formatTierPricePkr(tier: Tier): string {
   return tier.pricePkr === 0 ? "Free" : `PKR ${tier.pricePkr.toLocaleString("en-US")}`;
-}
-
-export function formatTierPriceUsd(tier: Tier): string {
-  return tier.priceUsd === 0 ? "" : `$${tier.priceUsd.toFixed(2)}`;
 }

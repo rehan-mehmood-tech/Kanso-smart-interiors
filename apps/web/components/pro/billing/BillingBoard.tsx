@@ -17,7 +17,6 @@ import {
   STATUS_LABELS,
   TIERS,
   formatTierPricePkr,
-  formatTierPriceUsd,
   type Tier,
   type TierId,
 } from '@/lib/pro/tiers';
@@ -105,9 +104,7 @@ export function BillingBoard({ subscription, upgradeAction, cancelAction }: Bill
               {formatTierPricePkr(currentTier)}
             </p>
             {currentTier.pricePkr > 0 && (
-              <p className="mt-1 font-body text-xs text-[#1b1c19]/50">
-                per month &middot; {formatTierPriceUsd(currentTier)}
-              </p>
+              <p className="mt-1 font-body text-xs text-[#1b1c19]/50">per month</p>
             )}
           </div>
         </div>
@@ -247,7 +244,7 @@ export function BillingBoard({ subscription, upgradeAction, cancelAction }: Bill
                 <p
                   className={`mt-1 font-body text-xs ${tier.featured ? 'text-[#fbf9f4]/45' : 'text-[#1b1c19]/45'}`}
                 >
-                  {formatTierPriceUsd(tier)} billed internationally
+                  Billed monthly in PKR
                 </p>
 
                 <ul className="mt-7 flex flex-1 flex-col gap-3">

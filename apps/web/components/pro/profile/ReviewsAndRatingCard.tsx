@@ -57,7 +57,7 @@ export function ReviewsAndRatingCard({ reviews, averageRating, totalReviews }: {
               </div>
             </div>
             <p className="font-body-md text-sm text-secondary leading-relaxed mb-3">
-              "{review.text}"
+              &ldquo;{review.text}&rdquo;
             </p>
             <span className="font-label-sm text-[10px] uppercase tracking-widest text-secondary border border-outline-variant/30 px-2 py-1 rounded inline-block bg-[#F4F2ED]/50">
               {review.projectType}

@@ -12,12 +12,7 @@ import {
   Loader2,
   ShieldCheck,
 } from 'lucide-react';
-import {
-  formatTierPricePkr,
-  formatTierPriceUsd,
-  type Tier,
-  type TierId,
-} from '@/lib/pro/tiers';
+import { formatTierPricePkr, type Tier, type TierId } from '@/lib/pro/tiers';
 import type { PaymentDetails } from '@/lib/pro/subscriptions';
 
 interface CheckoutModalProps {
@@ -200,9 +195,7 @@ export function CheckoutModal({ tier, onClose, onConfirm }: CheckoutModalProps) 
             </h2>
             <p className="mt-2 font-serif text-xl text-[#1b1c19] tabular-nums">
               {formatTierPricePkr(tier)}
-              <span className="ml-2 font-body text-sm text-[#1b1c19]/50">
-                / month &middot; {formatTierPriceUsd(tier)}
-              </span>
+              <span className="ml-2 font-body text-sm text-[#1b1c19]/50">/ month</span>
             </p>
           </div>
           <button

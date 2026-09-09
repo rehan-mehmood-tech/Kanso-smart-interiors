@@ -20,7 +20,7 @@ export function ProHeader() {
             Welcome back, Architect.
           </h1>
           <p className="font-body-md text-body-md text-secondary">
-            Here's what's happening with your studio today.
+            Here&rsquo;s what&rsquo;s happening with your studio today.
           </p>
         </div>
         <div className="flex gap-4 items-center">
