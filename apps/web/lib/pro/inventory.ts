@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { CATALOG_PRODUCTS } from "@/lib/constants/assets";
-import { isStyleTag, type StyleTag } from "./styles";
+import { isStyleTag } from "./styles";
 import {
   PRODUCT_CATEGORY_IDS,
   toPriceMinor,
@@ -450,4 +450,39 @@ export async function deleteProduct(
   product.updatedAt = nowIso();
   revalidatePath("/pro/inventory");
   return { ok: true };
+}
+
+/**
+ * Archive every product a business lists. Used by admin moderation: a banned
+ * vendor's stock must stop being retrievable by the AI pipeline immediately.
+ */
+export async function archiveProductsForBusiness(
+  businessId: string,
+): Promise<{ ok: boolean; archived: number; error?: string }> {
+  if (isSupabaseConfigured) {
+    const supabase = await createClient();
+    if (supabase) {
+      const { data, error } = await supabase
+        .from("business_products")
+        .update({ is_active: false, updated_at: nowIso() })
+        .eq("business_id", businessId)
+        .eq("is_active", true)
+        .select("id");
+
+      if (error) return { ok: false, archived: 0, error: error.message };
+      revalidatePath("/pro/inventory");
+      return { ok: true, archived: data?.length ?? 0 };
+    }
+  }
+
+  let archived = 0;
+  for (const product of store().products) {
+    if (product.businessId === businessId && product.isActive) {
+      product.isActive = false;
+      product.updatedAt = nowIso();
+      archived += 1;
+    }
+  }
+  revalidatePath("/pro/inventory");
+  return { ok: true, archived };
 }

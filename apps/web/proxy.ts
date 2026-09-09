@@ -14,6 +14,7 @@ import {
  * exporting `proxy` -- same request-interception behaviour, new name.
  *
  * Every /pro/* route requires a session; /pro/login is the only exception.
+ * Every /admin/* route additionally requires profiles.role === 'admin'.
  * The check fails CLOSED — if Supabase is unreachable or unconfigured we
  * cannot prove the visitor is signed in, so we redirect rather than let them
  * through. Before this existed, /pro/dashboard was readable by
@@ -21,6 +22,7 @@ import {
  */
 
 const PROTECTED_PREFIX = "/pro";
+const ADMIN_PREFIX = "/admin";
 const PUBLIC_PRO_PATHS = [VENDOR_LOGIN_PATH];
 
 function redirectToLogin(request: NextRequest) {
@@ -35,7 +37,8 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isProRoute = pathname === PROTECTED_PREFIX || pathname.startsWith(`${PROTECTED_PREFIX}/`);
-  if (!isProRoute) return NextResponse.next();
+  const isAdminRoute = pathname === ADMIN_PREFIX || pathname.startsWith(`${ADMIN_PREFIX}/`);
+  if (!isProRoute && !isAdminRoute) return NextResponse.next();
 
   if (PUBLIC_PRO_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
     return NextResponse.next();
@@ -83,11 +86,28 @@ export async function proxy(request: NextRequest) {
 
   if (!user) return redirectToLogin(request);
 
+  // Admin routes need more than a session: the role is read from `profiles`,
+  // never from a token claim the client could shape (PRD s19). Anything other
+  // than `admin` is bounced rather than shown a partial panel.
+  if (isAdminRoute) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profile?.role !== "admin") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+  }
+
   return response;
 }
 
 export const config = {
   // Skip static assets and image optimisation so protection costs nothing
   // on the rest of the site.
-  matcher: ["/pro/:path*"],
+  matcher: ["/pro/:path*", "/admin/:path*"],
 };

@@ -27,7 +27,7 @@ export default function CaptureSpacePage() {
       <main className="flex-grow pt-24 pb-[120px] px-6 md:px-12 max-w-[1280px] mx-auto w-full flex flex-col items-center">
         <div className="text-center max-w-2xl mx-auto mb-12 mt-6">
           <h1 className="text-3xl md:text-[40px] font-semibold text-primary mb-2 leading-tight tracking-[-0.01em]">Capture Your Space</h1>
-          <p className="text-lg font-normal text-secondary">We'll use four views of your room to create a more complete visual concept.</p>
+          <p className="text-lg font-normal text-secondary">We&rsquo;ll use four views of your room to create a more complete visual concept.</p>
         </div>
         
         <CaptureGrid onCompletionChange={setIsCompleted} />

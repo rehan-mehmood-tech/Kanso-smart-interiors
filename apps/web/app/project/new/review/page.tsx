@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { Suspense, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
 import { RoomSummaryCard } from '@/components/wizard/review/RoomSummaryCard';
 import { PhotosSummaryCard } from '@/components/wizard/review/PhotosSummaryCard';
@@ -11,29 +11,21 @@ import { WizardFooter } from '@/components/wizard/WizardFooter';
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { getRoomWallSet } from '@/lib/constants/assets';
 
-export default function ReviewProjectPage() {
+function ReviewContent() {
   const router = useRouter();
   const [isGenerating, setIsGenerating] = useState(false);
-  const [roomType, setRoomType] = useState('Living Room');
-  const [styleName, setStyleName] = useState('Modern Grey');
+  // Derived from the URL rather than synced into state by an effect, which
+  // caused a cascading render on every mount.
+  const searchParams = useSearchParams();
+  const room = searchParams.get('room');
+  const style = searchParams.get('style');
+  const customRoom = searchParams.get('custom');
+
+  const roomType = room ? (room === 'other' && customRoom ? customRoom : room) : 'Living Room';
+  const styleName = style ?? 'Modern Grey';
 
   // Fallback photos for the mock presentation
   const mockPhotos = getRoomWallSet('review-sample');
-
-  useEffect(() => {
-    // Read selections from URL if available
-    const searchParams = new URLSearchParams(window.location.search);
-    const room = searchParams.get('room');
-    const style = searchParams.get('style');
-    const customRoom = searchParams.get('custom');
-    
-    if (room) {
-      setRoomType(room === 'other' && customRoom ? customRoom : room);
-    }
-    if (style) {
-      setStyleName(style);
-    }
-  }, []);
 
   const handleGenerate = () => {
     setIsGenerating(true);
@@ -76,5 +68,13 @@ export default function ReviewProjectPage() {
         ctaIcon={<Sparkles className="w-4 h-4" />}
       />
     </div>
+  );
+}
+
+export default function ReviewProjectPage() {
+  return (
+    <Suspense fallback={null}>
+      <ReviewContent />
+    </Suspense>
   );
 }
