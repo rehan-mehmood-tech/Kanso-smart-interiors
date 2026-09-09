@@ -6,7 +6,7 @@ import { PrivacyNotice } from '@/components/consultation/PrivacyNotice';
 import Link from 'next/link';
 import { SiteHeader } from "@/components/layout/SiteHeader";
 
-const SELECTED_IMAGE = 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1800&q=85';
+const SELECTED_IMAGE = '/assets/images/rooms/interior-wide-1.jpg';
 
 interface ConsultationPageProps {
   params: Promise<{ id: string }>;
@@ -44,7 +44,7 @@ export default async function ConsultationPage({ params }: ConsultationPageProps
           <div className="hidden md:block md:col-span-6 lg:col-span-5 h-[600px] md:h-full min-h-[700px] relative rounded-xl overflow-hidden shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)]">
             <div 
               className="bg-cover bg-center w-full h-full absolute inset-0" 
-              style={{ backgroundImage: `url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=85')` }}
+              style={{ backgroundImage: `url('/assets/images/rooms/interior-wide-4.jpg')` }}
             />
             {/* Subtle overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#1c1b1b]/20 to-transparent mix-blend-multiply" />

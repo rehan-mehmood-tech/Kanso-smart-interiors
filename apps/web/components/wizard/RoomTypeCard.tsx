@@ -39,7 +39,7 @@ export function RoomTypeCard({ option, selected, onSelect, customValue, onCustom
               alt={`${option.title} preview`}
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
-              className={`object-cover w-full h-full absolute inset-0 transition-transform duration-700 hover:scale-105 ${selected ? 'opacity-90' : ''}`}
+              className={`object-cover object-center w-full h-full absolute inset-0 transition-transform duration-700 hover:scale-105 ${selected ? 'opacity-90' : ''}`}
             />
           )}
         </div>

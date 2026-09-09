@@ -8,7 +8,7 @@ import { MatchingStatusTicker } from '@/components/matching/MatchingStatusTicker
 import { useMatchingTimeoutRedirect } from '@/components/matching/useMatchingTimeoutRedirect';
 import { MapPin, Palette, Ruler } from 'lucide-react';
 
-const BG_IMAGE = 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1800&q=85';
+const BG_IMAGE = '/assets/images/rooms/interior-wide-2.jpg';
 
 export default function MatchingPage() {
   const params = useParams();
