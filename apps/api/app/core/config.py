@@ -61,6 +61,10 @@ class Settings(BaseSettings):
     supabase_anon_key: str | None = None
     supabase_service_role_key: str | None = None
 
+    #: Table probed by GET /health. Any always-present table works; profiles is
+    #: the first one the baseline migration creates.
+    health_check_table: str = "profiles"
+
     # Private buckets, signed-URL access only (PRD s16).
     room_photos_bucket: str = "room-photos"
     generated_designs_bucket: str = "generated-designs"

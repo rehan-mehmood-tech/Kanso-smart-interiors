@@ -21,6 +21,7 @@ from app.api.routes import health
 from app.core.config import get_settings
 from app.core.errors import register_exception_handlers
 from app.core.logging import RequestContextMiddleware, configure_logging
+from app.db.supabase import ping_database
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,17 @@ async def lifespan(app: FastAPI):
             "apps/api/.env is filled in.",
             ", ".join(missing),
         )
+
+    # Probe the database once at boot so a broken connection is visible in the
+    # terminal immediately, rather than on the first request that needs it.
+    probe = await ping_database()
+    if probe["connected"] and probe["migrated"]:
+        logger.info("Supabase connected: %s", settings.supabase_url)
+    elif probe["connected"]:
+        logger.warning("Supabase connected but schema not migrated: %s", probe["detail"])
+    else:
+        logger.error("Supabase NOT connected: %s", probe["detail"])
+
     yield
     logger.info("Kanso API shutting down")
 

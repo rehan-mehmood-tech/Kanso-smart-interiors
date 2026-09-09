@@ -3,7 +3,7 @@
 
 fastapi==0.120.4
 uvicorn[standard]==0.38.0
-pydantic==2.12.4
+pydantic[email]==2.12.4        # EmailStr in the schema layer
 pydantic-settings==2.13.1
 python-multipart==0.0.20        # multipart wall-photo uploads
 httpx==0.28.1                   # outbound provider calls

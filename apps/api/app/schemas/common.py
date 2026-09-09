@@ -30,12 +30,24 @@ class Envelope(BaseModel, Generic[T]):
 
 
 class HealthResponse(BaseModel):
-    status: str = "ok"
+    """Liveness plus a live database probe.
+
+    `status` and `database` are the two fields an uptime check reads;
+    `detail` is present only when something needs explaining, so a healthy
+    response stays exactly the documented three-field shape plus metadata.
+    """
+
+    status: str = "healthy"
+    database: str = "connected"
+    timestamp: str
     service: str = "kanso-api"
     version: str
     environment: str
     #: Which external credentials are present. Values are never included.
     configured: dict[str, bool] = Field(default_factory=dict)
+    #: Set when the database is reachable but the schema is not migrated, or
+    #: when the connection failed. Omitted entirely when all is well.
+    detail: str | None = None
 
 
 class CurrentUser(BaseModel):
