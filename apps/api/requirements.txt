@@ -14,3 +14,6 @@ supabase==2.31.0
 # --- AI providers: Gemini reads the walls, Flux renders the concepts ---
 google-genai==1.51.0
 replicate==1.0.7
+
+# --- Dev tooling ---
+pglast==8.4                    # scripts/verify_migration_order.py

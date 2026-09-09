@@ -5,21 +5,35 @@
 -- The single source of truth for the entire Kanso database. Builds the
 -- Identity, Customer, Vendor and Admin domains from absolute scratch.
 --
--- Safe to paste straight into the Supabase SQL Editor, and safe to run again:
--- every statement is idempotent, so a re-run changes nothing.
+-- Paste straight into the Supabase SQL Editor. Safe to run more than once:
+-- tables use IF NOT EXISTS, policies are dropped before being recreated, and
+-- every seed row is ON CONFLICT DO NOTHING.
 --
--- Domains and dependency order:
---   Identity   profiles
---   Vendor     businesses -> business_products, business_subscriptions
---   Customer   room_projects -> room_photos
---                            -> design_generations -> generated_designs
---   Shared     consultation_leads (-> businesses, room_projects)
---              customer_disputes  (-> businesses)
+-- -----------------------------------------------------------------------------
+-- EXECUTION ORDER — and why it matters
+--
+--   Step 1  Teardown of policies and functions
+--   Step 2  Enum types
+--   Step 3  ALL TABLES, in dependency order
+--   Step 4  Helper functions
+--   Step 5  RLS and policies
+--   Step 6  Indexes and triggers
+--   Step 7  Seed data
+--
+-- Functions come AFTER tables because PostgreSQL validates the body of a
+-- LANGUAGE SQL function at creation time. is_admin() selects from profiles,
+-- so defining it before profiles exists fails immediately with
+-- "ERROR: 42P01: relation profiles does not exist". LANGUAGE plpgsql bodies
+-- are not validated this way, which is why set_updated_at() would have
+-- survived in the old position and is_admin() did not.
+--
+-- Policies come after functions for the same reason: a USING clause calling
+-- is_admin() needs that function to already exist.
 --
 -- -----------------------------------------------------------------------------
 -- READ BEFORE RUNNING IN PRODUCTION
 --
--- 1. ROW LEVEL SECURITY IS ENABLED on every table (Section 4).
+-- 1. ROW LEVEL SECURITY IS ENABLED on every table (Step 5).
 --    service_role bypasses RLS by design, so the FastAPI backend is
 --    unaffected. The anon key -- which ships inside the browser bundle -- can
 --    only read the public vendor directory and product catalogue. No policy
@@ -34,7 +48,41 @@
 create extension if not exists pgcrypto;
 
 -- =============================================================================
--- SECTION 1 — ENUM TYPES
+-- STEP 1 — TEARDOWN
+--
+-- Functions and policies only. Dropping them is safe and idempotent: they hold
+-- no data, and a signature change would otherwise make CREATE OR REPLACE fail.
+--
+-- Tables are deliberately NOT dropped here. A DROP TABLE ... CASCADE would
+-- turn this file from a migration into a data-destroying reset, and running it
+-- twice would silently delete every project, lead and product. If you do want
+-- a clean slate, uncomment the block below -- knowing exactly what it costs.
+-- =============================================================================
+
+-- --- FULL RESET (destructive; commented out on purpose) ----------------------
+-- drop table if exists customer_disputes      cascade;
+-- drop table if exists business_subscriptions cascade;
+-- drop table if exists consultation_leads     cascade;
+-- drop table if exists generated_designs      cascade;
+-- drop table if exists design_generations     cascade;
+-- drop table if exists room_photos            cascade;
+-- drop table if exists room_projects          cascade;
+-- drop table if exists business_products      cascade;
+-- drop table if exists businesses             cascade;
+-- drop table if exists profiles               cascade;
+-- drop type  if exists user_role, business_kind, lead_status, subscription_status,
+--                      subscription_tier, project_status, wall_angle,
+--                      generation_engine, generation_status cascade;
+
+-- --- Functions ---------------------------------------------------------------
+-- CASCADE also removes any policy that depends on them; Step 5 recreates those.
+drop function if exists business_has_paid_access(uuid) cascade;
+drop function if exists owned_business_ids() cascade;
+drop function if exists is_admin() cascade;
+drop function if exists set_updated_at() cascade;
+
+-- =============================================================================
+-- STEP 2 — ENUM TYPES
 --
 -- CREATE TYPE has no IF NOT EXISTS, so each is guarded. Re-running is a no-op.
 -- =============================================================================
@@ -89,56 +137,27 @@ end
 $$;
 
 -- =============================================================================
--- SHARED HELPERS
--- =============================================================================
-
-create or replace function set_updated_at()
-returns trigger
-language plpgsql
-as $$
-begin
-  new.updated_at = now();
-  return new;
-end;
-$$;
-
--- Is the caller an admin? SECURITY DEFINER so the lookup runs with RLS
--- bypassed: a policy on profiles that queries profiles would otherwise
--- re-enter itself and raise "infinite recursion detected in policy".
-create or replace function is_admin()
-returns boolean
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select exists (
-    select 1 from profiles p
-    where p.id = auth.uid() and p.role = 'admin'
-  );
-$$;
-
--- Businesses the caller owns. Also SECURITY DEFINER, for the same reason.
-create or replace function owned_business_ids()
-returns setof uuid
-language sql
-stable
-security definer
-set search_path = public
-as $$
-  select b.id from businesses b where b.owner_id = auth.uid();
-$$;
-
--- =============================================================================
--- SECTION 2 — MASTER TABLES
--- =============================================================================
-
--- -----------------------------------------------------------------------------
--- 2.1 profiles
+-- STEP 3 — ALL TABLES
 --
+-- Strict dependency order. Every foreign key target is created before the
+-- table that references it, so this section can run top to bottom on an empty
+-- database with no forward references.
+--
+--   profiles
+--     -> businesses
+--          -> business_products
+--     -> room_projects
+--          -> room_photos
+--          -> design_generations
+--               -> generated_designs
+--     -> consultation_leads      (businesses, room_projects)
+--     -> business_subscriptions  (businesses)
+--     -> customer_disputes       (businesses)
+-- =============================================================================
+
+-- --- 3.1 profiles ------------------------------------------------------------
 -- One row per auth.users row. `role` is the authorisation source of truth and
 -- is only ever read server-side -- never trusted from a request payload.
--- -----------------------------------------------------------------------------
 create table if not exists profiles (
   id         uuid primary key references auth.users(id) on delete cascade,
   email      text not null unique,
@@ -149,26 +168,13 @@ create table if not exists profiles (
   updated_at timestamptz not null default now()
 );
 
-create index if not exists profiles_role_idx on profiles (role);
-
-drop trigger if exists profiles_set_updated_at on profiles;
-create trigger profiles_set_updated_at
-  before update on profiles
-  for each row execute function set_updated_at();
-
-comment on table profiles is
-  'Application user record, 1:1 with auth.users. profiles.role is the only trusted source of authorisation.';
-
--- -----------------------------------------------------------------------------
--- 2.2 businesses
---
+-- --- 3.2 businesses ----------------------------------------------------------
 -- owner_id is nullable on purpose: an admin can register a partner before that
 -- partner has claimed an account.
 --
 -- is_active and is_banned are separate flags because they mean different
 -- things. Disabling is reversible housekeeping; a ban is a sanction with a
 -- reason behind it. Collapsing them loses the answer to "why is this off?".
--- -----------------------------------------------------------------------------
 create table if not exists businesses (
   id          uuid primary key default gen_random_uuid(),
   owner_id    uuid references profiles(id) on delete cascade,
@@ -185,28 +191,12 @@ create table if not exists businesses (
   updated_at  timestamptz not null default now()
 );
 
-create index if not exists businesses_owner_idx on businesses (owner_id);
-create index if not exists businesses_city_trade_idx on businesses (city, trade);
--- Partial index: lead routing only ever looks for bookable vendors.
-create index if not exists businesses_bookable_idx
-  on businesses (city)
-  where is_active and not is_banned and verified_at is not null;
-
-drop trigger if exists businesses_set_updated_at on businesses;
-create trigger businesses_set_updated_at
-  before update on businesses
-  for each row execute function set_updated_at();
-
-comment on column businesses.verified_at is
-  'Null until an admin verifies the business. Unverified businesses never receive leads, regardless of what they have paid.';
-
--- -----------------------------------------------------------------------------
--- 2.3 business_products — vendor inventory, and the AI retrieval corpus
+-- --- 3.3 business_products ---------------------------------------------------
+-- Vendor inventory, and the corpus the AI pipeline retrieves from.
 --
 -- price_minor is an integer in the smallest currency unit (PKR paisa). Never a
 -- float: binary floating point cannot represent 0.01 exactly, and a catalogue
 -- gets summed and compared.
--- -----------------------------------------------------------------------------
 create table if not exists business_products (
   id          uuid primary key default gen_random_uuid(),
   business_id uuid not null references businesses(id) on delete cascade,
@@ -224,33 +214,13 @@ create table if not exists business_products (
   updated_at  timestamptz not null default now()
 );
 
-create index if not exists business_products_business_active_idx
-  on business_products (business_id, is_active);
-
--- SECTION 3.1 — GIN index for style-tag retrieval. This is what makes
--- `where style_tags && array['japandi','minimal']` fast enough to run inside
--- the generation pipeline rather than as a batch job.
-create index if not exists business_products_style_tags_gin
-  on business_products using gin (style_tags);
-
-drop trigger if exists business_products_set_updated_at on business_products;
-create trigger business_products_set_updated_at
-  before update on business_products
-  for each row execute function set_updated_at();
-
-comment on column business_products.price_minor is
-  'Price in PKR paisa. 8500000 = PKR 85,000. Integer arithmetic only.';
-comment on column business_products.style_tags is
-  'Join key to a project style. Must use the same vocabulary the customer wizard writes, or a style silently stops matching.';
-
--- -----------------------------------------------------------------------------
--- 2.4 room_projects — the customer's design project
+-- --- 3.4 room_projects -------------------------------------------------------
+-- The customer's design project.
 --
 -- customer_id is nullable so the wizard can start before signup; the row is
 -- claimed when an account is created. budget_pkr is whole rupees, because a
 -- budget is a round number -- unlike price_minor, which is paisa because
 -- catalogue prices get added up.
--- -----------------------------------------------------------------------------
 create table if not exists room_projects (
   id          uuid primary key default gen_random_uuid(),
   customer_id uuid references profiles(id) on delete cascade,
@@ -263,25 +233,12 @@ create table if not exists room_projects (
   updated_at  timestamptz not null default now()
 );
 
-create index if not exists room_projects_customer_idx
-  on room_projects (customer_id, created_at desc);
-create index if not exists room_projects_status_idx on room_projects (status);
-
-drop trigger if exists room_projects_set_updated_at on room_projects;
-create trigger room_projects_set_updated_at
-  before update on room_projects
-  for each row execute function set_updated_at();
-
-comment on column room_projects.budget_pkr is
-  'Whole rupees. Distinct from business_products.price_minor, which is paisa.';
-
--- -----------------------------------------------------------------------------
--- 2.5 room_photos — the four wall captures
+-- --- 3.5 room_photos ---------------------------------------------------------
+-- The four wall captures.
 --
 -- UNIQUE (project_id, wall_angle) is what makes the capture step idempotent:
 -- re-uploading a wall replaces it instead of quietly adding a fifth photo and
 -- breaking the four-wall promise.
--- -----------------------------------------------------------------------------
 create table if not exists room_photos (
   id         uuid primary key default gen_random_uuid(),
   project_id uuid not null references room_projects(id) on delete cascade,
@@ -292,14 +249,8 @@ create table if not exists room_photos (
   unique (project_id, wall_angle)
 );
 
-create index if not exists room_photos_project_idx on room_photos (project_id);
-
-comment on column room_photos.image_url is
-  'Path inside the private room-photos bucket. Served by signed URL, never public.';
-
--- -----------------------------------------------------------------------------
--- 2.6 design_generations — one AI run
--- -----------------------------------------------------------------------------
+-- --- 3.6 design_generations --------------------------------------------------
+-- One AI run.
 create table if not exists design_generations (
   id           uuid primary key default gen_random_uuid(),
   project_id   uuid not null references room_projects(id) on delete cascade,
@@ -310,28 +261,13 @@ create table if not exists design_generations (
   updated_at   timestamptz not null default now()
 );
 
-create index if not exists design_generations_project_idx
-  on design_generations (project_id, created_at desc);
-
--- One run at a time per project. The 409 the API returns for a concurrent
--- generation is enforced here, not only in application code.
-create unique index if not exists design_generations_one_active_idx
-  on design_generations (project_id)
-  where status in ('pending', 'processing');
-
-drop trigger if exists design_generations_set_updated_at on design_generations;
-create trigger design_generations_set_updated_at
-  before update on design_generations
-  for each row execute function set_updated_at();
-
--- -----------------------------------------------------------------------------
--- 2.7 generated_designs — the concepts a run produced
+-- --- 3.7 generated_designs ---------------------------------------------------
+-- The concepts a run produced.
 --
 -- mapped_products is a jsonb array of business_products ids, deliberately not
 -- uuid[] with a foreign key: it is a snapshot of what the render actually
 -- depicted and must survive a vendor archiving or deleting that product. A
 -- real FK would either block the delete or rewrite history.
--- -----------------------------------------------------------------------------
 create table if not exists generated_designs (
   id              uuid primary key default gen_random_uuid(),
   generation_id   uuid not null references design_generations(id) on delete cascade,
@@ -341,21 +277,10 @@ create table if not exists generated_designs (
   created_at      timestamptz not null default now()
 );
 
-create index if not exists generated_designs_generation_idx
-  on generated_designs (generation_id);
-create index if not exists generated_designs_mapped_products_gin
-  on generated_designs using gin (mapped_products);
-
-comment on column generated_designs.mapped_products is
-  'Snapshot array of business_products ids specified in this render. Intentionally not a foreign key: the record must survive the product being archived.';
-
--- -----------------------------------------------------------------------------
--- 2.8 consultation_leads
---
+-- --- 3.8 consultation_leads --------------------------------------------------
 -- business_id is ON DELETE SET NULL, not CASCADE: if a vendor account is
 -- removed the lead returns to the admin queue. Deleting the customer's request
 -- because a vendor left would destroy the customer's record of asking.
--- -----------------------------------------------------------------------------
 create table if not exists consultation_leads (
   id            uuid primary key default gen_random_uuid(),
   customer_name text not null check (length(trim(customer_name)) > 0),
@@ -375,32 +300,10 @@ create table if not exists consultation_leads (
   updated_at    timestamptz not null default now()
 );
 
-create index if not exists consultation_leads_business_status_idx
-  on consultation_leads (business_id, status);
-create index if not exists consultation_leads_created_idx
-  on consultation_leads (created_at desc);
-create index if not exists consultation_leads_project_idx
-  on consultation_leads (project_id);
--- The admin queue: unassigned leads are the ones reaching nobody.
-create index if not exists consultation_leads_unassigned_idx
-  on consultation_leads (created_at desc)
-  where business_id is null;
-
-drop trigger if exists consultation_leads_set_updated_at on consultation_leads;
-create trigger consultation_leads_set_updated_at
-  before update on consultation_leads
-  for each row execute function set_updated_at();
-
-comment on column consultation_leads.unlocked_at is
-  'When a paying business first revealed the contact details. Append-only in practice: an unlock cannot be undone, so a later billing dispute has a record.';
-
--- -----------------------------------------------------------------------------
--- 2.9 business_subscriptions
---
+-- --- 3.9 business_subscriptions ----------------------------------------------
 -- One row per business, enforced by UNIQUE (business_id): upgrades mutate the
 -- row rather than stacking, so "what is this vendor paying for?" has exactly
 -- one answer.
--- -----------------------------------------------------------------------------
 create table if not exists business_subscriptions (
   id                 uuid primary key default gen_random_uuid(),
   business_id        uuid not null unique references businesses(id) on delete cascade,
@@ -412,17 +315,7 @@ create table if not exists business_subscriptions (
   updated_at         timestamptz not null default now()
 );
 
-create index if not exists business_subscriptions_status_idx
-  on business_subscriptions (status, current_period_end);
-
-drop trigger if exists business_subscriptions_set_updated_at on business_subscriptions;
-create trigger business_subscriptions_set_updated_at
-  before update on business_subscriptions
-  for each row execute function set_updated_at();
-
--- -----------------------------------------------------------------------------
--- 2.10 customer_disputes
--- -----------------------------------------------------------------------------
+-- --- 3.10 customer_disputes --------------------------------------------------
 create table if not exists customer_disputes (
   id             uuid primary key default gen_random_uuid(),
   customer_name  text not null check (length(trim(customer_name)) > 0),
@@ -435,20 +328,73 @@ create table if not exists customer_disputes (
   updated_at     timestamptz not null default now()
 );
 
-create index if not exists customer_disputes_business_idx
-  on customer_disputes (business_id, status);
-create index if not exists customer_disputes_open_idx
-  on customer_disputes (created_at desc)
-  where status in ('pending', 'reviewing');
-
-drop trigger if exists customer_disputes_set_updated_at on customer_disputes;
-create trigger customer_disputes_set_updated_at
-  before update on customer_disputes
-  for each row execute function set_updated_at();
+-- --- Table comments ----------------------------------------------------------
+comment on table profiles is
+  'Application user record, 1:1 with auth.users. profiles.role is the only trusted source of authorisation.';
+comment on column businesses.verified_at is
+  'Null until an admin verifies the business. Unverified businesses never receive leads, regardless of what they have paid.';
+comment on column business_products.price_minor is
+  'Price in PKR paisa. 8500000 = PKR 85,000. Integer arithmetic only.';
+comment on column business_products.style_tags is
+  'Join key to a project style. Must use the same vocabulary the customer wizard writes, or a style silently stops matching.';
+comment on column room_projects.budget_pkr is
+  'Whole rupees. Distinct from business_products.price_minor, which is paisa.';
+comment on column room_photos.image_url is
+  'Path inside the private room-photos bucket. Served by signed URL, never public.';
+comment on column generated_designs.mapped_products is
+  'Snapshot array of business_products ids specified in this render. Intentionally not a foreign key: the record must survive the product being archived.';
+comment on column consultation_leads.unlocked_at is
+  'When a paying business first revealed the contact details. Append-only in practice: an unlock cannot be undone, so a later billing dispute has a record.';
 
 -- =============================================================================
--- SECTION 3.2 — PAID ACCESS PREDICATE
+-- STEP 4 — HELPER FUNCTIONS
 --
+-- Every table these read now exists, so PostgreSQL can validate the LANGUAGE
+-- SQL bodies. This is the section whose position caused the 42P01.
+-- =============================================================================
+
+-- Keeps updated_at honest. LANGUAGE plpgsql, so its body is not validated at
+-- creation time -- it would work anywhere in the file, unlike the others.
+create or replace function set_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+-- Is the caller an admin?
+--
+-- SECURITY DEFINER matters twice over: it lets the lookup run with RLS
+-- bypassed, and that is what stops a policy on profiles that calls this
+-- function from re-entering its own policy and raising
+-- "infinite recursion detected in policy for relation profiles".
+create or replace function is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from profiles p
+    where p.id = auth.uid() and p.role = 'admin'
+  );
+$$;
+
+-- Businesses the caller owns. SECURITY DEFINER for the same reason.
+create or replace function owned_business_ids()
+returns setof uuid
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select b.id from businesses b where b.owner_id = auth.uid();
+$$;
+
 -- The single definition of "may this business see a lead's contact details".
 -- Every endpoint and every policy goes through this, so the rule cannot drift
 -- between the database and the application.
@@ -459,8 +405,6 @@ create trigger customer_disputes_set_updated_at
 --             already paid for the month in hand. Cancelling is a request not
 --             to renew, not a forfeit.
 --   banned / inactive businesses are refused regardless of what they paid.
--- =============================================================================
-
 create or replace function business_has_paid_access(b_id uuid)
 returns boolean
 language sql
@@ -488,13 +432,12 @@ comment on function business_has_paid_access(uuid) is
   'True when the business is live and holds a paid subscription that has not lapsed. Used for server-side lead unmasking.';
 
 -- =============================================================================
--- SECTION 4 — ROW LEVEL SECURITY
+-- STEP 5 — ROW LEVEL SECURITY
 --
 -- service_role bypasses RLS entirely, so the FastAPI backend is unaffected by
 -- everything below. These policies govern the anon and authenticated keys,
 -- which ship in the browser.
 --
--- The shape of it:
 --   anon           public vendor directory and catalogue. Nothing else.
 --   authenticated  your own profile, your own projects, your own business.
 --   admin          everything, via is_admin().
@@ -504,16 +447,16 @@ comment on function business_has_paid_access(uuid) is
 -- business_has_paid_access() first.
 -- =============================================================================
 
-alter table profiles              enable row level security;
-alter table businesses            enable row level security;
-alter table business_products     enable row level security;
-alter table room_projects         enable row level security;
-alter table room_photos           enable row level security;
-alter table design_generations    enable row level security;
-alter table generated_designs     enable row level security;
-alter table consultation_leads    enable row level security;
+alter table profiles               enable row level security;
+alter table businesses             enable row level security;
+alter table business_products      enable row level security;
+alter table room_projects          enable row level security;
+alter table room_photos            enable row level security;
+alter table design_generations     enable row level security;
+alter table generated_designs      enable row level security;
+alter table consultation_leads     enable row level security;
 alter table business_subscriptions enable row level security;
-alter table customer_disputes     enable row level security;
+alter table customer_disputes      enable row level security;
 
 -- --- profiles ---------------------------------------------------------------
 drop policy if exists profiles_self_read on profiles;
@@ -527,8 +470,9 @@ create policy profiles_self_update on profiles
   using (id = auth.uid())
   with check (id = auth.uid());
 
--- Note: no INSERT policy. Profiles are created by the backend (service_role)
--- alongside the auth user, so a client cannot mint one with role = 'admin'.
+-- No INSERT policy on purpose. Profiles are created by the backend
+-- (service_role) alongside the auth user, so a client cannot mint one with
+-- role = 'admin'.
 
 -- --- businesses -------------------------------------------------------------
 -- Public directory: only live, verified vendors, and only to read.
@@ -563,10 +507,10 @@ create policy business_products_owner_manage on business_products
   using (business_id in (select owned_business_ids()) or is_admin())
   with check (business_id in (select owned_business_ids()) or is_admin());
 
--- --- room_projects and the pipeline ----------------------------------------
+-- --- room_projects and the pipeline -----------------------------------------
 -- A project and everything hanging off it belongs to one customer. Anonymous
 -- projects (customer_id is null) are reachable only through the backend, which
--- holds the id -- not enumerable by a client.
+-- holds the id -- they are not enumerable by a client.
 drop policy if exists room_projects_owner on room_projects;
 create policy room_projects_owner on room_projects
   for all to authenticated
@@ -651,7 +595,109 @@ create policy customer_disputes_admin on customer_disputes
   with check (is_admin());
 
 -- =============================================================================
--- SECTION 5 — SEED DATA
+-- STEP 6 — INDEXES AND TRIGGERS
+-- =============================================================================
+
+-- --- Indexes -----------------------------------------------------------------
+create index if not exists profiles_role_idx on profiles (role);
+
+create index if not exists businesses_owner_idx on businesses (owner_id);
+create index if not exists businesses_city_trade_idx on businesses (city, trade);
+-- Partial index: lead routing only ever looks for bookable vendors.
+create index if not exists businesses_bookable_idx
+  on businesses (city)
+  where is_active and not is_banned and verified_at is not null;
+
+create index if not exists business_products_business_active_idx
+  on business_products (business_id, is_active);
+-- GIN index for style-tag retrieval. This is what makes
+-- `where style_tags && array['japandi','minimal']` fast enough to run inside
+-- the generation pipeline rather than as a batch job.
+create index if not exists business_products_style_tags_gin
+  on business_products using gin (style_tags);
+
+create index if not exists room_projects_customer_idx
+  on room_projects (customer_id, created_at desc);
+create index if not exists room_projects_status_idx on room_projects (status);
+
+create index if not exists room_photos_project_idx on room_photos (project_id);
+
+create index if not exists design_generations_project_idx
+  on design_generations (project_id, created_at desc);
+-- One run at a time per project. The 409 the API returns for a concurrent
+-- generation is enforced here, not only in application code.
+create unique index if not exists design_generations_one_active_idx
+  on design_generations (project_id)
+  where status in ('pending', 'processing');
+
+create index if not exists generated_designs_generation_idx
+  on generated_designs (generation_id);
+create index if not exists generated_designs_mapped_products_gin
+  on generated_designs using gin (mapped_products);
+
+create index if not exists consultation_leads_business_status_idx
+  on consultation_leads (business_id, status);
+create index if not exists consultation_leads_created_idx
+  on consultation_leads (created_at desc);
+create index if not exists consultation_leads_project_idx
+  on consultation_leads (project_id);
+-- The admin queue: unassigned leads are the ones reaching nobody.
+create index if not exists consultation_leads_unassigned_idx
+  on consultation_leads (created_at desc)
+  where business_id is null;
+
+create index if not exists business_subscriptions_status_idx
+  on business_subscriptions (status, current_period_end);
+
+create index if not exists customer_disputes_business_idx
+  on customer_disputes (business_id, status);
+create index if not exists customer_disputes_open_idx
+  on customer_disputes (created_at desc)
+  where status in ('pending', 'reviewing');
+
+-- --- Triggers ----------------------------------------------------------------
+drop trigger if exists profiles_set_updated_at on profiles;
+create trigger profiles_set_updated_at
+  before update on profiles
+  for each row execute function set_updated_at();
+
+drop trigger if exists businesses_set_updated_at on businesses;
+create trigger businesses_set_updated_at
+  before update on businesses
+  for each row execute function set_updated_at();
+
+drop trigger if exists business_products_set_updated_at on business_products;
+create trigger business_products_set_updated_at
+  before update on business_products
+  for each row execute function set_updated_at();
+
+drop trigger if exists room_projects_set_updated_at on room_projects;
+create trigger room_projects_set_updated_at
+  before update on room_projects
+  for each row execute function set_updated_at();
+
+drop trigger if exists design_generations_set_updated_at on design_generations;
+create trigger design_generations_set_updated_at
+  before update on design_generations
+  for each row execute function set_updated_at();
+
+drop trigger if exists consultation_leads_set_updated_at on consultation_leads;
+create trigger consultation_leads_set_updated_at
+  before update on consultation_leads
+  for each row execute function set_updated_at();
+
+drop trigger if exists business_subscriptions_set_updated_at on business_subscriptions;
+create trigger business_subscriptions_set_updated_at
+  before update on business_subscriptions
+  for each row execute function set_updated_at();
+
+drop trigger if exists customer_disputes_set_updated_at on customer_disputes;
+create trigger customer_disputes_set_updated_at
+  before update on customer_disputes
+  for each row execute function set_updated_at();
+
+-- =============================================================================
+-- STEP 7 — SEED DATA
 --
 -- Idempotent (ON CONFLICT DO NOTHING) with fixed UUIDs, so re-running does not
 -- duplicate rows. Delete this section before running against production.
@@ -811,13 +857,23 @@ values
 on conflict (id) do nothing;
 
 -- =============================================================================
--- DONE.
+-- VERIFICATION — run these after the script finishes
 --
--- Quick checks after running:
---   select business_has_paid_access('00000000-0000-4000-b000-000000000001');  -- t
---   select business_has_paid_access('00000000-0000-4000-b000-000000000002');  -- f
---   select count(*) from room_photos
---    where project_id = '00000000-0000-4000-f000-000000000001';               -- 4
+--   -- all ten tables, RLS on every one
 --   select tablename, rowsecurity from pg_tables
---    where schemaname = 'public' order by tablename;                          -- all t
+--    where schemaname = 'public' order by tablename;
+--
+--   -- the paid-access predicate, both answers
+--   select business_has_paid_access('00000000-0000-4000-b000-000000000001'); -- t
+--   select business_has_paid_access('00000000-0000-4000-b000-000000000002'); -- f
+--
+--   -- the worked project has all four walls
+--   select count(*) from room_photos
+--    where project_id = '00000000-0000-4000-f000-000000000001';              -- 4
+--
+--   -- helper functions exist
+--   select proname from pg_proc
+--    where proname in ('is_admin','owned_business_ids','business_has_paid_access',
+--                      'set_updated_at')
+--    order by proname;                                                       -- 4 rows
 -- =============================================================================
