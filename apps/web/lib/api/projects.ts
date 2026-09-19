@@ -6,7 +6,7 @@
  * relative /api path that Vercel rewrites to the Render service.
  */
 
-import { apiFetch, apiUrl, ApiError } from "./client";
+import { apiFetch, apiUrl, ApiError, getAccessToken } from "./client";
 
 export type WallAngle = "north" | "south" | "east" | "west";
 
@@ -47,6 +47,9 @@ export interface GeneratedDesign {
   signed_url: string | null;
   mapped_products: string[];
   overall_score: number | null;
+  /** This viewer's interaction state, resolved server-side. */
+  liked: boolean;
+  saved: boolean;
 }
 
 export interface DesignGeneration {
@@ -78,6 +81,8 @@ export interface Project {
   budget_pkr: number | null;
   status: ProjectStatus;
   created_at: string;
+  /** The concept the customer chose. Authoritative per PRD s31. */
+  selected_design_id: string | null;
   photos: ProjectPhoto[];
   progress: WallProgress;
   generations: DesignGeneration[];
@@ -104,7 +109,8 @@ export interface CreateProjectInput {
   style_slug?: string;
   /** Whole rupees. */
   budget_pkr?: number;
-  customer_id?: string;
+  // No customer_id: the backend takes the owner from the access token and
+  // rejects an unexpected field, so sending one is a 422.
 }
 
 /** POST /api/v1/projects */
@@ -143,9 +149,16 @@ export async function uploadWallPhoto(
   form.append("wall_angle", wallAngle);
   form.append("file", file);
 
+  // This call bypasses apiFetch (which would set a JSON Content-Type), so the
+  // bearer header has to be attached here too.
+  const headers = new Headers();
+  const token = await getAccessToken();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+
   const response = await fetch(apiUrl(`v1/projects/${projectId}/photos`), {
     method: "POST",
     body: form,
+    headers,
     credentials: "include",
   });
 
@@ -215,4 +228,67 @@ export function submitConsultation(input: ConsultationInput): Promise<Consultati
 /** GET /api/v1/consultations/:id */
 export function getConsultation(leadId: string): Promise<ConsultationResult> {
   return apiFetch<ConsultationResult>(`v1/consultations/${leadId}`);
+}
+
+// -----------------------------------------------------------------------------
+// Dashboard listing
+// -----------------------------------------------------------------------------
+
+/** One card on the customer dashboard. A summary, not a full project. */
+export interface ProjectSummary {
+  id: string;
+  city: string | null;
+  room_type: string | null;
+  style_slug: string | null;
+  status: ProjectStatus;
+  created_at: string;
+  selected_design_id: string | null;
+  design_count: number;
+  /** Signed URL for a representative render; null before generation. */
+  thumbnail_url: string | null;
+  progress: WallProgress;
+}
+
+/**
+ * GET /api/v1/projects
+ *
+ * Returns only the authenticated caller's projects — the backend scopes by the
+ * token, so there is no owner parameter to pass (or to tamper with).
+ */
+export async function listProjects(): Promise<ProjectSummary[]> {
+  const body = await apiFetch<{ projects: ProjectSummary[] }>("v1/projects");
+  return body.projects;
+}
+
+// -----------------------------------------------------------------------------
+// Interactions
+// -----------------------------------------------------------------------------
+
+/** POST /api/v1/designs/:id/like — toggles. Returns the resulting state. */
+export async function likeDesign(designId: string): Promise<boolean> {
+  const body = await apiFetch<{ liked: boolean }>(`v1/designs/${designId}/like`, {
+    method: "POST",
+  });
+  return body.liked;
+}
+
+/** POST /api/v1/designs/:id/save — toggles. Returns the resulting state. */
+export async function saveDesign(designId: string): Promise<boolean> {
+  const body = await apiFetch<{ saved: boolean }>(`v1/designs/${designId}/save`, {
+    method: "POST",
+  });
+  return body.saved;
+}
+
+/**
+ * POST /api/v1/projects/:id/select-design
+ *
+ * One selection per project: this replaces any previous choice rather than
+ * adding to it. Returns the updated project.
+ */
+export function selectDesign(projectId: string, designId: string): Promise<Project> {
+  return apiFetch<Project>(`v1/projects/${projectId}/select-design`, {
+    method: "POST",
+    body: JSON.stringify({ design_id: designId }),
+  });
 }

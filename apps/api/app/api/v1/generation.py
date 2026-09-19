@@ -17,6 +17,7 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Response, status
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.api.deps import CurrentUserDep, assert_owns_project
 from app.core.config import get_settings
 from app.core.errors import ApiError, ConflictError, NotFoundError
 from app.db import projects_repo as repo
@@ -267,6 +268,7 @@ async def generate_designs(
     project_id: UUID,
     background: BackgroundTasks,
     response: Response,
+    user: CurrentUserDep,
     payload: GenerateRequest | None = None,
 ) -> GenerateResponse:
     """Run the pipeline: analyse the walls, build an inventory-aware prompt, render.
@@ -290,6 +292,7 @@ async def generate_designs(
         project = repo.get_project(project_id)
     except repo.NotFoundError as exc:
         raise NotFoundError(str(exc)) from exc
+    assert_owns_project(user, project)
 
     current = ProjectStatus(project["status"])
 

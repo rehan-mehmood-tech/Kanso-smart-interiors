@@ -68,10 +68,21 @@ export function selectedDesign(
 ): GeneratedDesign | null {
   const available = displayableDesigns(project);
   if (available.length === 0) return null;
+
+  // An explicit id in the URL wins: it is what the user just clicked.
   if (designId) {
     const match = available.find((design) => design.id === designId);
     if (match) return match;
   }
+
+  // Then the stored selection, which is authoritative per PRD s31 — so a page
+  // opened later, with no query string, still shows the concept they chose
+  // rather than whichever one happens to rank first.
+  if (project?.selected_design_id) {
+    const stored = available.find((design) => design.id === project.selected_design_id);
+    if (stored) return stored;
+  }
+
   return available[0];
 }
 

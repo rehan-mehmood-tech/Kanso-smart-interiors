@@ -25,6 +25,8 @@ DESIGNS = "generated_designs"
 LEADS = "consultation_leads"
 BUSINESSES = "businesses"
 PRODUCTS = "business_products"
+INTERACTIONS = "design_interactions"
+STYLES = "styles"
 
 
 class NotFoundError(LookupError):
@@ -270,6 +272,8 @@ def create_lead(
     preferred_mode: str | None = None,
     preferred_time_slot: str | None = None,
     notes: str | None = None,
+    selected_design_id: UUID | None = None,
+    customer_id: UUID | None = None,
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "customer_name": customer_name,
@@ -290,13 +294,18 @@ def create_lead(
         "preferred_mode": preferred_mode,
         "preferred_time_slot": preferred_time_slot,
         "notes": notes,
+        # Snapshot of who asked and which concept they chose (PRD s15.10), so
+        # the vendor's record does not change if the customer later picks a
+        # different concept.
+        "selected_design_id": str(selected_design_id) if selected_design_id else None,
+        "customer_id": str(customer_id) if customer_id else None,
     }
     payload.update({k: v for k, v in optional.items() if v is not None})
 
     try:
         result = get_supabase().table(LEADS).insert(payload).execute()
     except Exception as exc:  # noqa: BLE001
-        # These three columns arrived after the baseline schema. Against a
+        # These columns arrived after the baseline schema. Against a
         # database where the migration has not been applied yet, PostgREST
         # rejects the whole insert for an unknown column -- which would lose a
         # real customer's request over an optional preference. Drop them and
@@ -304,8 +313,8 @@ def create_lead(
         if not _is_unknown_column(exc, optional):
             raise
         logger.warning(
-            "Lead preference columns missing; storing the lead without them. "
-            "Apply supabase/migrations/20260910_lead_consultation_preferences.sql. (%s)",
+            "Optional lead columns missing; storing the lead without them. "
+            "Apply the 20260910 and 20260919 lead migrations. (%s)",
             exc,
         )
         for key in optional:
@@ -344,3 +353,253 @@ def find_lead_for_project(project_id: UUID) -> dict[str, Any] | None:
     )
     rows = result.data or []
     return rows[0] if rows else None
+
+
+# -----------------------------------------------------------------------------
+# Project listing (customer dashboard)
+# -----------------------------------------------------------------------------
+
+
+def list_projects_for_customer(customer_id: UUID) -> list[dict[str, Any]]:
+    """Every project owned by one customer, newest first.
+
+    Scoped by customer_id in the query itself rather than filtered afterwards:
+    this client bypasses RLS, so the WHERE clause is the only thing keeping one
+    customer's dashboard from showing another's rooms.
+    """
+    result = (
+        get_supabase()
+        .table(PROJECTS)
+        .select("*")
+        .eq("customer_id", str(customer_id))
+        .order("created_at", desc=True)
+        .execute()
+    )
+    return result.data or []
+
+
+def count_designs_by_project(project_ids: list[str]) -> dict[str, int]:
+    """How many concepts exist per project, for the dashboard cards.
+
+    Two hops because `generated_designs` has no project_id of its own: it
+    reaches a project only through `design_generations`.
+    """
+    if not project_ids:
+        return {}
+
+    gens = (
+        get_supabase()
+        .table(GENERATIONS)
+        .select("id,project_id")
+        .in_("project_id", project_ids)
+        .execute()
+    ).data or []
+    if not gens:
+        return {}
+
+    generation_to_project = {str(g["id"]): str(g["project_id"]) for g in gens}
+    designs = (
+        get_supabase()
+        .table(DESIGNS)
+        .select("id,generation_id")
+        .in_("generation_id", list(generation_to_project))
+        .execute()
+    ).data or []
+
+    counts: dict[str, int] = {}
+    for d in designs:
+        pid = generation_to_project.get(str(d["generation_id"]))
+        if pid:
+            counts[pid] = counts.get(pid, 0) + 1
+    return counts
+
+
+def first_design_for_projects(project_ids: list[str]) -> dict[str, dict[str, Any]]:
+    """One representative concept per project, for the card thumbnail."""
+    if not project_ids:
+        return {}
+
+    gens = (
+        get_supabase()
+        .table(GENERATIONS)
+        .select("id,project_id")
+        .in_("project_id", project_ids)
+        .execute()
+    ).data or []
+    if not gens:
+        return {}
+
+    generation_to_project = {str(g["id"]): str(g["project_id"]) for g in gens}
+    designs = (
+        get_supabase()
+        .table(DESIGNS)
+        .select("*")
+        .in_("generation_id", list(generation_to_project))
+        .order("overall_score", desc=True)
+        .execute()
+    ).data or []
+
+    best: dict[str, dict[str, Any]] = {}
+    for d in designs:
+        pid = generation_to_project.get(str(d["generation_id"]))
+        # Ordered by score, so the first one seen for a project is the best one.
+        if pid and pid not in best:
+            best[pid] = d
+    return best
+
+
+# -----------------------------------------------------------------------------
+# Designs, interactions and selection
+# -----------------------------------------------------------------------------
+
+
+def get_design(design_id: UUID) -> dict[str, Any]:
+    result = (
+        get_supabase()
+        .table(DESIGNS)
+        .select("*")
+        .eq("id", str(design_id))
+        .maybe_single()
+        .execute()
+    )
+    if not result or not result.data:
+        raise NotFoundError(f"Design {design_id} does not exist.")
+    return result.data
+
+
+def project_id_for_design(design_id: UUID) -> str:
+    """Resolve a design back to its project, for the ownership check.
+
+    `generated_designs` stores no project_id, so this hops through
+    `design_generations`.
+    """
+    design = get_design(design_id)
+    generation = (
+        get_supabase()
+        .table(GENERATIONS)
+        .select("project_id")
+        .eq("id", str(design["generation_id"]))
+        .maybe_single()
+        .execute()
+    )
+    if not generation or not generation.data:
+        raise NotFoundError(f"Design {design_id} does not exist.")
+    return str(generation.data["project_id"])
+
+
+def get_interaction(
+    user_id: UUID, design_id: UUID, interaction_type: str
+) -> dict[str, Any] | None:
+    result = (
+        get_supabase()
+        .table(INTERACTIONS)
+        .select("*")
+        .eq("user_id", str(user_id))
+        .eq("design_id", str(design_id))
+        .eq("interaction_type", interaction_type)
+        .limit(1)
+        .execute()
+    )
+    rows = result.data or []
+    return rows[0] if rows else None
+
+
+def toggle_interaction(
+    *, user_id: UUID, design_id: UUID, project_id: str, interaction_type: str
+) -> bool:
+    """Add or remove a like/save. Returns True when it is now set.
+
+    A toggle rather than an insert, so tapping twice ends where it started
+    instead of erroring on the unique index.
+    """
+    existing = get_interaction(user_id, design_id, interaction_type)
+    if existing:
+        get_supabase().table(INTERACTIONS).delete().eq("id", existing["id"]).execute()
+        return False
+
+    get_supabase().table(INTERACTIONS).insert(
+        {
+            "user_id": str(user_id),
+            "design_id": str(design_id),
+            "project_id": project_id,
+            "interaction_type": interaction_type,
+        }
+    ).execute()
+    return True
+
+
+def list_interactions_for_project(user_id: UUID, project_id: UUID) -> list[dict[str, Any]]:
+    result = (
+        get_supabase()
+        .table(INTERACTIONS)
+        .select("*")
+        .eq("user_id", str(user_id))
+        .eq("project_id", str(project_id))
+        .execute()
+    )
+    return result.data or []
+
+
+def set_selected_design(project_id: UUID, design_id: UUID) -> dict[str, Any]:
+    """Point the project at the chosen concept.
+
+    One selection per project: this overwrites whatever was there, which is
+    exactly the "selecting a new design clears the previous one" rule from PRD
+    s31 -- enforced by the column holding a single value, not by cleanup logic.
+    """
+    result = (
+        get_supabase()
+        .table(PROJECTS)
+        .update(
+            {
+                "selected_design_id": str(design_id),
+                "status": ProjectStatus.DESIGN_SELECTED.value,
+            }
+        )
+        .eq("id", str(project_id))
+        .execute()
+    )
+    if not result.data:
+        raise NotFoundError(f"Project {project_id} does not exist.")
+    return result.data[0]
+
+
+def record_selection_event(*, user_id: UUID, design_id: UUID, project_id: UUID) -> None:
+    """Append a `select` row for event history (PRD s31).
+
+    Analytics only. It is never read back to decide what is selected, so a
+    failure here must not fail the user's action.
+    """
+    try:
+        get_supabase().table(INTERACTIONS).insert(
+            {
+                "user_id": str(user_id),
+                "design_id": str(design_id),
+                "project_id": str(project_id),
+                "interaction_type": "select",
+            }
+        ).execute()
+    except Exception:  # noqa: BLE001 - history is best-effort
+        logger.warning("Could not record select event for design %s", design_id, exc_info=True)
+
+
+def list_photos_for_projects(project_ids: list[str]) -> dict[str, list[dict[str, Any]]]:
+    """Photos for many projects in one query, grouped by project.
+
+    The dashboard needs each card's wall progress; fetching them per project
+    would be one round trip per row.
+    """
+    if not project_ids:
+        return {}
+    rows = (
+        get_supabase()
+        .table(PHOTOS)
+        .select("*")
+        .in_("project_id", project_ids)
+        .execute()
+    ).data or []
+
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        grouped.setdefault(str(row["project_id"]), []).append(row)
+    return grouped

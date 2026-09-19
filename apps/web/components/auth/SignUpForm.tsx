@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { AuthFooter } from "./AuthFooter";
+import { createClient } from "@/lib/supabase/client";
 
 const inputClass =
   "w-full min-h-[44px] rounded-2xl border border-[#c4c7c7] bg-[#f4f0ea] px-4 py-3 font-body text-sm text-[#1b1c19] outline-none transition-colors placeholder:text-[#1b1c19]/40 focus:border-[#1b1c19] focus:ring-1 focus:ring-[#1b1c19]";
@@ -17,13 +18,59 @@ export function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("homeowner");
+  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const passwordTooShort = password.length > 0 && password.length < 8;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Stubbed redirect — real auth lands in the backend phase.
+    if (submitting || password.length < 8) return;
+    setError(null);
+    setNotice(null);
+
+    const supabase = createClient();
+    if (!supabase) {
+      setError("Sign-up is unavailable right now. Please try again shortly.");
+      return;
+    }
+
+    setSubmitting(true);
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: {
+        // Metadata only. The account role is assigned server-side and is never
+        // read from here -- this field is client-writable, so honouring it
+        // would let anyone sign up as a business or an admin. A professional
+        // account is created by an admin (PRD s7, s31).
+        data: { full_name: fullName.trim(), requested_account_type: role },
+      },
+    });
+    setSubmitting(false);
+
+    if (signUpError) {
+      const message = signUpError.message.toLowerCase();
+      if (message.includes("already") || message.includes("registered")) {
+        setError("That email is already registered. Try signing in instead.");
+      } else if (message.includes("password")) {
+        setError("Please choose a password of at least 8 characters.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+      return;
+    }
+
+    // With email confirmation enabled Supabase returns a user but no session,
+    // so there is nothing to redirect into yet.
+    if (!data.session) {
+      setNotice("Check your inbox to confirm your email, then sign in.");
+      return;
+    }
+
     router.push("/dashboard");
+    router.refresh();
   };
 
   return (
@@ -134,12 +181,23 @@ export function SignUpForm() {
         .
       </p>
 
+      {error && (
+        <p role="alert" className="mt-5 w-full font-body text-xs leading-relaxed text-[#ba1a1a]">
+          {error}
+        </p>
+      )}
+      {notice && (
+        <p role="status" className="mt-5 w-full font-body text-xs leading-relaxed text-[#1b1c19]">
+          {notice}
+        </p>
+      )}
+
       <button
         type="submit"
-        disabled={passwordTooShort}
+        disabled={passwordTooShort || submitting}
         className="mt-8 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-2xl bg-[#1b1c19] px-6 py-3 font-body text-sm font-medium text-[#fbf9f4] transition-all duration-300 hover:bg-black disabled:cursor-not-allowed disabled:opacity-40"
       >
-        Create Account
+        {submitting ? "Creating account…" : "Create Account"}
         <ArrowRight className="h-4 w-4 shrink-0" />
       </button>
 

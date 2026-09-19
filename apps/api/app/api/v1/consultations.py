@@ -13,7 +13,8 @@ from uuid import UUID
 from fastapi import APIRouter, status
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
-from app.core.errors import NotFoundError
+from app.api.deps import CurrentUserDep, assert_owns_project
+from app.core.errors import ApiError, NotFoundError
 from app.db import projects_repo as repo
 
 logger = logging.getLogger(__name__)
@@ -68,7 +69,9 @@ class ConsultationResponse(BaseModel):
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, summary="Submit a consultation request")
-async def create_consultation(payload: ConsultationRequest) -> ConsultationResponse:
+async def create_consultation(
+    payload: ConsultationRequest, user: CurrentUserDep
+) -> ConsultationResponse:
     """Create a lead and try to route it to a vendor.
 
     Auto-assignment considers only bookable vendors -- active, not banned, and
@@ -83,15 +86,29 @@ async def create_consultation(payload: ConsultationRequest) -> ConsultationRespo
     """
     room_type: str | None = None
     style_slug: str | None = None
+    selected_design_id = None
 
     if payload.project_id is not None:
         try:
             project = repo.get_project(payload.project_id)
         except repo.NotFoundError as exc:
             raise NotFoundError(str(exc)) from exc
+        # A lead carries the customer's contact details and unlocks their room
+        # photos for a vendor. Only the project's owner may submit it.
+        assert_owns_project(user, project)
 
         room_type = project.get("room_type")
         style_slug = project.get("style_slug")
+
+        # PRD s18: the project must have a selected design before a lead can be
+        # raised. A consultation is a request about a specific concept -- without
+        # one the vendor receives a lead with nothing to discuss.
+        selected_design_id = project.get("selected_design_id")
+        if not selected_design_id:
+            raise ApiError(
+                "Choose a concept before requesting a consultation.",
+                code="no_design_selected",
+            )
 
         existing = repo.find_lead_for_project(payload.project_id)
         if existing:
@@ -124,6 +141,8 @@ async def create_consultation(payload: ConsultationRequest) -> ConsultationRespo
         preferred_mode=payload.preferred_mode,
         preferred_time_slot=payload.preferred_time_slot,
         notes=payload.notes,
+        selected_design_id=selected_design_id,
+        customer_id=UUID(user.id),
     )
 
     if match:
@@ -145,8 +164,55 @@ async def create_consultation(payload: ConsultationRequest) -> ConsultationRespo
     )
 
 
+def _assert_may_read_lead(user, lead: dict) -> None:
+    """Only the customer who raised the lead, its assigned vendor, or an admin.
+
+    A lead row holds a phone number and a home address, so an unguarded read by
+    id is a contact-details leak to anyone who can guess a UUID.
+
+    Ownership is the lead's own `customer_id` where present, falling back to
+    the linked project's owner for rows written before that column existed. A
+    lead with neither has no provable customer owner and is readable only by
+    its assigned vendor or an admin.
+    """
+    from app.db.supabase import get_supabase
+
+    if user.is_admin:
+        return
+
+    if user.is_business:
+        owned = (
+            get_supabase()
+            .table("businesses")
+            .select("id")
+            .eq("owner_id", user.id)
+            .execute()
+        )
+        owned_ids = {str(row["id"]) for row in (owned.data or [])}
+        if lead.get("business_id") and str(lead["business_id"]) in owned_ids:
+            return
+        raise NotFoundError(f"Lead {lead.get('id')} does not exist.")
+
+    # The snapshot on the lead itself is the cheapest and most durable check:
+    # it still works if the project was later deleted.
+    if lead.get("customer_id") and str(lead["customer_id"]) == str(user.id):
+        return
+
+    project_id = lead.get("project_id")
+    if project_id:
+        try:
+            project = repo.get_project(UUID(str(project_id)))
+        except (repo.NotFoundError, ValueError):
+            raise NotFoundError(f"Lead {lead.get('id')} does not exist.") from None
+        # Raises NotFound when the caller is not the owner.
+        assert_owns_project(user, project)
+        return
+
+    raise NotFoundError(f"Lead {lead.get('id')} does not exist.")
+
+
 @router.get("/{lead_id}", summary="Lead status")
-async def get_consultation(lead_id: UUID) -> ConsultationResponse:
+async def get_consultation(lead_id: UUID, user: CurrentUserDep) -> ConsultationResponse:
     from app.db.supabase import get_supabase
 
     result = (
@@ -161,6 +227,8 @@ async def get_consultation(lead_id: UUID) -> ConsultationResponse:
         raise NotFoundError(f"Lead {lead_id} does not exist.")
 
     lead = result.data
+    _assert_may_read_lead(user, lead)
+
     business = None
     if lead.get("business_id"):
         biz = (

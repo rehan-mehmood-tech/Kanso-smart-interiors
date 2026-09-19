@@ -14,6 +14,7 @@ from uuid import UUID
 from fastapi import APIRouter, File, Form, UploadFile, status
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.api.deps import CurrentUserDep, assert_owns_project
 from app.core.config import get_settings
 from app.core.errors import ApiError, NotFoundError
 from app.db import projects_repo as repo
@@ -38,7 +39,9 @@ class ProjectCreateRequest(BaseModel):
     style_slug: str | None = Field(default=None, max_length=60)
     #: Whole rupees.
     budget_pkr: int | None = Field(default=None, ge=0)
-    customer_id: UUID | None = None
+    # `customer_id` is deliberately absent. The owner is taken from the verified
+    # access token; accepting it from the body would let a caller create
+    # projects belonging to someone else.
 
 
 class PhotoOut(BaseModel):
@@ -72,6 +75,10 @@ class DesignOut(BaseModel):
     signed_url: str | None = None
     mapped_products: list[UUID] = Field(default_factory=list)
     overall_score: float | None = None
+    #: This caller's interaction state, so the results page renders the right
+    #: icon on first paint instead of flashing an unliked heart.
+    liked: bool = False
+    saved: bool = False
 
 
 class ProductOut(BaseModel):
@@ -107,6 +114,8 @@ class ProjectOut(BaseModel):
     budget_pkr: int | None = None
     status: ProjectStatus
     created_at: str
+    #: The concept the customer chose. Authoritative per PRD s31.
+    selected_design_id: UUID | None = None
     photos: list[PhotoOut] = Field(default_factory=list)
     progress: WallProgress
     generations: list[GenerationOut] = Field(default_factory=list)
@@ -175,32 +184,39 @@ def _product_out(row: dict[str, Any]) -> ProductOut:
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, summary="Create a room project")
-async def create_project(payload: ProjectCreateRequest) -> ProjectOut:
+async def create_project(payload: ProjectCreateRequest, user: CurrentUserDep) -> ProjectOut:
     """Start a design project.
 
-    `customer_id` is optional: the wizard runs before signup, and the row is
-    claimed later. The project opens in `draft`.
+    The owner is the authenticated caller, per PRD s8.1 where signup precedes
+    Start Design. The project opens in `draft`.
     """
     row = repo.create_project(
         city=payload.city,
         room_type=payload.room_type,
         style_slug=payload.style_slug,
         budget_pkr=payload.budget_pkr,
-        customer_id=payload.customer_id,
+        customer_id=UUID(user.id),
     )
     return ProjectOut(**row, progress=_progress([]))
 
 
 @router.get("/{project_id}", summary="Project detail, photos and concepts")
-async def get_project(project_id: UUID) -> ProjectOut:
+async def get_project(project_id: UUID, user: CurrentUserDep) -> ProjectOut:
     try:
         project = repo.get_project(project_id)
     except repo.NotFoundError as exc:
         raise NotFoundError(str(exc)) from exc
+    assert_owns_project(user, project)
 
     photos = repo.list_photos(project_id)
     generations = repo.list_generations(project_id)
     designs = repo.list_designs_for_generations([g["id"] for g in generations])
+
+    # One query for every like/save this user has on this project, rather than
+    # two per concept.
+    interactions = repo.list_interactions_for_project(UUID(user.id), project_id)
+    liked = {str(i["design_id"]) for i in interactions if i["interaction_type"] == "like"}
+    saved = {str(i["design_id"]) for i in interactions if i["interaction_type"] == "save"}
 
     design_products = [
         DesignOut(
@@ -210,6 +226,8 @@ async def get_project(project_id: UUID) -> ProjectOut:
             signed_url=signed_url(d["render_url"], bucket=get_settings().generated_designs_bucket),
             mapped_products=_coerce_products(d.get("mapped_products")),
             overall_score=float(d["overall_score"]) if d.get("overall_score") is not None else None,
+            liked=str(d["id"]) in liked,
+            saved=str(d["id"]) in saved,
         )
         for d in designs
     ]
@@ -244,6 +262,7 @@ async def get_project(project_id: UUID) -> ProjectOut:
 )
 async def upload_photo(
     project_id: UUID,
+    user: CurrentUserDep,
     wall_angle: Annotated[WallAngle, Form(description="north, south, east or west")],
     file: Annotated[UploadFile | None, File(description="Image file")] = None,
     image_base64: Annotated[str | None, Form(description="Base64 or data: URI")] = None,
@@ -259,9 +278,10 @@ async def upload_photo(
     Once all four walls are present the project moves to `photos_uploaded`.
     """
     try:
-        repo.get_project(project_id)
+        existing = repo.get_project(project_id)
     except repo.NotFoundError as exc:
         raise NotFoundError(str(exc)) from exc
+    assert_owns_project(user, existing)
 
     supplied = [s for s in (file, image_base64, image_url) if s]
     if len(supplied) != 1:
@@ -320,11 +340,12 @@ async def upload_photo(
 
 
 @router.get("/{project_id}/photos", summary="List wall photos and progress")
-async def list_photos(project_id: UUID) -> PhotoUploadResponse:
+async def list_photos(project_id: UUID, user: CurrentUserDep) -> PhotoUploadResponse:
     try:
         project = repo.get_project(project_id)
     except repo.NotFoundError as exc:
         raise NotFoundError(str(exc)) from exc
+    assert_owns_project(user, project)
 
     photos = repo.list_photos(project_id)
     return PhotoUploadResponse(
@@ -333,3 +354,112 @@ async def list_photos(project_id: UUID) -> PhotoUploadResponse:
         walls=[_photo_out(p) for p in photos],
         progress=_progress(photos),
     )
+
+
+class ProjectSummary(BaseModel):
+    """One card on the customer dashboard.
+
+    Deliberately not the full ProjectOut: a dashboard listing twenty projects
+    does not need every photo, product and concept for each one.
+    """
+
+    id: UUID
+    city: str | None = None
+    room_type: str | None = None
+    style_slug: str | None = None
+    status: ProjectStatus
+    created_at: str
+    selected_design_id: UUID | None = None
+    #: Concepts generated so far, for the "5 concepts" line on the card.
+    design_count: int = 0
+    #: A representative render for the card image. None before generation.
+    thumbnail_url: str | None = None
+    progress: WallProgress
+
+
+class ProjectListResponse(BaseModel):
+    projects: list[ProjectSummary]
+
+
+class SelectDesignRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    design_id: UUID
+
+
+@router.get("", summary="List the caller's projects")
+async def list_projects(user: CurrentUserDep) -> ProjectListResponse:
+    """Every project belonging to the authenticated customer, newest first.
+
+    Powers the dashboard. Scoped by the token's user id, never by a query
+    parameter -- a client-supplied owner would be a trivial way to read someone
+    else's rooms.
+    """
+    rows = repo.list_projects_for_customer(UUID(user.id))
+    if not rows:
+        return ProjectListResponse(projects=[])
+
+    ids = [str(r["id"]) for r in rows]
+    counts = repo.count_designs_by_project(ids)
+    thumbs = repo.first_design_for_projects(ids)
+    photos_by_project = repo.list_photos_for_projects(ids)
+    designs_bucket = get_settings().generated_designs_bucket
+
+    summaries: list[ProjectSummary] = []
+    for row in rows:
+        pid = str(row["id"])
+        thumb = thumbs.get(pid)
+        summaries.append(
+            ProjectSummary(
+                id=row["id"],
+                city=row.get("city"),
+                room_type=row.get("room_type"),
+                style_slug=row.get("style_slug"),
+                status=ProjectStatus(row["status"]),
+                created_at=row["created_at"],
+                selected_design_id=row.get("selected_design_id"),
+                design_count=counts.get(pid, 0),
+                thumbnail_url=(
+                    signed_url(thumb["render_url"], bucket=designs_bucket) if thumb else None
+                ),
+                progress=_progress(photos_by_project.get(pid, [])),
+            )
+        )
+    return ProjectListResponse(projects=summaries)
+
+
+@router.post("/{project_id}/select-design", summary="Choose the concept to take forward")
+async def select_design(
+    project_id: UUID, payload: SelectDesignRequest, user: CurrentUserDep
+) -> ProjectOut:
+    """Set the project's selected concept.
+
+    Exactly one per project (PRD s10.12): writing the column replaces any
+    previous choice, so there is never a second selection to clean up. The
+    design must belong to this project -- otherwise a customer could attach
+    someone else's render to their own consultation request.
+    """
+    try:
+        project = repo.get_project(project_id)
+    except repo.NotFoundError as exc:
+        raise NotFoundError(str(exc)) from exc
+    assert_owns_project(user, project)
+
+    try:
+        design_project_id = repo.project_id_for_design(payload.design_id)
+    except repo.NotFoundError as exc:
+        raise NotFoundError(str(exc)) from exc
+
+    if design_project_id != str(project_id):
+        raise ApiError(
+            "That concept does not belong to this project.",
+            code="design_project_mismatch",
+        )
+
+    repo.set_selected_design(project_id, payload.design_id)
+    # History only; never the source of truth for what is selected.
+    repo.record_selection_event(
+        user_id=UUID(user.id), design_id=payload.design_id, project_id=project_id
+    )
+
+    return await get_project(project_id, user)

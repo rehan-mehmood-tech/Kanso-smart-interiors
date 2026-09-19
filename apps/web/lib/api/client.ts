@@ -35,6 +35,27 @@ export function apiUrl(path: string): string {
   return `${API_BASE_URL}/api/${clean}`;
 }
 
+/**
+ * The current Supabase access token, or null when signed out.
+ *
+ * Read from the Supabase client rather than from storage directly, so a token
+ * close to expiry is refreshed by the SDK before it is used. Returns null on
+ * any failure -- a missing token must produce a clean 401 from the API, never
+ * a crash in the caller.
+ */
+export async function getAccessToken(): Promise<string | null> {
+  if (typeof window === "undefined") return null;
+  try {
+    const { createClient } = await import("@/lib/supabase/client");
+    const supabase = createClient();
+    if (!supabase) return null;
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -67,13 +88,20 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
     );
   }
 
+  const headers = new Headers(init.headers);
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+
+  // The API authenticates with the Supabase access token as a bearer header,
+  // not with a cookie: it is a separate origin in production, so a
+  // Supabase-domain cookie would never be sent to it. An anonymous call is
+  // still made when there is no session, so the backend decides the 401
+  // rather than the client guessing.
+  const token = await getAccessToken();
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+
   const response = await fetch(apiUrl(path), {
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...init.headers,
-    },
-    // Session cookies are the auth mechanism; send them on same-origin calls.
+    headers,
     credentials: init.credentials ?? "include",
   });
 

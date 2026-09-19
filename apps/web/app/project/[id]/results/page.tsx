@@ -122,6 +122,35 @@ export default function ResultsPage() {
       .filter((product): product is MappedProduct => Boolean(product));
   }, [project, productsById, activeIndex]);
 
+  /** The concepts actually renderable, in the order the carousel shows them. */
+  const visibleDesigns = useMemo(
+    () => (project?.designs ?? []).filter((d) => d.signed_url),
+    [project],
+  );
+  const activeDesign = visibleDesigns[Math.min(activeIndex, visibleDesigns.length - 1)];
+
+  /**
+   * Fold a like/save result back into the loaded project.
+   *
+   * Patching in place rather than refetching keeps the carousel from resetting
+   * to the first concept every time the user taps a heart.
+   */
+  const applyInteraction = useCallback(
+    (designId: string, next: { liked?: boolean; saved?: boolean }) => {
+      setProject((current) =>
+        current
+          ? {
+              ...current,
+              designs: current.designs.map((d) =>
+                d.id === designId ? { ...d, ...next } : d,
+              ),
+            }
+          : current,
+      );
+    },
+    [],
+  );
+
   const handleRegenerate = () => router.push(`/project/${projectId}/generating?force=1`);
 
   return (
@@ -191,7 +220,10 @@ export default function ResultsPage() {
       {!isLoading && !error && concepts.length > 0 && (
         <ActionFloatingBar
           projectId={projectId}
-          designId={concepts[Math.min(activeIndex, concepts.length - 1)]?.id}
+          designId={activeDesign?.id}
+          liked={activeDesign?.liked ?? false}
+          saved={activeDesign?.saved ?? false}
+          onInteractionChange={applyInteraction}
         />
       )}
     </div>

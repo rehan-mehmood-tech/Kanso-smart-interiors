@@ -1,23 +1,64 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { AuthFooter } from "./AuthFooter";
+import { createClient } from "@/lib/supabase/client";
 
 const inputClass =
   "w-full min-h-[44px] rounded-2xl border border-[#c4c7c7] bg-[#f4f0ea] px-4 py-3 font-body text-sm text-[#1b1c19] outline-none transition-colors placeholder:text-[#1b1c19]/40 focus:border-[#1b1c19] focus:ring-1 focus:ring-[#1b1c19]";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  /**
+   * Where to land after signing in.
+   *
+   * Only a path on this site is accepted. Following an arbitrary `next` value
+   * would make this form an open redirect -- a phishing link could send a user
+   * here, have them log in for real, then bounce them to a lookalike site.
+   */
+  const nextPath = (() => {
+    const raw = searchParams.get("next");
+    if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return "/dashboard";
+    return raw;
+  })();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Stubbed redirect — real auth lands in the backend phase.
-    router.push("/dashboard");
+    if (submitting) return;
+    setError(null);
+
+    const supabase = createClient();
+    if (!supabase) {
+      setError("Sign-in is unavailable right now. Please try again shortly.");
+      return;
+    }
+
+    setSubmitting(true);
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    setSubmitting(false);
+
+    if (signInError) {
+      // Deliberately generic, per PRD s10.3: never reveal which field was
+      // wrong, or whether the account exists.
+      setError("Invalid email or password.");
+      return;
+    }
+
+    router.push(nextPath);
+    // The layout reads the session on the server, so refresh to pick it up.
+    router.refresh();
   };
 
   return (
@@ -101,11 +142,21 @@ export function LoginForm() {
         </a>
       </div>
 
+      {error && (
+        <p
+          role="alert"
+          className="mt-5 w-full font-body text-xs leading-relaxed text-[#ba1a1a]"
+        >
+          {error}
+        </p>
+      )}
+
       <button
         type="submit"
-        className="mt-8 min-h-[44px] w-full rounded-2xl bg-[#1b1c19] px-6 py-3 font-body text-sm font-medium text-[#fbf9f4] transition-all duration-300 hover:bg-black"
+        disabled={submitting}
+        className="mt-8 min-h-[44px] w-full rounded-2xl bg-[#1b1c19] px-6 py-3 font-body text-sm font-medium text-[#fbf9f4] transition-all duration-300 hover:bg-black disabled:cursor-not-allowed disabled:opacity-40"
       >
-        Sign In
+        {submitting ? "Signing in…" : "Sign In"}
       </button>
 
       <div className="relative py-7">

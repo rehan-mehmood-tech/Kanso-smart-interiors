@@ -61,6 +61,24 @@ class Settings(BaseSettings):
     supabase_anon_key: str | None = None
     supabase_service_role_key: str | None = None
 
+    # --- Access-token verification (see core/auth.py) ---
+    #
+    # Asymmetric projects need no secret here: the public keys are fetched from
+    # the project's JWKS endpoint. This is only for legacy HS256 projects, and
+    # when it is unset an HS256 token is rejected rather than trusted.
+    supabase_jwt_secret: str | None = None
+    #: Supabase stamps user access tokens with this audience.
+    supabase_jwt_audience: str = "authenticated"
+    #: Keep short: a hung key fetch would stall every authenticated request.
+    jwks_timeout_seconds: float = 5.0
+    #: Clock-skew tolerance for `exp`/`iat`, in seconds.
+    #
+    # A server whose clock trails Supabase's by even a few seconds sees a
+    # freshly issued token as "not yet valid (iat)" and rejects every login.
+    # A minute is the usual allowance: wide enough for ordinary drift, far too
+    # narrow to meaningfully extend the life of an expired token.
+    jwt_leeway_seconds: int = 60
+
     #: Table probed by GET /health. Any always-present table works; profiles is
     #: the first one the baseline migration creates.
     health_check_table: str = "profiles"

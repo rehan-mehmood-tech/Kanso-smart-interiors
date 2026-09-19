@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { AuthLayout } from "@/components/auth/AuthLayout";
 import { LoginForm } from "@/components/auth/LoginForm";
 
@@ -10,7 +12,11 @@ export default function LoginPage() {
       imageAlt="A warm minimal living room with layered neutral textures"
       quote="Transforming imagination into scope-locked reality."
     >
-      <LoginForm />
+      {/* LoginForm reads the `next` query parameter, so it must sit behind a
+          Suspense boundary or prerendering this page fails at build time. */}
+      <Suspense fallback={null}>
+        <LoginForm />
+      </Suspense>
     </AuthLayout>
   );
 }
