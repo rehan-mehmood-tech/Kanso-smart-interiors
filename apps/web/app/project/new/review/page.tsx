@@ -75,6 +75,15 @@ function ReviewContent() {
       // 3. Hand off to the real project route.
       router.push(`/project/${project.id}/generating`);
     } catch (caught) {
+      // A session that expired between opening this page and pressing the
+      // button. The middleware cannot catch that -- it only runs on navigation
+      // -- so send them to log in and come straight back here.
+      if (caught instanceof ApiError && caught.status === 401) {
+        const here = `${window.location.pathname}${window.location.search}`;
+        router.push(`/login?next=${encodeURIComponent(here)}`);
+        return;
+      }
+
       const message =
         caught instanceof ApiError
           ? caught.message

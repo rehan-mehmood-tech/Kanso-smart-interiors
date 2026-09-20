@@ -15,6 +15,9 @@ import {
  *
  * Every /pro/* route requires a session; /pro/login is the only exception.
  * Every /admin/* route additionally requires profiles.role === 'admin'.
+ * Every customer route that talks to the API (/project/*, /dashboard) also
+ * requires a session, and is sent to the customer login rather than the
+ * vendor one.
  * The check fails CLOSED — if Supabase is unreachable or unconfigured we
  * cannot prove the visitor is signed in, so we redirect rather than let them
  * through. Before this existed, /pro/dashboard was readable by
@@ -25,12 +28,43 @@ const PROTECTED_PREFIX = "/pro";
 const ADMIN_PREFIX = "/admin";
 const PUBLIC_PRO_PATHS = [VENDOR_LOGIN_PATH];
 
-function redirectToLogin(request: NextRequest) {
+/**
+ * Customer routes that require a session.
+ *
+ * Every one of these calls the API, which authenticates with the Supabase
+ * access token. Without a session the call returns 401 and the page becomes a
+ * dead end -- which is exactly what "Missing bearer token" on the review step
+ * was: the wizard let an anonymous visitor capture four walls and only failed
+ * at the point of creating the project.
+ *
+ * Guarding the whole wizard, not just its last step, matters: the captured
+ * photos live in memory until they are uploaded, so bouncing someone to login
+ * from the review screen would discard them. Stopping them at the first step
+ * means they log in before there is anything to lose.
+ */
+const CUSTOMER_PREFIXES = ["/project", "/dashboard"];
+const CUSTOMER_LOGIN_PATH = "/login";
+
+function redirectTo(request: NextRequest, pathname: string) {
   const url = request.nextUrl.clone();
-  url.pathname = VENDOR_LOGIN_PATH;
-  // Preserve where they were heading so login can return them there.
-  url.searchParams.set("next", request.nextUrl.pathname);
+  url.pathname = pathname;
+  // Start from a clean query string: cloning keeps the original one, which
+  // would spill the wizard's own params (style, budget, ...) onto the login
+  // page alongside `next`.
+  const destination = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+  url.search = "";
+  // Preserve where they were heading, query string included, so login returns
+  // them to the exact step they were on.
+  url.searchParams.set("next", destination);
   return NextResponse.redirect(url);
+}
+
+function redirectToLogin(request: NextRequest) {
+  return redirectTo(request, VENDOR_LOGIN_PATH);
+}
+
+function redirectToCustomerLogin(request: NextRequest) {
+  return redirectTo(request, CUSTOMER_LOGIN_PATH);
 }
 
 export async function proxy(request: NextRequest) {
@@ -38,7 +72,10 @@ export async function proxy(request: NextRequest) {
 
   const isProRoute = pathname === PROTECTED_PREFIX || pathname.startsWith(`${PROTECTED_PREFIX}/`);
   const isAdminRoute = pathname === ADMIN_PREFIX || pathname.startsWith(`${ADMIN_PREFIX}/`);
-  if (!isProRoute && !isAdminRoute) return NextResponse.next();
+  const isCustomerRoute = CUSTOMER_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+  if (!isProRoute && !isAdminRoute && !isCustomerRoute) return NextResponse.next();
 
   if (PUBLIC_PRO_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
     return NextResponse.next();
@@ -57,7 +94,7 @@ export async function proxy(request: NextRequest) {
       response.headers.set("x-kanso-vendor-preview", "unauthenticated-dev");
       return response;
     }
-    return redirectToLogin(request);
+    return isCustomerRoute ? redirectToCustomerLogin(request) : redirectToLogin(request);
   }
 
   // This response carries any refreshed auth cookies back to the browser.
@@ -84,7 +121,9 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return redirectToLogin(request);
+  if (!user) {
+    return isCustomerRoute ? redirectToCustomerLogin(request) : redirectToLogin(request);
+  }
 
   // Admin routes need more than a session: the role is read from `profiles`,
   // never from a token claim the client could shape (PRD s19). Anything other
@@ -109,5 +148,5 @@ export async function proxy(request: NextRequest) {
 export const config = {
   // Skip static assets and image optimisation so protection costs nothing
   // on the rest of the site.
-  matcher: ["/pro/:path*", "/admin/:path*"],
+  matcher: ["/pro/:path*", "/admin/:path*", "/project/:path*", "/dashboard/:path*", "/dashboard"],
 };
