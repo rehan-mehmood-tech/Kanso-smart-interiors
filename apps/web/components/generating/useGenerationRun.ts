@@ -155,7 +155,7 @@ export function useGenerationRun(projectId: string, force = false): GenerationRu
       // orphaned the run mid-flight.
       await apiFetch<GenerateResponse>(`v1/projects/${projectId}/generate`, {
         method: "POST",
-        body: JSON.stringify({ count: 2, force }),
+        body: JSON.stringify({ count: 5, force }),
       });
 
       // Analysis comes first and takes about ten seconds; the stage flips on a

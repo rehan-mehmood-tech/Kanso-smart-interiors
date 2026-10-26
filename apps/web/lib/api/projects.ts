@@ -208,7 +208,7 @@ export interface ConsultationInput {
   email?: string;
   city?: string;
   full_address?: string;
-  project_id?: string;
+  project_id: string;
   /** How the customer wants the consultation to happen. */
   preferred_mode?: "in-person" | "video";
   /** Rough window rather than a booked time; the specialist confirms. */

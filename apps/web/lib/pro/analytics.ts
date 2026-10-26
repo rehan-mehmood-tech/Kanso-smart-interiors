@@ -2,7 +2,7 @@ import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
-import { getVendorLeads } from "./mock-leads";
+import { getVendorLeads } from "./api";
 import { getProducts } from "./inventory";
 import { DEV_BUSINESS_ID } from "./subscription-store";
 import type { LeadStatus } from "./leads";
@@ -160,7 +160,7 @@ export async function getVendorAnalytics(
 
   // Local fallback. Access state does not matter here: analytics counts leads,
   // it never reads the contact fields the paywall gates.
-  const leads = getVendorLeads(false);
+  const leads = await getVendorLeads();
   const products = await getProducts(businessId);
   const prices = products
     .map((p) => p.priceMinor)

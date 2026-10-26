@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { WizardProgressBar } from '@/components/wizard/WizardProgressBar';
 import { CaptureGuidelines } from '@/components/wizard/capture/CaptureGuidelines';
 import { CaptureGrid } from '@/components/wizard/capture/CaptureGrid';
 import { WizardFooter } from '@/components/wizard/WizardFooter';

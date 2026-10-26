@@ -71,7 +71,7 @@ export default function loginkansoPage() {
                             Sign In
                         </button>
 <div className="text-center">
-<span className="font-body-md text-body-md text-secondary">Don't have an account? </span>
+<span className="font-body-md text-body-md text-secondary">Don&apos;t have an account? </span>
 <a className="font-label-sm text-label-sm text-primary hover:text-secondary transition-colors duration-300 relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-[1px] after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left" href="#">
                                 Create an account
                             </a>

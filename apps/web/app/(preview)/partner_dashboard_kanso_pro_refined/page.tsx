@@ -80,7 +80,7 @@ export default function partnerdashboardkansoprorefinedPage() {
 <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-md">
 <div>
 <h1 className="font-display-xl text-[48px] md:text-[56px] leading-tight tracking-tight text-on-surface mb-xs">Welcome back, Architect.</h1>
-<p className="font-body-md text-body-md text-secondary">Here's what's happening with your studio today.</p>
+<p className="font-body-md text-body-md text-secondary">Here&apos;s what&apos;s happening with your studio today.</p>
 </div>
 <div className="flex gap-sm">
 <button className="px-md py-sm border border-outline text-on-surface font-label-sm text-label-sm rounded-DEFAULT hover:bg-surface-container transition-colors">Generate Report</button>
@@ -194,7 +194,7 @@ export default function partnerdashboardkansoprorefinedPage() {
 <div className="flex flex-col gap-lg">
 {/* Schedule */}
 <div className="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-container flex-1">
-<h2 className="font-display-xl text-[28px] tracking-tight text-on-surface mb-md">Today's Schedule</h2>
+<h2 className="font-display-xl text-[28px] tracking-tight text-on-surface mb-md">Today&apos;s Schedule</h2>
 <div className="flex flex-col gap-md mt-lg">
 <div className="flex gap-md">
 <div className="w-16 text-right shrink-0 mt-1">

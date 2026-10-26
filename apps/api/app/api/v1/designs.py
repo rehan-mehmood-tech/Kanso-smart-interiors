@@ -19,7 +19,7 @@ from uuid import UUID
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.api.deps import CurrentUserDep, assert_owns_project
+from app.api.deps import CustomerDep, assert_owns_project
 from app.core.errors import NotFoundError
 from app.db import projects_repo as repo
 
@@ -48,7 +48,7 @@ def _owned_project_for_design(user, design_id: UUID) -> str:
 
 
 @router.post("/{design_id}/like", summary="Like or unlike a concept")
-async def like_design(design_id: UUID, user: CurrentUserDep) -> InteractionResponse:
+async def like_design(design_id: UUID, user: CustomerDep) -> InteractionResponse:
     """Toggle a like. Idempotent in the sense that the state, not the tap, is
     what matters: the response says where it ended up."""
     project_id = _owned_project_for_design(user, design_id)
@@ -62,7 +62,7 @@ async def like_design(design_id: UUID, user: CurrentUserDep) -> InteractionRespo
 
 
 @router.post("/{design_id}/save", summary="Save or unsave a concept")
-async def save_design(design_id: UUID, user: CurrentUserDep) -> InteractionResponse:
+async def save_design(design_id: UUID, user: CustomerDep) -> InteractionResponse:
     """Toggle a save."""
     project_id = _owned_project_for_design(user, design_id)
     saved = repo.toggle_interaction(

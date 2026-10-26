@@ -7,8 +7,7 @@ import { WallCaptureGallery } from '@/components/pro/leads/WallCaptureGallery';
 import { MaterialSpecAccordion } from '@/components/pro/leads/MaterialSpecAccordion';
 import { ProNotesForm } from '@/components/pro/leads/ProNotesForm';
 import { SiteHeader } from '@/components/layout/SiteHeader';
-import { getVendorAccess } from '@/lib/pro/access';
-import { getVendorLead } from '@/lib/pro/mock-leads';
+import { getVendorLead } from '@/lib/pro/api';
 import { AI_DESIGN_CONCEPTS, getRoomWallSet } from '@/lib/constants/assets';
 
 // Project context that is not gated: a vendor needs the brief to decide
@@ -54,17 +53,14 @@ const PROJECT_CONTEXT = {
 
 interface ProLeadDetailPageProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ access?: string }>;
 }
 
-export default async function ProLeadDetailPage({ params, searchParams }: ProLeadDetailPageProps) {
+export default async function ProLeadDetailPage({ params }: ProLeadDetailPageProps) {
   const { id } = await params;
-  const { access } = await searchParams;
 
   // Gate resolved on the server. An unpaid vendor's response never contains
   // the contact values at all.
-  const vendorAccess = await getVendorAccess(access);
-  const lead = getVendorLead(id, vendorAccess.hasPaidAccess);
+  const lead = await getVendorLead(id);
 
   if (!lead) notFound();
 

@@ -5,18 +5,11 @@ import { LeadTable } from '@/components/pro/dashboard/LeadTable';
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { ProSidebar } from '@/components/pro/layout/ProSidebar';
 import { RoiAnalyticsChart } from '@/components/pro/dashboard/RoiAnalyticsChart';
-import { getVendorAccess } from '@/lib/pro/access';
-import { getVendorLeads } from '@/lib/pro/mock-leads';
+import { getVendorLeads } from '@/lib/pro/api';
 import { getVendorAnalytics } from '@/lib/pro/analytics';
 
-interface ProDashboardPageProps {
-  searchParams: Promise<{ access?: string }>;
-}
-
-export default async function ProDashboardPage({ searchParams }: ProDashboardPageProps) {
-  const { access } = await searchParams;
-  const vendorAccess = await getVendorAccess(access);
-  const leads = getVendorLeads(vendorAccess.hasPaidAccess);
+export default async function ProDashboardPage() {
+  const leads = await getVendorLeads();
   const analytics = await getVendorAnalytics();
 
   return (

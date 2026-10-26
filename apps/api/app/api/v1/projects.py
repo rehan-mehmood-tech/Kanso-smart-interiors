@@ -14,7 +14,7 @@ from uuid import UUID
 from fastapi import APIRouter, File, Form, UploadFile, status
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.api.deps import CurrentUserDep, assert_owns_project
+from app.api.deps import CustomerDep, assert_owns_project
 from app.core.config import get_settings
 from app.core.errors import ApiError, NotFoundError
 from app.db import projects_repo as repo
@@ -184,7 +184,7 @@ def _product_out(row: dict[str, Any]) -> ProductOut:
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, summary="Create a room project")
-async def create_project(payload: ProjectCreateRequest, user: CurrentUserDep) -> ProjectOut:
+async def create_project(payload: ProjectCreateRequest, user: CustomerDep) -> ProjectOut:
     """Start a design project.
 
     The owner is the authenticated caller, per PRD s8.1 where signup precedes
@@ -201,7 +201,7 @@ async def create_project(payload: ProjectCreateRequest, user: CurrentUserDep) ->
 
 
 @router.get("/{project_id}", summary="Project detail, photos and concepts")
-async def get_project(project_id: UUID, user: CurrentUserDep) -> ProjectOut:
+async def get_project(project_id: UUID, user: CustomerDep) -> ProjectOut:
     try:
         project = repo.get_project(project_id)
     except repo.NotFoundError as exc:
@@ -262,7 +262,7 @@ async def get_project(project_id: UUID, user: CurrentUserDep) -> ProjectOut:
 )
 async def upload_photo(
     project_id: UUID,
-    user: CurrentUserDep,
+    user: CustomerDep,
     wall_angle: Annotated[WallAngle, Form(description="north, south, east or west")],
     file: Annotated[UploadFile | None, File(description="Image file")] = None,
     image_base64: Annotated[str | None, Form(description="Base64 or data: URI")] = None,
@@ -340,7 +340,7 @@ async def upload_photo(
 
 
 @router.get("/{project_id}/photos", summary="List wall photos and progress")
-async def list_photos(project_id: UUID, user: CurrentUserDep) -> PhotoUploadResponse:
+async def list_photos(project_id: UUID, user: CustomerDep) -> PhotoUploadResponse:
     try:
         project = repo.get_project(project_id)
     except repo.NotFoundError as exc:
@@ -388,7 +388,7 @@ class SelectDesignRequest(BaseModel):
 
 
 @router.get("", summary="List the caller's projects")
-async def list_projects(user: CurrentUserDep) -> ProjectListResponse:
+async def list_projects(user: CustomerDep) -> ProjectListResponse:
     """Every project belonging to the authenticated customer, newest first.
 
     Powers the dashboard. Scoped by the token's user id, never by a query
@@ -430,7 +430,7 @@ async def list_projects(user: CurrentUserDep) -> ProjectListResponse:
 
 @router.post("/{project_id}/select-design", summary="Choose the concept to take forward")
 async def select_design(
-    project_id: UUID, payload: SelectDesignRequest, user: CurrentUserDep
+    project_id: UUID, payload: SelectDesignRequest, user: CustomerDep
 ) -> ProjectOut:
     """Set the project's selected concept.
 

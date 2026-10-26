@@ -9,15 +9,14 @@ project stuck in `generating` with nothing to show.
 
 from __future__ import annotations
 
-import asyncio
 import logging
 from typing import Any
 from uuid import UUID
 
-from fastapi import APIRouter, BackgroundTasks, Response, status
+from fastapi import APIRouter, Response, status
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.api.deps import CurrentUserDep, assert_owns_project
+from app.api.deps import CustomerDep, assert_owns_project
 from app.core.config import get_settings
 from app.core.errors import ApiError, ConflictError, NotFoundError
 from app.db import projects_repo as repo
@@ -41,7 +40,7 @@ class GenerateRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     #: How many concepts to render. Each is a separate provider call.
-    count: int = Field(default=2, ge=1, le=4)
+    count: int | None = Field(default=None, ge=4, le=6)
     #: Re-run even if the project has already generated.
     force: bool = False
     #: Block until the renders are done and return them in this response.
@@ -235,30 +234,6 @@ async def _execute_pipeline(
         ) from exc
 
 
-def _run_detached(**kwargs: Any) -> None:
-    """Background wrapper, deliberately synchronous.
-
-    Starlette runs a `def` background task in a worker thread, where this
-    starts its own event loop. That matters: the pipeline mixes long awaits
-    (Gemini, the render provider) with the *synchronous* Supabase client, so
-    running it on the API's own loop blocked request handling for tens of
-    seconds and interleaved two coroutines over one pooled HTTP connection --
-    which surfaced as reads failing with "connection forcibly closed" while a
-    generation was in flight. On its own thread it cannot do either.
-
-    Nothing is listening for the result, so an exception escaping here would
-    only reach the log. `_execute_pipeline` has already written the failure to
-    `design_generations` by the time it raises, and that is where the client
-    reads the outcome from.
-    """
-    try:
-        asyncio.run(_execute_pipeline(**kwargs))
-    except ApiError as exc:
-        logger.warning("Background generation ended: %s", exc)
-    except Exception:  # noqa: BLE001
-        logger.exception("Background generation crashed")
-
-
 @router.post(
     "/{project_id}/generate",
     status_code=status.HTTP_202_ACCEPTED,
@@ -266,9 +241,8 @@ def _run_detached(**kwargs: Any) -> None:
 )
 async def generate_designs(
     project_id: UUID,
-    background: BackgroundTasks,
     response: Response,
-    user: CurrentUserDep,
+    user: CustomerDep,
     payload: GenerateRequest | None = None,
 ) -> GenerateResponse:
     """Run the pipeline: analyse the walls, build an inventory-aware prompt, render.
@@ -287,6 +261,13 @@ async def generate_designs(
     call the service directly and have no proxy in between.
     """
     body = payload or GenerateRequest()
+    requested_count = body.count or get_settings().designs_per_generation
+    if not 4 <= requested_count <= 6:
+        raise ApiError(
+            "DESIGNS_PER_GENERATION must be between 4 and 6.",
+            code="invalid_generation_count",
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
 
     try:
         project = repo.get_project(project_id)
@@ -341,7 +322,9 @@ async def generate_designs(
                 {
                     "project_id": str(project_id),
                     "engine_used": "gemini_flux",
-                    "status": GenerationStatus.PROCESSING.value,
+                    "status": GenerationStatus.PENDING.value,
+                    "requested_count": requested_count,
+                    "gating_report": gating_report,
                 }
             )
             .execute()
@@ -359,24 +342,24 @@ async def generate_designs(
         "project": project,
         "project_id": project_id,
         "generation_id": generation_id,
-        "count": body.count,
+        "count": requested_count,
         "photos": photos,
         "gating_report": gating_report,
     }
 
     if body.wait:
+        _set_generation(generation_id, status=GenerationStatus.PROCESSING.value)
         result = await _execute_pipeline(**kwargs)
         response.status_code = status.HTTP_201_CREATED
         return result
 
-    background.add_task(_run_detached, **kwargs)
     return GenerateResponse(
         generation_id=generation_id,
         project_id=project_id,
-        status=GenerationStatus.PROCESSING,
+        status=GenerationStatus.PENDING,
         project_status=ProjectStatus.GENERATING,
         engine_used="gemini_flux",
         prompt="",
         gating=gating_report,
-        detail="Generation started. Poll GET /api/v1/projects/{id} until designs appear.",
+        detail="Generation queued. Poll GET /api/v1/projects/{id} until designs appear.",
     )

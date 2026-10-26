@@ -7,6 +7,50 @@
 #
 # Secrets (sync: false) are set in the Render dashboard, never committed.
 
+envVarGroups:
+  - name: kanso-api-env
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.4"
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ORIGINS
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_VISION_MODEL
+        value: gemini-3.6-flash
+      - key: IMAGE_GENERATOR_PROVIDER
+        value: pollinations
+      - key: HUGGINGFACE_API_TOKEN
+        sync: false
+      - key: HUGGINGFACE_IMAGE_MODEL
+        value: black-forest-labs/FLUX.1-schnell
+      - key: REPLICATE_API_TOKEN
+        sync: false
+      - key: FLUX_MODEL
+        value: black-forest-labs/flux-1.1-pro
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DESIGNS_PER_GENERATION
+        value: "5"
+      - key: GENERATION_TIMEOUT_SECONDS
+        value: "180"
+
 services:
   - type: web
     name: kanso-api
@@ -21,48 +65,16 @@ services:
     autoDeployTrigger: commit
 
     envVars:
-      - key: PYTHON_VERSION
-        value: "3.13.4"
+      - fromGroup: kanso-api-env
 
-      - key: ENVIRONMENT
-        value: production
-      - key: DEBUG
-        value: "false"
-      - key: LOG_LEVEL
-        value: INFO
-
-      # Origins allowed to call this API. The Vercel production domain; preview
-      # deployments are matched by regex in app/main.py instead, because their
-      # hostnames are generated per deployment.
-      - key: CORS_ORIGINS
-        sync: false
-      - key: NEXT_PUBLIC_SITE_URL
-        sync: false
-
-      # --- Supabase ---
-      # SERVICE_ROLE bypasses row-level security. Server-side only, never
-      # exposed to the browser.
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_ANON_KEY
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
-
-      # --- AI providers ---
-      - key: GEMINI_API_KEY
-        sync: false
-      - key: GEMINI_VISION_MODEL
-        value: gemini-2.0-flash
-      - key: REPLICATE_API_TOKEN
-        sync: false
-      - key: FLUX_MODEL
-        value: black-forest-labs/flux-1.1-pro
-      - key: GROQ_API_KEY
-        sync: false
-
-      # --- Generation limits ---
-      - key: DESIGNS_PER_GENERATION
-        value: "5"
-      - key: GENERATION_TIMEOUT_SECONDS
-        value: "180"
+  - type: worker
+    name: kanso-generation-worker
+    runtime: python
+    plan: starter
+    region: singapore
+    branch: main
+    buildCommand: cd apps/api && pip install -r requirements.txt
+    startCommand: cd apps/api && python -m app.worker
+    autoDeployTrigger: commit
+    envVars:
+      - fromGroup: kanso-api-env

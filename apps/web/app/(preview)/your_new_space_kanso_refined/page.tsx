@@ -102,7 +102,7 @@ export default function yournewspacekansorefinedPage() {
 <div className="mb-xl flex-grow">
 <h4 className="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest mb-md">Spatial Tone</h4>
 <p className="text-body-md font-body-md text-primary">
-                                Calm, grounding, and expansive. The layout prioritizes negative space, allowing the high-quality materials to dictate the room's character without visual clutter.
+                                Calm, grounding, and expansive. The layout prioritizes negative space, allowing the high-quality materials to dictate the room&apos;s character without visual clutter.
                             </p>
 </div>
 <div className="pt-lg border-t border-outline-variant mt-auto">

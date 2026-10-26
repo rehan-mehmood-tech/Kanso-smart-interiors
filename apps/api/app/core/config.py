@@ -54,7 +54,9 @@ class Settings(BaseSettings):
     #: Vercel generates a new hostname per preview deployment, so previews are
     #: matched by pattern rather than listed. Anchored at both ends so that
     #: something like "evil-vercel.app.attacker.com" cannot match.
-    cors_origin_regex: str = r"^https://[a-z0-9-]+\.vercel\.app$"
+    # Vercel production/preview hosts for this project only. Override when the
+    # Vercel project slug changes; never broaden this back to every Vercel app.
+    cors_origin_regex: str = r"^https://kanso-smart-interiors(?:-[a-z0-9-]+)?\.vercel\.app$"
 
     # --- Supabase (Postgres + Auth + Storage) ---
     supabase_url: str | None = None

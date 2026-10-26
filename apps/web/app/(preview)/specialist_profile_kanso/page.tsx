@@ -34,7 +34,7 @@ export default function specialistprofilekansoPage() {
 <p className="text-body-lg font-body-lg text-secondary mb-lg">Architectural Designer &amp; Spatial Consultant</p>
 <div className="prose prose-p:text-body-md prose-p:font-body-md text-on-surface-variant max-w-3xl mb-xl">
 <p>
-                        Elena specializes in crafting environments that embody 'Quiet Luxury'—spaces that speak through material integrity and spatial harmony rather than overt decoration. With over a decade of experience in residential and boutique commercial design, her approach is deeply tactile and intentionally reductive, drawing inspiration from natural light and pure architectural forms.
+                        Elena specializes in crafting environments that embody &apos;Quiet Luxury&apos;—spaces that speak through material integrity and spatial harmony rather than overt decoration. With over a decade of experience in residential and boutique commercial design, her approach is deeply tactile and intentionally reductive, drawing inspiration from natural light and pure architectural forms.
                     </p>
 </div>
 {/* Expertise/Materials */}

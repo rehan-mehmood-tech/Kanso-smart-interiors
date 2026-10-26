@@ -12,7 +12,7 @@ export default function captureyourspacekansoPage() {
 {/* Typography Header */}
 <div className="text-center max-w-2xl mx-auto mb-xl">
 <h1 className="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">Capture Your Space</h1>
-<p className="text-body-lg font-body-lg text-secondary">We'll use four views of your room to create a more complete visual concept.</p>
+<p className="text-body-lg font-body-lg text-secondary">We&apos;ll use four views of your room to create a more complete visual concept.</p>
 </div>
 {/* 2x2 Grid for Photos */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-md w-full max-w-4xl mx-auto mb-xl">

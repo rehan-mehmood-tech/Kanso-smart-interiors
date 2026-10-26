@@ -13,7 +13,7 @@ from uuid import UUID
 from fastapi import APIRouter, status
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
-from app.api.deps import CurrentUserDep, assert_owns_project
+from app.api.deps import CustomerDep, assert_owns_project
 from app.core.errors import ApiError, NotFoundError
 from app.db import projects_repo as repo
 
@@ -31,7 +31,7 @@ class ConsultationRequest(BaseModel):
     city: str | None = Field(default="Lahore", max_length=120)
     full_address: str | None = None
     #: Optional link to the design project this request came from.
-    project_id: UUID | None = None
+    project_id: UUID
     #: How the customer wants the consultation to happen.
     preferred_mode: Literal["in-person", "video"] | None = None
     #: Rough window rather than a booked time: the specialist confirms.
@@ -70,7 +70,7 @@ class ConsultationResponse(BaseModel):
 
 @router.post("", status_code=status.HTTP_201_CREATED, summary="Submit a consultation request")
 async def create_consultation(
-    payload: ConsultationRequest, user: CurrentUserDep
+    payload: ConsultationRequest, user: CustomerDep
 ) -> ConsultationResponse:
     """Create a lead and try to route it to a vendor.
 
@@ -128,22 +128,37 @@ async def create_consultation(
 
     match = repo.find_matching_business(payload.city)
 
-    lead = repo.create_lead(
-        customer_name=payload.customer_name,
-        phone=payload.phone,
-        email=payload.email,
-        city=payload.city,
-        full_address=payload.full_address,
-        room_type=room_type,
-        style_slug=style_slug,
-        project_id=payload.project_id,
-        business_id=match["id"] if match else None,
-        preferred_mode=payload.preferred_mode,
-        preferred_time_slot=payload.preferred_time_slot,
-        notes=payload.notes,
-        selected_design_id=selected_design_id,
-        customer_id=UUID(user.id),
-    )
+    try:
+        lead = repo.create_lead(
+            customer_name=payload.customer_name,
+            phone=payload.phone,
+            email=payload.email,
+            city=payload.city,
+            full_address=payload.full_address,
+            room_type=room_type,
+            style_slug=style_slug,
+            project_id=payload.project_id,
+            business_id=match["id"] if match else None,
+            preferred_mode=payload.preferred_mode,
+            preferred_time_slot=payload.preferred_time_slot,
+            notes=payload.notes,
+            selected_design_id=selected_design_id,
+            customer_id=UUID(user.id),
+        )
+    except Exception:
+        # The partial unique index is the final arbiter. A concurrent request
+        # may win after our initial lookup; return that row as the idempotent
+        # result instead of surfacing a database uniqueness error.
+        existing = repo.find_lead_for_project(payload.project_id)
+        if not existing:
+            raise
+        return ConsultationResponse(
+            lead_id=existing["id"],
+            status=existing["status"],
+            assignment="assigned" if existing.get("business_id") else "queued",
+            deduplicated=True,
+            message="A consultation request already exists for this project.",
+        )
 
     if match:
         logger.info("Lead %s auto-assigned to %s", lead["id"], match["name"])
@@ -212,7 +227,7 @@ def _assert_may_read_lead(user, lead: dict) -> None:
 
 
 @router.get("/{lead_id}", summary="Lead status")
-async def get_consultation(lead_id: UUID, user: CurrentUserDep) -> ConsultationResponse:
+async def get_consultation(lead_id: UUID, user: CustomerDep) -> ConsultationResponse:
     from app.db.supabase import get_supabase
 
     result = (

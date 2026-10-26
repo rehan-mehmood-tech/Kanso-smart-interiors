@@ -512,20 +512,16 @@ def toggle_interaction(
     A toggle rather than an insert, so tapping twice ends where it started
     instead of erroring on the unique index.
     """
-    existing = get_interaction(user_id, design_id, interaction_type)
-    if existing:
-        get_supabase().table(INTERACTIONS).delete().eq("id", existing["id"]).execute()
-        return False
-
-    get_supabase().table(INTERACTIONS).insert(
+    result = get_supabase().rpc(
+        "toggle_design_interaction",
         {
-            "user_id": str(user_id),
-            "design_id": str(design_id),
-            "project_id": project_id,
-            "interaction_type": interaction_type,
-        }
+            "p_user_id": str(user_id),
+            "p_design_id": str(design_id),
+            "p_project_id": project_id,
+            "p_interaction_type": interaction_type,
+        },
     ).execute()
-    return True
+    return bool(result.data)
 
 
 def list_interactions_for_project(user_id: UUID, project_id: UUID) -> list[dict[str, Any]]:
