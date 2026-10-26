@@ -14,7 +14,7 @@ dist/
 # Environment — templates are tracked, real values never are.
 .env
 .env.local
-.env.*.local
+.env.*
 !.env.example
 
 # Platform
